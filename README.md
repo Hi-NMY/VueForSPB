@@ -1,24 +1,29 @@
-# vue_spb
+# V2版本
 
-## Project setup
-```
-npm install
-```
+# 框架使用
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+1. UI     -->     Element(按需引入)  详见文档
+2. 动画    -->   animate.css   详见文档
+3. 组件通信    -->   Vuex，全局事件总线$bus
+4. vue-router
+5. 网络请求axios
 
-### Compiles and minifies for production
-```
-npm run build
-```
+# 目录结构
 
-### Lints and fixes files
-```
-npm run lint
-```
+-src
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+--api（封装请求）
+
+--assets（项目资源文件）
+
+--components（公共组件）
+
+--config（配置文件）
+
+--router（路由）
+
+--store（Vuex）
+
+--utils（项目公共函数）
+
+--views（路由对应页面）
