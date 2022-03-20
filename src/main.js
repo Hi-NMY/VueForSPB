@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { Button, Input } from 'element-ui';
+import {Button,Input} from 'element-ui';
 //引入store
 import store from './store/index.js'
 //引入VueRouter和路由器

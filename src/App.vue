@@ -1,20 +1,24 @@
 <template>
   <div id="app">
-    <el-button type="primary">主要按钮</el-button>
-    <span>{{msg}}</span>
+      <Box></Box>
   </div>
 </template>
 
 <script>
+import Box from './components/login/Box'
 export default {
   name: 'App',
-  data(){
-    return{
-      msg:"111"
-    }
+  components:{
+    Box
   }
 }
 </script>
 
 <style>
+   *{padding: 0; margin: 0;}
+
+   #app{
+        display: flex;
+        height: 100%;
+   }
 </style>
