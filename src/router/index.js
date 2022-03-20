@@ -2,5 +2,16 @@
 import VueRouter from 'vue-router'
 //创建并暴露路由器
 export default new VueRouter({
-	routes:[]
+	// routes:[
+	// 	{
+	// 		path: '/login',
+	// 		component: () => import(/* webpackChunkName: "login" */ '../components/login/Login.vue'),
+	// 		meta: { title: '登录' }
+	// 	},
+	// 	{
+	// 		path: '/register',
+	// 		component: () => import(/* webpackChunkName: "login" */ '../components/login/Register.vue'),
+	// 		meta: { title: '注册' }
+	// 	},
+	// ]
 })

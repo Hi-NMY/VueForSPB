@@ -1,19 +1,25 @@
 <template>
-  <div id="app">
-    <el-button type="primary">主要按钮</el-button>
-    <span>{{msg}}</span>
-  </div>
+    <div id="app">
+<!--        <router-link to="/register"></router-link>-->
+<!--        <router-view></router-view>-->
+    </div>
 </template>
 
 <script>
-export default {
-  name: 'App',
-  data(){
-    return{
-      msg:"111"
+    export default {
+        name: 'App',
+        // data() {
+        //     return {
+        //         msg: "111"
+        //     }
+        // },
+        //
+        // methods: {
+        //     tiaozhuan() {
+        //         this.$router.push('./components/login/Register');
+        //     }
+        // }
     }
-  }
-}
 </script>
 
 <style>
