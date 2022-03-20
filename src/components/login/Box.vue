@@ -1,6 +1,12 @@
 <template>
   <div class="box">
-    <div class="left-app"></div>
+    <img class="text-logo" src="../../assets/text-logo.png" alt="logo">
+    <div class="left-app">
+        <img src="../../assets/logo.png" alt="">
+        <div class="download-button">
+            下载APP(Android)
+        </div>
+    </div>
     <div class="right-input">
         <div class="login-nav">
             <div class="login-box" :class="loginClass" @click="loginClick">
@@ -17,7 +23,7 @@
     </div>
   </div>
 </template>
-<script>
+<script scope>
 export default {
   name: "login-box",
   data() {
@@ -48,16 +54,36 @@ export default {
     }
 };
 </script>
-<style>
+<style scope>
+.download-button{
+    margin-top: 40px;
+    width: 100%;
+    padding: 0px 20px;
+    font-size: 18px;
+    line-height: 48px;
+    color: white;
+    text-align: center;
+    background-color: #46B3E6;
+    border-radius: 360px;
+}
 .box {
-  width: 1000px;
-  height: 600px;
+  width: auto;
+  height: 70%;
   margin: auto;
   display: flex;
   justify-content: right;
   color: rgb(117, 117, 117);
   font-size: 18px;
   font-family: '微软雅黑';
+}
+.text-logo{
+    position: relative;
+    left: -30%;
+    top: -20%;
+    width: auto;
+    height: auto;
+    max-width: 30%;
+    max-height: 30%;  
 }
 .right-input {
   width: 400px;
@@ -68,12 +94,15 @@ export default {
   flex-direction: column;
   align-items: center;
   box-shadow: rgb(219, 219, 219) 1px 1px 30px 5px;
-  border-radius: 2px;
+  border-radius: 5px;
 }
-.right-input div div,.right-input div span{
+.login-nav div,.login-nav span{
     float: left;
 }
-.right-input div span{
+.login-nav div:hover,.download-button:hover{
+    cursor: pointer;
+}
+.login-nav span{
     margin: 0px 20px;
     padding-top: 5px;
 }
@@ -89,6 +118,16 @@ export default {
     border-bottom: 2px #46B3E6 solid;
 }
 .login-nav{
-    margin-top: 40px;
+    margin: 50px 0px;
+}
+.left-app{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 150px;
+    margin-right: 120px;
+}
+.left-app img{
+    width: 100%;
 }
 </style>

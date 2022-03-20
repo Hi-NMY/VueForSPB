@@ -2,6 +2,7 @@
 import VueRouter from 'vue-router'
 //引入相关依赖
 import Login from '../components/login/Login.vue'
+import Register from '../components/login/Register.vue'
 //创建并暴露路由器
 export default new VueRouter({
 	routes:[
@@ -14,7 +15,8 @@ export default new VueRouter({
 		{
             //注意/不能丢
 			name:'register',
-			path:'/register'
+			path:'/register',
+			component:Register
 		}
 	]	
 })
