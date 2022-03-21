@@ -5,9 +5,14 @@
 //modules分开编写，一起引入
 import Vuex from 'vuex'
 import Vue from 'vue'
+import index from './modules/index'
+
 Vue.use(Vuex)
 
 //创建并暴露store
 export default new Vuex.Store({
-	modules:{}
+	modules:{
+		index
+	}
 })
+

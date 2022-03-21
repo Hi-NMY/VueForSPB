@@ -1,7 +1,7 @@
 <template>
 <div class="register">
     <div class="form">
-        <el-form :model="param" :rules="rules" ref="param" class="form-center">
+        <el-form :model="param" :rules="rules" class="form-center">
             <el-form-item prop="username">
                 <el-input type="text" placeholder="你的昵称" prefix-icon="el-icon-user" v-model="param.username" ></el-input>
             </el-form-item>
@@ -51,15 +51,6 @@ export default {
     },
     methods:{
         submitForm() {
-            this.$refs[`param`].validate((valid) => {
-                if (valid) {
-                    console.log('您点击了注册');
-                    this.$message({
-                        message: '您点击了注册',
-                        type: 'success'
-                    });
-                }
-            });
         }
     }
 

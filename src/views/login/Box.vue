@@ -18,12 +18,16 @@
             </div>
         </div>
         <div class="login-register-box">
-            <router-view></router-view>
+            <loginBox v-if="isBox"></loginBox>
+            <registerBox v-else></registerBox>
         </div>
     </div>
   </div>
 </template>
-<script scope>
+<script>
+import loginBox from '@/components/login/Login.vue'
+import registerBox from '@/components/login/Register.vue'
+
 export default {
   name: "login-box",
   data() {
@@ -33,23 +37,24 @@ export default {
           },
           registerClass:{
               select:false,
-          }
+          },
+            isBox:true
       }
+  },
+  components:{
+      loginBox,
+      registerBox
   },
   methods: {
       loginClick(){
         this.loginClass.select = true;
         this.registerClass.select = false;
-        this.$router.push({
-           name:'login'
-         })
+        this.isBox = true
       },
       registerClick(){
-         this.loginClass.select = false;
+        this.loginClass.select = false;
         this.registerClass.select = true;
-        this.$router.push({
-           name:'register'
-         })
+        this.isBox = false
       }
     }
 };

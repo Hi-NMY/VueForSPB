@@ -1,12 +1,12 @@
 <template>
     <div class="login">
         <div class="form">
-            <el-form :model="param" :rules="rules" ref="param" class="form-center">
-                <el-form-item prop="userNumber">
-                    <el-input placeholder="账号" prefix-icon="el-icon-reading" v-model="param.userNumber"></el-input>
+            <el-form :model="loginDto" :rules="rules" class="form-center">
+                <el-form-item prop="userAccount">
+                    <el-input placeholder="账号" prefix-icon="el-icon-reading" v-model="loginDto.userAccount"></el-input>
                 </el-form-item>
-                <el-form-item prop="userpwd">
-                    <el-input type="password" placeholder="密码" prefix-icon="el-icon-lock" v-model="param.userpwd"></el-input>
+                <el-form-item prop="userPwd">
+                    <el-input type="password" placeholder="密码" prefix-icon="el-icon-lock" v-model="loginDto.userPwd"></el-input>
                 </el-form-item>
                 <div class="remember-me-forget">
                     <div>
@@ -23,12 +23,13 @@
     </div>
 </template>
 <script>
+import {login} from '@/api/login'
 export default {
      data: function () {
         return {
-            param:{
-                userNumber:'',
-                userpwd:''
+            loginDto:{
+                userAccount:'',
+                userPwd:''
             },
             rules: {
                 userNumber: [
@@ -45,15 +46,15 @@ export default {
     },
     methods:{
         submitForm() {
-            this.$refs[`param`].validate((valid) => {
-                if (valid) {
-                    console.log('您点击了登录');
-                    this.$message({
-                        message: '您点击了登录',
-                        type: 'success'
-                    });
+            login(this.loginDto).then(res=>{
+                    if(res.data){
+                        this.$store.commit('index/updateIsLogin',true)
+                        this.$router.push({
+                                name:'index',
+                            })
+                    }
                 }
-            });
+            );
         }
     }
 
