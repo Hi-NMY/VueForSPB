@@ -2,20 +2,43 @@
     <div class="head">
         <img src="../../assets/text-logo.png" class="head_img">
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" active-text-color="rgb(70,179,230)">
-            <el-menu-item index="1">
+            <el-menu-item index="1" v-if="!isdenglu">
                 <i class="el-icon-aim"></i>
                 首页
             </el-menu-item>
-            <el-menu-item index="2">
+            <el-menu-item index="2" v-if="!isdenglu">
                 <i class="el-icon-download"></i>
                 下载App
             </el-menu-item>
-            <el-menu-item index="3">
+            <el-menu-item index="3" v-if="!isdenglu">
                 <i class="el-icon-chat-line-square"></i>
                 话题
             </el-menu-item>
+
+            <el-menu-item index="4" v-if="isdenglu">
+                <i class="el-icon-aim"></i>
+                发现
+            </el-menu-item>
+            <el-menu-item index="5" v-if="isdenglu">
+                <i class="el-icon-c-scale-to-original"></i>
+                关注
+            </el-menu-item>
+            <el-menu-item index="6" v-if="isdenglu">
+                <i class="el-icon-chat-line-square"></i>
+                话题
+            </el-menu-item>
+            <el-menu-item index="7" v-if="isdenglu">
+                <i class="el-icon-chat-dot-round"></i>
+                消息
+            </el-menu-item>
         </el-menu>
-        <div class="sousuo">
+        <div class="sousuo" v-if="!isdenglu" style="left: 680px">
+            <el-input type="text" placeholder="搜索" v-model="sousuo" ></el-input>
+            <button>
+                <i class="el-icon-search"></i>
+            </button>
+        </div>
+        <div class="sousuo" v-if="isdenglu" style="left: 810px">
             <el-input type="text" placeholder="搜索" v-model="sousuo" ></el-input>
             <button>
                 <i class="el-icon-search"></i>
@@ -99,7 +122,7 @@
         padding: 0;
         font-size: 16px;
         color: black;
-        width: 140px;
+        width: 130px;
         text-align: center;
         border: 0;
     }
@@ -110,7 +133,6 @@
         width: 220px;
         position: absolute;
         display: inline-block;
-        left: 700px;
         top: 12px;
     }
     /deep/ .sousuo .el-input__inner {
@@ -134,7 +156,7 @@
     .head_right{
         position: absolute;
         display: inline-block;
-        right: 55px;
+        right: 45px;
         /*border: 1px solid red;*/
     }
     .head_right button{
@@ -152,7 +174,7 @@
         border: 1px solid rgb(70,179,230);
     }
     .head_right .qiandao {
-        width: 100px;
+        width: 110px;
         color: white;
         background-color: rgb(70,179,230);
     }
