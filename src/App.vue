@@ -1,15 +1,16 @@
 <template>
   <div id="app">
-      <Box></Box>
+      <Head></Head>
   </div>
 </template>
 
 <script>
-import Box from './components/login/Box'
+
+import Head from './components/head/Head'
 export default {
   name: 'App',
   components:{
-    Box
+      Head
   }
 }
 </script>

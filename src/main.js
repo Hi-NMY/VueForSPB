@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { Button, Input, Form,FormItem} from 'element-ui';
+import {Button, Input, Form, FormItem, Menu, MenuItem, Submenu} from 'element-ui';
 //引入store
 // import ElementUi from 'element-ui'
 //
-// import 'element-ui/lib/theme-chalk/index.css';
+import 'element-ui/lib/theme-chalk/index.css';
 // Vue.use(ElementUi)
 
 import store from './store/index.js'
@@ -18,6 +18,11 @@ Vue.use(Input)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(VueRouter)
+Vue.use(Menu)
+Vue.use(MenuItem)
+Vue.use(Submenu)
+
+
 
 new Vue({
   render: h => h(App),

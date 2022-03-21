@@ -3,7 +3,7 @@
     <div class="form">
         <el-form :model="param" :rules="rules" ref="param" class="form-center">
             <el-form-item prop="username">
-                <el-input type="test" placeholder="你的昵称" prefix-icon="el-icon-user" v-model="param.username" ></el-input>
+                <el-input type="text" placeholder="你的昵称" prefix-icon="el-icon-user" v-model="param.username" ></el-input>
             </el-form-item>
             <el-form-item prop="userphone">
                 <el-input type="phone" placeholder="学号" prefix-icon="el-icon-reading" v-model="param.userphone"></el-input>
