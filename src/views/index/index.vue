@@ -1,6 +1,7 @@
 <template>
     <div class="index">
         <head-box></head-box>
+        
     </div>
 </template>
 <script>
@@ -20,6 +21,7 @@ export default {
             login(user).then(res =>{
                 if(res.data){
                     this.$store.commit('index/updateIsLogin',true)
+                    this.$store.dispatch('userInfo/obtainUserInfo',user.userAccount)
                 }
             })
         }

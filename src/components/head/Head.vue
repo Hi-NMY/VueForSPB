@@ -123,7 +123,7 @@
     }
     .head_img{
         z-index: 1;
-        width: 120px;
+        width: 100px;
         height: auto;
         margin-left: 40px;
         float: left;

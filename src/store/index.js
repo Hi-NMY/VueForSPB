@@ -6,13 +6,15 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
 import index from './modules/index'
+import userInfo from './modules/user'
 
 Vue.use(Vuex)
 
 //创建并暴露store
 export default new Vuex.Store({
 	modules:{
-		index
+		index,
+		userInfo
 	}
 })
 

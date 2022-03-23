@@ -4,7 +4,7 @@ const index = {
 	mutations: {
 		updateIsLogin(state, value) {
 			state.isLogin = value
-		},
+		}
 	},
 	state: {
 		isLogin: false

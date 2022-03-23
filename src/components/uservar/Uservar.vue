@@ -1,16 +1,16 @@
 <template>
     <div class="uservar">
         <div class="uname">
-            <h3>一头大熊呀</h3>
+            <h3>{{userInfo.user.userName}}</h3>
         </div>
         <div class="hand_info">
             <span>签到天数:</span>&nbsp;
-            <span class="qiandao">20</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="qiandao">{{userInfo.user.userLongDay}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
             <span>徽章</span>&nbsp;
             <img src="../../assets/logo.png">
         </div>
         <div class="qianming">
-            这是一条个性签名啦啦啦啦啦啦啦啦啦啦啦啦啦啦
+            {{userInfo.user.userProfile}}
         </div>
         <div class="info_box">
             <div class="box_left">
@@ -56,7 +56,7 @@
             </div>
         </div>
         <hr class="xian">
-        <div class="userinfo_button6">
+        <div class="userinfo_button6" @click="loginOut">
             <div class="button_left">
                 <i class="el-icon-switch-button"></i>&nbsp;&nbsp;
                 <span>退出登录</span>
@@ -66,8 +66,18 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
     export default {
-        name:'user-var'
+        name:'user-var',
+        computed:{
+            ...mapState(['userInfo'])
+        },
+        methods:{
+            loginOut(){
+                localStorage.removeItem("user");
+                this.$store.commit('index/updateIsLogin',false)
+            }
+        }
     }
 </script>
 
@@ -163,7 +173,6 @@
     .userinfo_button6{
         /*top: 420px;*/
         top: 260px;
-
     }
 
 </style>
