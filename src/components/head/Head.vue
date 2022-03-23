@@ -46,7 +46,7 @@
             <template v-else>
                 <div class="i" @mouseenter="showUserMsg" @mouseleave="showUserMsg">
                     <div>
-                        <img src="../../assets/logo.png">
+                        <img :class="headImgAnima" src="../../assets/logo.png">
 <!--                        <i class="el-icon-arrow-down"></i>-->
                         <div v-show="userMsg" class="userMsgVar">
                             <template>
@@ -58,7 +58,7 @@
             </template>
             <button class="sign"><i class="el-icon-magic-stick"></i> 签到</button>
         </div>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -69,7 +69,10 @@
             return {
                 activeIndex: '1',
                 search:'',
-                userMsg:false
+                userMsg:false,
+                headImgAnima:{
+                  imgAnima:false
+                }
             };
         },
         components:{
@@ -77,7 +80,13 @@
         },
         computed:{
             isLogin(){
-                return this.$store.state.index.isLogin
+                const isLogin = this.$store.state.index.isLogin;
+                if(isLogin){
+                  this.activeIndex = '4'
+                }else{
+                  this.activeIndex = '1'
+                }
+                return isLogin
             }
         },
         methods: {
@@ -96,6 +105,7 @@
             },
             showUserMsg(){
                 this.userMsg = !this.userMsg
+                this.headImgAnima.imgAnima = !this.headImgAnima.imgAnima
             }
         }
     }
@@ -144,7 +154,9 @@
     }
     .search{
         width: 15%;
+        min-width: 100px;
         margin-left: 60px;
+        margin-right: 20px;
         top: 12px;
         float: left;
         display: flex;
@@ -201,7 +213,7 @@
         width: auto;
         height: 100%;
         border-radius: 0;
-        margin: 10px 0;
+        margin-right: 30px;
         display: flex;
         align-items: center;
     }
@@ -213,7 +225,7 @@
         margin-left: 10px;
         border-radius: 40px;
     }
-    .head_right img:hover{
+    .imgAnima{
         transform:scale(1.7);
         transition: all 0.1s;
         position: relative;
@@ -234,8 +246,9 @@
     .head_right button:hover{
         cursor: pointer;
     }
-
     .userMsgVar{
+      width: auto;
+      height: auto;
         position: absolute;
         top: 9%;
     }

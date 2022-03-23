@@ -5,9 +5,24 @@
 </template>
 <script>
 import headBox from '@/components/head/Head.vue'
+import {login} from '@/api/login'
 export default {
     components:{
         headBox
+    },
+    created(){
+        let user = null;
+        try {
+            user = JSON.parse(localStorage.getItem('user'));
+        } catch (error) {
+        }
+        if(user){
+            login(user).then(res =>{
+                if(res.data){
+                    this.$store.commit('index/updateIsLogin',true)
+                }
+            })
+        }
     }
 }
 </script>

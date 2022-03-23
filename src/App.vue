@@ -16,5 +16,6 @@ export default {
    #app{
         display: flex;
         height: 100%;
+        overflow-x: hidden;
    }
 </style>

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import {Button, Input, Form, FormItem, Menu, MenuItem, Submenu} from 'element-ui';
+import {Button, Input, Form, FormItem, Menu, MenuItem, Submenu,Message} from 'element-ui';
 //引入store
 // import ElementUi from 'element-ui'
 //
@@ -27,8 +27,7 @@ Vue.use(VueRouter)
 Vue.use(Menu)
 Vue.use(MenuItem)
 Vue.use(Submenu)
-
-
+Vue.prototype.$message = Message;
 
 new Vue({
   render: h => h(App),

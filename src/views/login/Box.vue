@@ -76,24 +76,22 @@ export default {
   height: 70%;
   margin: auto;
   display: flex;
+  padding-left: 100px;
   justify-content: right;
   color: rgb(117, 117, 117);
   font-size: 18px;
   font-family: '微软雅黑';
 }
 .text-logo{
-    position: relative;
-    left: -30%;
-    top: -20%;
-    width: auto;
+    position: absolute;
+    left: 3%;
+    top: 4%;
+    width: 150px;
     height: auto;
-    max-width: 30%;
-    max-height: 30%;  
 }
 .right-input {
   width: 400px;
   height: 500px;
-  margin: 40px;
   background-color: white;
   display: flex;
   flex-direction: column;

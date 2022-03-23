@@ -20,7 +20,6 @@
                 <div class="title_text">
                     关注
                 </div>
-
             </div>
             <div class="box_middle">
                 <div class="number">
@@ -47,7 +46,6 @@
                 </div>
             </div>
         </div>
-
         <div class="userinfo_button1">
             <div class="button_left">
                 <i class="el-icon-user"></i>&nbsp;&nbsp;
@@ -57,42 +55,6 @@
                 <i class="el-icon-arrow-right"></i>
             </div>
         </div>
-<!--        <div class="userinfo_button2">-->
-<!--            <div class="button_left">-->
-<!--                <i class="el-icon-user"></i>&nbsp;&nbsp;-->
-<!--                <span>关注</span>-->
-<!--            </div>-->
-<!--            <div class="button_right">-->
-<!--                <i class="el-icon-arrow-right"></i>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="userinfo_button3">-->
-<!--            <div class="button_left">-->
-<!--                <i class="el-icon-user"></i>&nbsp;&nbsp;-->
-<!--                <span>个人中心</span>-->
-<!--            </div>-->
-<!--            <div class="button_right">-->
-<!--                <i class="el-icon-arrow-right"></i>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="userinfo_button4">-->
-<!--            <div class="button_left">-->
-<!--                <i class="el-icon-user"></i>&nbsp;&nbsp;-->
-<!--                <span>个人中心</span>-->
-<!--            </div>-->
-<!--            <div class="button_right">-->
-<!--                <i class="el-icon-arrow-right"></i>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="userinfo_button5">-->
-<!--            <div class="button_left">-->
-<!--                <i class="el-icon-user"></i>&nbsp;&nbsp;-->
-<!--                <span>个人中心</span>-->
-<!--            </div>-->
-<!--            <div class="button_right">-->
-<!--                <i class="el-icon-arrow-right"></i>-->
-<!--            </div>-->
-<!--        </div>-->
         <hr class="xian">
         <div class="userinfo_button6">
             <div class="button_left">
@@ -112,7 +74,7 @@
 <style scoped>
     .uservar{
         /*border: 1px solid lightgray;*/
-        box-shadow:5px 5px 10px 5px lightgray;
+        box-shadow:0 2px 12px 0 rgba(0, 0, 0, 0.1);
         width: 260px;
         /*height: 480px;*/
         height: 340px;
@@ -190,18 +152,6 @@
         margin: 20px 40px;
         width: 180px;
     }
-    /*.userinfo_button2{*/
-    /*    top: 240px;*/
-    /*}*/
-    /*.userinfo_button3{*/
-    /*    top: 280px;*/
-    /*}*/
-    /*.userinfo_button4{*/
-    /*    top: 320px;*/
-    /*}*/
-    /*.userinfo_button5{*/
-    /*    top: 360px;*/
-    /*}*/
     .xian{
         width: 200px;
         margin: 0px 20px;
