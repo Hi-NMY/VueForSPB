@@ -133,6 +133,7 @@ import {mapState} from 'vuex'
         white-space:nowrap;
         width: 180px;
         color: lightgray;
+        text-align: left;
     }
     .info_box{
         display: flex;
@@ -164,11 +165,12 @@ import {mapState} from 'vuex'
     }
     .xian{
         width: 200px;
-        margin: 0px 20px;
+        margin: 0px 30px;
         position: absolute;
         /*top: 420px;*/
         top: 260px;
-        border: 1px solid whitesmoke;
+        border: none;
+        border-bottom: 1px solid whitesmoke;
     }
     .userinfo_button6{
         /*top: 420px;*/

@@ -1,15 +1,17 @@
 <template>
     <div class="index">
-        <head-box></head-box>
-        
+<!--        <head-box></head-box>-->
+        <random-user></random-user>
     </div>
 </template>
 <script>
+import randomUser from '@/components/index/RandomUser.vue'
 import headBox from '@/components/head/Head.vue'
 import {login} from '@/api/login'
 export default {
     components:{
-        headBox
+        headBox,
+        randomUser
     },
     created(){
         let user = null;
