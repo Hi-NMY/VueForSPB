@@ -44,10 +44,15 @@
                 <button @click="register()">注册</button>
             </template>
             <template v-else>
-                <div class="i">
+                <div class="i" @mouseenter="showUserMsg" @mouseleave="showUserMsg">
                     <div>
                         <img src="../../assets/logo.png">
-                        <i class="el-icon-arrow-down"></i>
+<!--                        <i class="el-icon-arrow-down"></i>-->
+                        <div v-show="userMsg" class="userMsgVar">
+                            <template>
+                                <user-var></user-var>
+                            </template>
+                        </div>
                     </div>
                 </div>
             </template>
@@ -57,13 +62,18 @@
 </template>
 
 <script>
+    import UserVar from '@/components/uservar/Uservar'
     export default {
         // name: "Head",
         data() {
             return {
                 activeIndex: '1',
                 search:'',
+                userMsg:false
             };
+        },
+        components:{
+            UserVar
         },
         computed:{
             isLogin(){
@@ -83,6 +93,9 @@
                 this.$router.push({
                                 path:'/login',
                             })
+            },
+            showUserMsg(){
+                this.userMsg = !this.userMsg
             }
         }
     }
@@ -94,8 +107,9 @@
         display: flex;
         align-items: center;
         border: 1px solid rgb(243, 243, 243);
-        height: 8%;
+        height: 60px;;
         width: 100%;
+        position: fixed;
     }
     .head_img{
         z-index: 1;
@@ -191,11 +205,19 @@
         display: flex;
         align-items: center;
     }
+
     .head_right img{
+        z-index: 4;
         width: 45px;
         height: 100%;
         margin-left: 10px;
         border-radius: 40px;
+    }
+    .head_right img:hover{
+        transform:scale(1.7);
+        transition: all 0.1s;
+        position: relative;
+        top: 22px;
     }
     .head_right .i div{
         display: flex;
@@ -206,10 +228,15 @@
         margin-right: 10px;
     }
     .head_right .i:hover{
-       background-color: rgb(245, 245, 245);
+        /*background-color: rgb(245, 245, 245);*/
         cursor: pointer;
     }
     .head_right button:hover{
         cursor: pointer;
+    }
+
+    .userMsgVar{
+        position: absolute;
+        top: 9%;
     }
 </style>

@@ -46,15 +46,19 @@ export default {
     },
     methods:{
         submitForm() {
-            login(this.loginDto).then(res=>{
-                    if(res.data){
-                        this.$store.commit('index/updateIsLogin',true)
-                        this.$router.push({
-                                name:'index',
-                            })
-                    }
-                }
-            );
+            this.$store.commit('index/updateIsLogin',true)
+            this.$router.push({
+                name:'index',
+            })
+            // login(this.loginDto).then(res=>{
+            //         if(res.data){
+            //             this.$store.commit('index/updateIsLogin',true)
+            //             this.$router.push({
+            //                     name:'index',
+            //                 })
+            //         }
+            //     }
+            // );
         }
     }
 
