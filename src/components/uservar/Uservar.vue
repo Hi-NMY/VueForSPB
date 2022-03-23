@@ -89,11 +89,8 @@ import {mapState} from 'vuex'
         /*height: 480px;*/
         height: 340px;
         background-color: white;
-        position: relative;
-        right: 100px;
         border-radius: 10px;
         z-index: 3;
-        top: 55px;
     }
     .uname{
         position: absolute;

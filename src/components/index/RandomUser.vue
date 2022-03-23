@@ -18,10 +18,10 @@
                         </div>
                         <div class="message">
                             <span class="username">{{usermsg.userName}}</span><br>
+                            <span class="guanzhu">关注</span>
                             <span>{{usermsg.followNum}}</span>
-                            <span class="guanzhu">关注</span>.
-                            <span>{{usermsg.followedNum}}</span>
                             <span class="beiguanzhu">被关注</span>
+                            <span>{{usermsg.followedNum}}</span>
                         </div>
                     </div>
                     <div class="user_msg_right">
@@ -64,9 +64,11 @@
 </script>
 <style>
     .randomUser{
-        border: 1px solid gainsboro;
-        width: 270px;
-        padding: 30px;
+        height: 420px;
+        border-radius: 10px;
+        width: 100%;
+        padding: 20px;
+        background-color: white;
     }
     .head{
         display: flex;
@@ -107,6 +109,9 @@
     }
     .tuijian_user .user_msg_right{
         color: #46B3E6;
+    }
+    .beiguanzhu{
+        margin-left: 10px;
     }
     /*.message_all{*/
     /*    border: 1px solid gainsboro;*/

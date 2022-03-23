@@ -1,16 +1,15 @@
-import Vue from 'vue'
-import App from './App.vue'
-import {Button, Input, Form, FormItem, Menu, MenuItem, Submenu,Message} from 'element-ui';
+import { Avatar, Button, Form, FormItem, Input, Menu, MenuItem, Message, Submenu, TabPane, Tabs, Tag ,Image} from 'element-ui';
 //引入store
 // import ElementUi from 'element-ui'
 //
 import 'element-ui/lib/theme-chalk/index.css';
-// Vue.use(ElementUi)
-
-import store from './store/index.js'
+import Vue from 'vue';
 //引入VueRouter和路由器
-import VueRouter from 'vue-router'
-import router from './router/index.js'
+import VueRouter from 'vue-router';
+import App from './App.vue';
+import router from './router/index.js';
+// Vue.use(ElementUi)
+import store from './store/index.js';
 
 const originalPush = VueRouter.prototype.push
 
@@ -27,13 +26,18 @@ Vue.use(VueRouter)
 Vue.use(Menu)
 Vue.use(MenuItem)
 Vue.use(Submenu)
+Vue.use(Tabs)
+Vue.use(TabPane)
+Vue.use(Avatar)
+Vue.use(Tag)
+Vue.use(Image)
 Vue.prototype.$message = Message;
 
 new Vue({
   render: h => h(App),
   store,
   router,
-  beforeCreate(){
+  beforeCreate() {
     Vue.prototype.$bus = this
   }
 }).$mount('#app')
