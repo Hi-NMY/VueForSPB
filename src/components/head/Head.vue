@@ -123,6 +123,8 @@ export default {
   border: 1px solid rgb(243, 243, 243);
   height: 60px;
   width: 100%;
+  position: fixed;
+  z-index: 2;
 }
 .head_img {
   z-index: 1;

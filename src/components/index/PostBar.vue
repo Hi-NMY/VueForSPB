@@ -44,7 +44,7 @@ barItem
 .postbar-box {
   padding: 0px 5px 0px 5px;
   height: auto;
-  width: 70%;
+  /*width: 70%;*/
   /* border:1px solid aqua; */
 }
 .el-tabs__nav-wrap::after {

@@ -2,8 +2,15 @@
     <div class="index">
         <head-box></head-box>
         <div class="main">
-            <post-bar class="postBar"></post-bar>
-            <random-user class="randomUser"></random-user>
+            <div class="main_left">
+                <post-bar class="postBar"></post-bar>
+            </div>
+
+            <div class="main_right">
+                <random-user class="randomUser"></random-user>
+                <hot-topic class="hotTopic"></hot-topic>
+            </div>
+
         </div>
     </div>
 </template>
@@ -11,12 +18,15 @@
 import headBox from '@/components/head/Head.vue'
 import postBar from '@/components/index/PostBar.vue'
 import randomUser from '@/components/index/RandomUser.vue'
+import hotTopic from '@/components/index/HotTopic.vue'
+
 import {login} from '@/api/login'
 export default {
     components:{
         headBox,
         postBar,
-        randomUser
+        randomUser,
+        hotTopic
     },
     created(){
         let user = null;
@@ -51,13 +61,14 @@ export default {
         min-width: 1000px;
         display: flex;
         align-items: top;
+        margin-top: 85px;
     }
-    .postBar{
-        width : 70%;
+    .main_left{
+        width : 65%;
     }
-    .randomUser{
+    .main_right{
         margin-left: 10px;
-        
         width: 30%;
     }
+
 </style>

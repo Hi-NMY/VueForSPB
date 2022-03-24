@@ -8,3 +8,10 @@ export function randomUser(params){
         params
     })
 }
+export function hotTopic(params){
+    return request({
+        url:'/index/hotTopic',
+        method:'get',
+        params
+    })
+}

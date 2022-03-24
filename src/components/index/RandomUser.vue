@@ -10,8 +10,8 @@
             </div>
         </div>
         <div class="tuijian_user">
-            <template v-for="usermsg in usersmsg">
-                <div class="user_msg" >
+            <template>
+                <div class="user_msg" v-for="usermsg in usersmsg" :key="usermsg.userAccount">
                     <div class="user_msg_left">
                         <div class="img">
                             <img src="../../assets/logo.png">
@@ -62,7 +62,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
     .randomUser{
         height: 420px;
         border-radius: 10px;
