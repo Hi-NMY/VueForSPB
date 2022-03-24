@@ -51,13 +51,16 @@
       <template v-else>
         <div class="i" @mouseenter="showUserMsg" @mouseleave="showUserMsg">
           <div>
-            <img :class="headImgAnima" src="../../assets/logo.png" />
+            <el-avatar :class="headImgAnima" :size="50" src="">
+              <img src="../../assets/logo.png" />
+            </el-avatar>
+            <!-- <img src="../../assets/logo.png" /> -->
             <!--                        <i class="el-icon-arrow-down"></i>-->
-            <div v-show="userMsg" class="userMsgVar">
-              <template>
+            <transition name="el-fade-in-linear">
+              <div v-show="userMsg" class="userMsgVar">
                 <user-var></user-var>
-              </template>
-            </div>
+              </div>
+            </transition>
           </div>
         </div>
       </template>
@@ -77,6 +80,7 @@ export default {
       userMsg: false,
       headImgAnima: {
         imgAnima: false,
+        imgAnimaI: true,
       },
     };
   },
@@ -109,6 +113,7 @@ export default {
     showUserMsg() {
       this.userMsg = !this.userMsg;
       this.headImgAnima.imgAnima = !this.headImgAnima.imgAnima;
+      this.headImgAnima.imgAnimaI = !this.headImgAnima.imgAnimaI;
     },
   },
 };
@@ -224,18 +229,29 @@ export default {
   align-items: center;
 }
 
-.head_right img {
+/* .head_right img {
   z-index: 4;
   width: 45px;
   height: 100%;
   margin-left: 10px;
   border-radius: 40px;
+} */
+
+.el-avatar {
+  margin-left: 10px;
+  z-index: 99;
 }
 .imgAnima {
-  transform: scale(1.7);
+  transform: scale(1.5);
   transition: all 0.1s;
   position: relative;
   top: 22px;
+}
+.imgAnimaI {
+  transform: scale(1);
+  transition: all 0.1s;
+  position: relative;
+  top: 0px;
 }
 .head_right .i div {
   display: flex;
@@ -258,5 +274,6 @@ export default {
   height: auto;
   position: absolute;
   top: 60px;
+  margin-left: 10px;
 }
 </style>

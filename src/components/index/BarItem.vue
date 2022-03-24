@@ -5,15 +5,18 @@
         <img src="../../assets/logo.png" />
       </el-avatar>
       <div class="item-head-msg">
-        <span class="name">{{todo.userAccount}}</span>
-        <span class="date">{{todo.pbDate}}</span>
+        <div>
+          <span class="name">{{ todo.userAccount }}</span>
+          <el-image
+            src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
+          ></el-image>
+        </div>
+        <span class="date">{{ date }}</span>
       </div>
     </div>
     <div class="item-main">
       <div class="item-article">
-        <span
-          >{{todo.pbArticle}}</span
-        >
+        <span>{{ todo.pbArticle }}</span>
       </div>
       <div class="item-img">
         <el-image
@@ -23,12 +26,12 @@
           src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
         ></el-image>
       </div>
-      <div class="item-location">
+      <div v-show="location" class="item-location">
         <img src="../../assets/location.png" />
-        <span>{{todo.pbLocation}}</span>
+        <span>{{ todo.pbLocation }}</span>
       </div>
-      <div class="item-topic">
-        <el-tag v-for="(topic, index) in topics" :key="index">{{
+      <div v-show="topic" class="item-topic">
+        <el-tag v-for="(topic, index) in topicList" :key="index">{{
           topic
         }}</el-tag>
       </div>
@@ -42,13 +45,13 @@
       <div>
         <div>
           <img src="../../assets/bar_comment.png" />
-          <span>123</span>
+          <span>{{ pbCommentNum }}</span>
         </div>
       </div>
       <div>
         <div>
           <img src="../../assets/bar_like.png" />
-          <span>123</span>
+          <span>{{ pbThumbNum }}</span>
         </div>
       </div>
     </div>
@@ -56,6 +59,7 @@
 </template>
 
 <script>
+import { barTimeUtil } from "@/utils/dateUtil";
 export default {
   name: "item",
   data() {
@@ -64,6 +68,49 @@ export default {
     };
   },
   props: ["todo"],
+  computed: {
+    date() {
+      return barTimeUtil(this.todo.pbDate.replace("T", " "));
+    },
+    location() {
+      const isLocation = this.todo.pbLocation;
+      if (isLocation) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    topic() {
+      const isTopic = this.todo.pbTopic;
+      if (isTopic) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    topicList() {
+      let topicList = this.todo.pbTopic;
+      topicList = topicList.split("|");
+      topicList.pop();
+      return topicList;
+    },
+    pbThumbNum() {
+      const pbThumbNum = this.todo.pbThumbNum;
+      if (pbThumbNum == 0) {
+        return "";
+      } else {
+        return pbThumbNum;
+      }
+    },
+    pbCommentNum() {
+      const pbCommentNum = this.todo.pbCommentNum;
+      if (pbCommentNum == 0) {
+        return "";
+      } else {
+        return pbCommentNum;
+      }
+    },
+  },
 };
 </script>
 
@@ -88,11 +135,22 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: left;
+  position: relative;
+}
+.item-head-msg div {
+  display: flex;
+  align-items: center;
+}
+.item-head-msg .el-image__inner {
+  margin-left: 4px;
+  width: 24px;
+  height: auto;
 }
 .name {
   font-weight: bold;
 }
 .date {
+  line-height: 12px;
   font-size: 12px;
   margin-top: 5px;
   font-weight: lighter;
@@ -107,7 +165,7 @@ export default {
 .item-img {
   margin-top: 15px;
 }
-.el-image__inner {
+.item-img .el-image__inner {
   width: 150px;
   height: 150px;
   margin-right: 10px;
@@ -121,6 +179,10 @@ export default {
 }
 .item-location img {
   width: 15px;
+  margin-right: 1px;
+}
+.item-location span {
+  line-height: 18px;
   margin-right: 1px;
 }
 .item-topic {
@@ -162,6 +224,21 @@ export default {
   margin-left: 2px;
 }
 .item-foot img {
+  padding: 3px;
   width: 20px;
+}
+.el-tag:hover,
+.el-avatar:hover,
+.item-foot > div > div > img:hover,
+.name:hover {
+  cursor: pointer;
+}
+.name:hover {
+  color: #3bb0e6;
+}
+.item-foot > div > div > img:hover {
+  padding: 3px;
+  background-color: #3bb0e62a;
+  border-radius: 20px;
 }
 </style>

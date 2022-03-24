@@ -12,7 +12,7 @@ Vue.use(Vuex)
 
 //创建并暴露store
 export default new Vuex.Store({
-	modules:{
+	modules: {
 		index,
 		userInfo
 	}

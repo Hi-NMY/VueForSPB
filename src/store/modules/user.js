@@ -1,29 +1,29 @@
-import {getInfo} from '@/api/userInfo'
+import { getInfo } from '@/api/userInfo'
 const userInfo = {
     namespaced: true,
-    actions:{
-        obtainUserInfo({commit},value){
+    actions: {
+        obtainUserInfo({ commit }, value) {
             getInfo(value).then(res => {
-                commit('obtainUserInfo',res.data)
+                commit('obtainUserInfo', res.data)
             })
         }
     },
-    mutations:{
-        obtainUserInfo(state, value){
-			state.user = value
-		}
+    mutations: {
+        obtainUserInfo(state, value) {
+            state.user = value
+        }
     },
-    state:{
-		user : {
-			userName: "",
-			userBirth: "",
-			userHome: "",
-			userFavorite: "",
-			userProfile: "",
-			userBadge: "",
-			userLongDay: "",
-			userPrivacy: ""
-		}
+    state: {
+        user: {
+            userName: "",
+            userBirth: "",
+            userHome: "",
+            userFavorite: "",
+            userProfile: "",
+            userBadge: "",
+            userLongDay: "",
+            userPrivacy: ""
+        }
     }
 }
 export default userInfo

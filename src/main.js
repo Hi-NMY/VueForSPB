@@ -1,4 +1,5 @@
-import { Avatar, Button, Form, FormItem, Input, Menu, MenuItem, Message, Submenu, TabPane, Tabs, Tag ,Image} from 'element-ui';
+import { Avatar, Button, Form, FormItem, Input, Menu, MenuItem, Message, Submenu, TabPane, Tabs, Tag, Image } from 'element-ui';
+import 'element-ui/lib/theme-chalk/base.css';
 //引入store
 // import ElementUi from 'element-ui'
 //

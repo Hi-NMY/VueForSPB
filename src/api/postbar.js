@@ -1,9 +1,9 @@
 import request from '@/utils/request';
 
-export function queryNoVideoPostBarForDate(date){
+export function queryNoVideoPostBarForDate(date) {
     return request({
-        url:'/postbar/queryNoVideoPostBarForDate',
-        method:'post',
-        data:date
+        url: '/postbar/queryNoVideoPostBarForDate',
+        method: 'post',
+        data: date
     })
 }
