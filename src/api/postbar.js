@@ -7,3 +7,11 @@ export function queryNoVideoPostBarForDate(date) {
         data: date
     })
 }
+
+export function queryBarComment(date) {
+    return request({
+        url: '/postbar/queryComment',
+        method: 'post',
+        data: date
+    })
+}

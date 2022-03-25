@@ -63,7 +63,6 @@ export default {
   border-radius: 10px;
   width: 100%;
   background-color: white;
-  margin-top: 15px;
   height: auto;
   display: flex;
   flex-direction: column;

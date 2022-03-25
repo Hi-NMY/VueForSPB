@@ -1,7 +1,7 @@
 <template>
   <div class="randomUser">
     <div class="head">
-      <div class="head_left">推荐用户</div>
+      <div class="head_left">你可能感兴趣的人</div>
       <div class="head_right" @click="findUsers">
         <i :class="isLoading"></i>
         换一批
@@ -41,6 +41,7 @@
 // import { index } from "../../api/index";
 import * as api from "../../api/index";
 export default {
+  name:'random-user',
   data: function () {
     return {
       usersmsg: [],

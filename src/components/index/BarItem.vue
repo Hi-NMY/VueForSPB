@@ -1,70 +1,112 @@
 <template>
   <div class="bar-item">
-    <div class="item-head">
-      <el-avatar :size="50" src="">
-        <img src="../../assets/logo.png" />
-      </el-avatar>
-      <div class="item-head-msg">
-        <div>
-          <span class="name">{{ todo.userAccount }}</span>
+    <div>
+      <div class="item-head">
+        <el-avatar :size="50" src="">
+          <img src="../../assets/logo.png" />
+        </el-avatar>
+        <div class="item-head-msg">
+          <div>
+            <span class="name">{{ todo.userAccount }}</span>
+            <el-image
+              src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
+            ></el-image>
+          </div>
+          <span class="date">{{ date }}</span>
+        </div>
+      </div>
+      <div class="item-main">
+        <div class="item-article">
+          <span>{{ todo.pbArticle }}</span>
+        </div>
+        <div class="item-img">
+          <el-image
+            src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
+          ></el-image>
           <el-image
             src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
           ></el-image>
         </div>
-        <span class="date">{{ date }}</span>
+        <div v-show="location" class="item-location">
+          <img src="../../assets/location.png" />
+          <span>{{ todo.pbLocation }}</span>
+        </div>
+        <div v-show="topic" class="item-topic">
+          <el-tag v-for="(topic, index) in topicList" :key="index">{{
+            topic
+          }}</el-tag>
+        </div>
+      </div>
+      <div class="item-foot">
+        <div>
+          <div>
+            <i class="iconfont icon-fenxiang"></i>
+          </div>
+        </div>
+        <div>
+          <div :class="commentColor" @click="seeComments">
+            <i class="iconfont icon-xiaoxi"></i>
+            <span>{{ pbCommentNum }}</span>
+          </div>
+        </div>
+        <div>
+          <div :class="likeColor" @click="clickLike">
+            <i :class="likeIcon"></i>
+            <span>{{ pbThumbNum }}</span>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="item-main">
-      <div class="item-article">
-        <span>{{ todo.pbArticle }}</span>
-      </div>
-      <div class="item-img">
-        <el-image
-          src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
-        ></el-image>
-        <el-image
-          src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
-        ></el-image>
-      </div>
-      <div v-show="location" class="item-location">
-        <img src="../../assets/location.png" />
-        <span>{{ todo.pbLocation }}</span>
-      </div>
-      <div v-show="topic" class="item-topic">
-        <el-tag v-for="(topic, index) in topicList" :key="index">{{
-          topic
-        }}</el-tag>
-      </div>
-    </div>
-    <div class="item-foot">
-      <div>
-        <div>
-          <img style="margin: auto" src="../../assets/bar_share.png" />
+
+    <div class="comment_box" v-show="seeComment">
+      <div class="comment_head">
+        <div class="comment_input_box">
+          <el-avatar :size="35" src="">
+            <img src="../../assets/logo.png" />
+          </el-avatar>
+          <el-input v-model="input" placeholder="请输入内容"></el-input>
+        </div>
+        <div class="comment_send_box">
+          <div class="emoji_box">表情功能站位</div>
+          <div class="send_box">
+            <span class="txtCount">字数站位</span>
+            <el-button type="primary" round>评论</el-button>
+          </div>
         </div>
       </div>
-      <div>
-        <div>
-          <img src="../../assets/bar_comment.png" />
-          <span>{{ pbCommentNum }}</span>
-        </div>
-      </div>
-      <div>
-        <div>
-          <img src="../../assets/bar_like.png" />
-          <span>{{ pbThumbNum }}</span>
-        </div>
+      <div class="comment_item">
+        <bar-comment-item
+          v-for="(comment, index) in comments"
+          :key="index"
+          :commentTodo="comment"
+        ></bar-comment-item>
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script scope>
 import { barTimeUtil } from "@/utils/dateUtil";
+import barCommentItem from "@/components/index/BarCommentItem.vue";
+import { queryBarComment } from "@/api/postbar";
 export default {
   name: "item",
+  components: {
+    barCommentItem,
+  },
   data() {
     return {
-      topics: ["话题1", "话题2", "话题3", "话题4"],
+      topics: [],
+      comments: [],
+      seeComment: false,
+      commentColor: {
+        commentColor: false,
+      },
+      likeColor: {
+        likeColor: false,
+      },
+      likeIcon: "iconfont icon-aixin",
+      input: "",
     };
   },
   props: ["todo"],
@@ -111,10 +153,29 @@ export default {
       }
     },
   },
+  methods: {
+    seeComments() {
+      this.seeComment = !this.seeComment;
+      this.commentColor.commentColor = !this.commentColor.commentColor;
+      if (this.seeComment) {
+        queryBarComment("").then((res) => {
+          this.comments = res.data;
+        });
+      }
+    },
+    clickLike() {
+      this.likeColor.likeColor = !this.likeColor.likeColor;
+      if (this.likeColor.likeColor) {
+        this.likeIcon = "iconfont icon-aixin-sel";
+      } else {
+        this.likeIcon = "iconfont icon-aixin";
+      }
+    },
+  },
 };
 </script>
 
-<style scope>
+<style scope lang="scss">
 .bar-item {
   border-radius: 10px;
   background-color: white;
@@ -202,7 +263,7 @@ export default {
   margin-right: 15px;
 }
 .item-foot {
-  color: #bfbfbf;
+  color: #8a8a8a;
   font-size: 12px;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -223,22 +284,132 @@ export default {
   text-align: center;
   margin-left: 2px;
 }
-.item-foot img {
-  padding: 3px;
-  width: 20px;
-}
 .el-tag:hover,
 .el-avatar:hover,
-.item-foot > div > div > img:hover,
+.item-foot > div > div > i:hover,
 .name:hover {
   cursor: pointer;
 }
 .name:hover {
   color: #3bb0e6;
 }
-.item-foot > div > div > img:hover {
+.item-foot > div > div > i {
+  font-size: 20px;
   padding: 3px;
-  background-color: #3bb0e62a;
+}
+.item-foot > div > div:hover {
+  cursor: pointer;
+  color: #3bb0e6;
+  .iconfont.icon-xiaoxi {
+    padding: 3px;
+    background-color: #3bb0e62a;
+    border-radius: 20px;
+  }
+}
+.item-foot > div > div:hover {
+  cursor: pointer;
+  color: #3bb0e6;
+  .iconfont.icon-fenxiang {
+    padding: 3px;
+    background-color: #3bb0e62a;
+    border-radius: 20px;
+  }
+}
+.item-foot > div > div:hover {
+  cursor: pointer;
+  color: #3bb0e6;
+  .iconfont.icon-aixin {
+    padding: 3px;
+    background-color: #3bb0e62a;
+    border-radius: 20px;
+  }
+  .iconfont.icon-aixin-sel {
+    padding: 3px;
+    background-color: #3bb0e62a;
+    border-radius: 20px;
+  }
+}
+.commentColor {
+  color: #3bb0e6;
+}
+.likeColor {
+  color: #3bb0e6;
+}
+.comment_box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.comment_head {
+  padding: 15px 0px;
+  border-top: 1px solid rgba(226, 226, 226, 0.384);
+  border-bottom: 1px solid rgba(226, 226, 226, 0.384);
+  width: 93%;
+  margin: 0px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.comment_input_box {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.comment_input_box .el-avatar {
+  flex-shrink: 0;
+}
+.comment_input_box .el-input__inner {
+  width: 98%;
+  border: 2px solid #c0c4cc;
+  line-height: 35px;
+  margin-left: 10px;
+  border-radius: 10px;
+}
+.comment_input_box .el-input__inner:hover {
+  border: 2px solid #46b3e6;
+}
+.comment_input_box .el-input__inner:active {
+  border: 2px solid #46b3e6;
+}
+.comment_send_box {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.emoji_box {
+  margin-left: 40px;
+}
+.send_box {
+  display: flex;
+  align-items: center;
+}
+.txtCount {
+  white-space: nowrap;
+  font-size: 13px;
+  color: #bfbfbf;
+}
+.comment_send_box .el-button.is-round {
+  width: 55%;
+  height: 34px;
+  margin-left: 10px;
+  text-align: center;
+  line-height: 0.8;
+  color: white;
+  font-weight: bolder;
+  border: 0px;
+  background-color: #4d80e4;
   border-radius: 20px;
+}
+.comment_send_box .el-button.is-round:hover {
+  background-color: #2e5ebe;
+}
+.comment_send_box .el-button.is-round:active {
+  background-color: #4d80e4;
+}
+.comment_item {
+  width: 93%;
+  margin-bottom: 10px;
 }
 </style>

@@ -5,12 +5,31 @@
       <div class="main_left">
         <post-bar class="postBar"></post-bar>
       </div>
-
       <div class="main_right">
-        <random-user class="randomUser"></random-user>
+        <bar-fun-group></bar-fun-group>
         <hot-topic class="hotTopic"></hot-topic>
+        <random-user class="randomUser"></random-user>
       </div>
     </div>
+
+    <el-backtop target=".index">
+      <div
+        style="
+           {
+            height: 100%;
+            width: 100%;
+            background-color: #f2f5f6;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+            text-align: center;
+            line-height: 40px;
+            border-radius: 5px;
+            color: #1989fa;
+          }
+        "
+      >
+        ↑
+      </div>
+    </el-backtop>
   </div>
 </template>
 <script>
@@ -18,6 +37,7 @@ import headBox from "@/components/head/Head.vue";
 import postBar from "@/components/index/PostBar.vue";
 import randomUser from "@/components/index/RandomUser.vue";
 import hotTopic from "@/components/index/HotTopic.vue";
+import barFunGroup from "@/components/index/BarFunGroup.vue";
 
 import { login } from "@/api/login";
 export default {
@@ -26,6 +46,7 @@ export default {
     postBar,
     randomUser,
     hotTopic,
+    barFunGroup,
   },
   created() {
     let user = null;
@@ -47,9 +68,10 @@ export default {
 .index {
   background-color: #f5f5f5;
   width: 100%;
-  height: auto;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  overflow-x: hidden;
 }
 .main {
   margin: 20px 18% 0px 18%;
@@ -67,5 +89,11 @@ export default {
 .main_right {
   margin-left: 10px;
   width: 30%;
+}
+.randomUser {
+  margin-top: 15px;
+}
+.hotTopic {
+  margin-top: 15px;
 }
 </style>
