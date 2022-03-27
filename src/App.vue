@@ -21,5 +21,7 @@ export default {
   height: auto;
   min-height: 700px;
   overflow-x: hidden;
+  height: 100%;
+  overflow: auto;
 }
 </style>

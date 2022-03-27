@@ -177,6 +177,16 @@ export default {
   border: 1px solid #dcdfe6;
   border-right: 0;
 }
+/deep/ .el-input__inner:focus{
+   border: 1px solid #dcdfe6;
+   border-right: none;
+   /*outline: none;*/
+ }
+/deep/ .el-input__inner:hover{
+  border: 1px solid #dcdfe6;
+  border-right: none;
+  /*outline: none;*/
+}
 
 .search button {
   width: auto;

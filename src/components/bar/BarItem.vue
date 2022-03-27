@@ -14,8 +14,11 @@
           </div>
           <span class="date">{{ date }}</span>
         </div>
-        <i @click="moreFun = !moreFun" class="iconfont icon-xiajiantou"></i>
-        <more-fun class="moreFunClass" v-show="moreFun"></more-fun>
+        <div class="icon" @mouseenter="showMoreFun" @mouseleave="showMoreFun">
+          <i class="iconfont icon-xiajiantou"></i>
+          <more-fun class="moreFunClass" v-show="moreFun"></more-fun>
+        </div>
+
       </div>
       <div class="item-main">
         <div class="item-article">
@@ -147,6 +150,9 @@ export default {
     },
   },
   methods: {
+    showMoreFun(){
+      this.moreFun = !this.moreFun;
+    },
     seeComments() {
       this.seeComment = !this.seeComment;
       this.commentColor.commentColor = !this.commentColor.commentColor;
@@ -220,10 +226,13 @@ export default {
   font-weight: lighter;
   color: rgb(201, 201, 201);
 }
-.iconfont.icon-xiajiantou{
+.icon{
   margin-left: auto;
   margin-right: 15px;
   padding: 3px;
+}
+.iconfont.icon-xiajiantou{
+
 }
 .iconfont.icon-xiajiantou:hover {
   background-color: #3bb0e62a;

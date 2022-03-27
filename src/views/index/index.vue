@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <head-box></head-box>
+        <head-box></head-box>
     <div class="main">
       <div class="main_left">
         <post-bar class="postBar"></post-bar>
@@ -14,24 +14,25 @@
 
     <el-backtop target=".index">
       <div
-        style="
-           {
-            height: 100%;
-            width: 100%;
-            background-color: #f2f5f6;
-            box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
-            text-align: center;
-            line-height: 40px;
-            border-radius: 5px;
-            color: #1989fa;
-          }
-        "
+              style="
+         {
+          height: 100%;
+          width: 100%;
+          background-color: #f2f5f6;
+          box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+          text-align: center;
+          line-height: 40px;
+          border-radius: 5px;
+          color: #1989fa;
+        }
+      "
       >
         ☝
       </div>
     </el-backtop>
   </div>
-</template>
+
+  </template>
 <script>
 import headBox from "@/components/head/Head.vue";
 import postBar from "@/components/index/PostBar.vue";
@@ -70,8 +71,6 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow-x: hidden;
 }
 .main {
   margin: 20px 18% 0px 18%;
