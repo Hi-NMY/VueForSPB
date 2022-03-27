@@ -1,4 +1,4 @@
-import { Avatar, Button, Form, FormItem, Input, Menu, MenuItem, Message, Submenu, TabPane, Tabs, Tag, Image , Backtop} from 'element-ui';
+import { Avatar, Button, Form, FormItem, Input, Menu, MenuItem, Message, Submenu, TabPane, Tabs, Tag, Image , Backtop,Loading,Skeleton,SkeletonItem} from 'element-ui';
 import 'element-ui/lib/theme-chalk/base.css';
 //引入store
 // import ElementUi from 'element-ui'
@@ -33,6 +33,9 @@ Vue.use(Avatar)
 Vue.use(Tag)
 Vue.use(Image)
 Vue.use(Backtop)
+Vue.use(Loading.directive);
+Vue.use(Skeleton)
+Vue.use(SkeletonItem)
 Vue.prototype.$message = Message;
 
 new Vue({

@@ -14,6 +14,8 @@
           </div>
           <span class="date">{{ date }}</span>
         </div>
+        <i @click="moreFun = !moreFun" class="iconfont icon-xiajiantou"></i>
+        <more-fun class="moreFunClass" v-show="moreFun"></more-fun>
       </div>
       <div class="item-main">
         <div class="item-article">
@@ -58,22 +60,8 @@
       </div>
     </div>
 
-    <div class="comment_box" v-show="seeComment">
-      <div class="comment_head">
-        <div class="comment_input_box">
-          <el-avatar :size="35" src="">
-            <img src="../../assets/logo.png" />
-          </el-avatar>
-          <el-input v-model="input" placeholder="请输入内容"></el-input>
-        </div>
-        <div class="comment_send_box">
-          <div class="emoji_box">表情功能站位</div>
-          <div class="send_box">
-            <span class="txtCount">字数站位</span>
-            <el-button type="primary" round>评论</el-button>
-          </div>
-        </div>
-      </div>
+    <div class="comment_box" v-loading="commentLoading" v-show="seeComment">
+      <comment-input></comment-input>
       <div class="comment_item">
         <bar-comment-item
           v-for="(comment, index) in comments"
@@ -87,12 +75,16 @@
 
 <script scope>
 import { barTimeUtil } from "@/utils/dateUtil";
-import barCommentItem from "@/components/index/BarCommentItem.vue";
+import barCommentItem from "@/components/bar/BarCommentItem.vue";
 import { queryBarComment } from "@/api/postbar";
+import commentInput from "@/components/bar/CommentInput.vue";
+import moreFun from "@/components/bar/MoreFun.vue";
 export default {
   name: "item",
   components: {
     barCommentItem,
+    commentInput,
+    moreFun,
   },
   data() {
     return {
@@ -106,7 +98,8 @@ export default {
         likeColor: false,
       },
       likeIcon: "iconfont icon-aixin",
-      input: "",
+      commentLoading: false,
+      moreFun: false,
     };
   },
   props: ["todo"],
@@ -158,8 +151,10 @@ export default {
       this.seeComment = !this.seeComment;
       this.commentColor.commentColor = !this.commentColor.commentColor;
       if (this.seeComment) {
+        this.commentLoading = true;
         queryBarComment("").then((res) => {
           this.comments = res.data;
+          this.commentLoading = false;
         });
       }
     },
@@ -187,9 +182,17 @@ export default {
   margin-bottom: 15px;
 }
 .item-head {
+  position: relative;
   margin: 20px 10px 5px 20px;
   display: flex;
   align-items: center;
+}
+.moreFunClass {
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 36px;
+  right: 16px;
 }
 .item-head-msg {
   margin-left: 10px;
@@ -217,6 +220,16 @@ export default {
   font-weight: lighter;
   color: rgb(201, 201, 201);
 }
+.iconfont.icon-xiajiantou{
+  margin-left: auto;
+  margin-right: 15px;
+  padding: 3px;
+}
+.iconfont.icon-xiajiantou:hover {
+  background-color: #3bb0e62a;
+  border-radius: 20px;
+}
+
 .item-main {
   margin-left: 80px;
 }
@@ -340,73 +353,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-.comment_head {
-  padding: 15px 0px;
-  border-top: 1px solid rgba(226, 226, 226, 0.384);
-  border-bottom: 1px solid rgba(226, 226, 226, 0.384);
-  width: 93%;
-  margin: 0px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.comment_input_box {
-  width: 100%;
-  display: flex;
-  align-items: center;
-}
-.comment_input_box .el-avatar {
-  flex-shrink: 0;
-}
-.comment_input_box .el-input__inner {
-  width: 98%;
-  border: 2px solid #c0c4cc;
-  line-height: 35px;
-  margin-left: 10px;
-  border-radius: 10px;
-}
-.comment_input_box .el-input__inner:hover {
-  border: 2px solid #46b3e6;
-}
-.comment_input_box .el-input__inner:active {
-  border: 2px solid #46b3e6;
-}
-.comment_send_box {
-  margin-top: 10px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-.emoji_box {
-  margin-left: 40px;
-}
-.send_box {
-  display: flex;
-  align-items: center;
-}
-.txtCount {
-  white-space: nowrap;
-  font-size: 13px;
-  color: #bfbfbf;
-}
-.comment_send_box .el-button.is-round {
-  width: 55%;
-  height: 34px;
-  margin-left: 10px;
-  text-align: center;
-  line-height: 0.8;
-  color: white;
-  font-weight: bolder;
-  border: 0px;
-  background-color: #4d80e4;
-  border-radius: 20px;
-}
-.comment_send_box .el-button.is-round:hover {
-  background-color: #2e5ebe;
-}
-.comment_send_box .el-button.is-round:active {
-  background-color: #4d80e4;
 }
 .comment_item {
   width: 93%;

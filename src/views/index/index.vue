@@ -27,7 +27,7 @@
           }
         "
       >
-        ↑
+        ☝
       </div>
     </el-backtop>
   </div>
@@ -84,10 +84,10 @@ export default {
   margin-top: 85px;
 }
 .main_left {
-  width: 70%;
+  width: 69%;
 }
 .main_right {
-  margin-left: 10px;
+  margin-left: 1%;
   width: 30%;
 }
 .randomUser {

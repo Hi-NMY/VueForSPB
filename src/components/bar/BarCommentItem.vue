@@ -5,7 +5,7 @@
     </el-avatar>
     <div class="comment_item_main">
       <div class="comment_item_head">
-        <div>
+        <div class="head_left">
           <span class="comment_name">{{ commentTodo.commentUser }}</span>
           <div v-show="isReply">
             <span>&nbsp;回复</span>
@@ -14,11 +14,15 @@
           </div>
           <span>&nbsp;:&nbsp;</span>
         </div>
-        <span>{{ commentTodo.commentArt }}</span>
+        <div class="comment_art">{{ commentTodo.commentArt }}</div>
+        <span style="margin-left: auto; white-space: nowrap">楼层站位</span>
       </div>
       <div class="comment_item_foot">
         <span>{{ date }}</span>
-        <i class="iconfont icon-xiaoxi"></i>
+        <i
+          @click="replayTo(commentTodo.commentUser)"
+          class="iconfont icon-xiaoxi"
+        ></i>
       </div>
     </div>
   </div>
@@ -26,6 +30,8 @@
 
 <script>
 import { barTimeUtil } from "@/utils/dateUtil";
+import { MessageBox } from "element-ui";
+import commentInput from "@/components/bar/CommentInput.vue";
 export default {
   name: "comment_item",
   props: ["commentTodo"],
@@ -38,6 +44,16 @@ export default {
     },
     isHost() {
       return this.commentTodo.commentToUser == "1231" ? true : false;
+    },
+  },
+  methods: {
+    replayTo(toName) {
+      const h = this.$createElement;
+      MessageBox({
+        title: "回复 @" + toName,
+        showConfirmButton: false,
+        message: h(commentInput, { style: "margin-right: 10px" }),
+      });
     },
   },
 };
@@ -74,10 +90,15 @@ export default {
   width: 100%;
   margin-bottom: 3px;
 }
-.comment_item_head > div {
+.head_left {
   white-space: nowrap;
   display: flex;
   align-items: center;
+}
+.comment_art {
+  width: 100%;
+  white-space: pre-wrap;
+  margin-right: 10px;
 }
 .comment_item_foot {
   width: 100%;
@@ -90,7 +111,18 @@ export default {
 .comment_item_foot > .iconfont.icon-xiaoxi {
   display: none;
 }
-.iconfont.icon-xiaoxi:hover{
-  cursor: pointer;    
+.iconfont.icon-xiaoxi:hover {
+  cursor: pointer;
+}
+.el-message-box {
+  width: 460px;
+  border-radius: 10px;
+}
+.el-message-box__title {
+  font-size: 14px;
+  font-weight: bold;
+}
+.el-message-box__content {
+  padding: 2px 15px;
 }
 </style>

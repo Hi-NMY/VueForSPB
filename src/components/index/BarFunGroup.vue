@@ -12,14 +12,10 @@
 <script>
 export default {
   name: "fun-group",
-  methods:{
-      addBarFun(){
-
-      },
-      addVideoFun(){
-
-      }
-  }
+  methods: {
+    addBarFun() {},
+    addVideoFun() {},
+  },
 };
 </script>
 
@@ -51,7 +47,7 @@ export default {
 .addBar .el-button.is-round:active {
   background-color: rgb(70, 179, 230);
 }
-.el-button.el-button {
+.addVideo .el-button.el-button {
   width: 100%;
   color: white;
   font-weight: bolder;

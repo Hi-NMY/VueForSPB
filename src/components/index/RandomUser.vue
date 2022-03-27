@@ -8,44 +8,53 @@
       </div>
     </div>
     <div class="tuijian_user">
-      <div
-        class="user_msg"
-        v-for="usermsg in usersmsg"
-        :key="usermsg.userAccount"
-      >
-        <div class="user_msg_left">
-          <div class="img">
-            <el-avatar :size="46" src="">
-              <img src="../../assets/logo.png" />
-            </el-avatar>
+      <el-skeleton :class="randomuser_skeleton_item" :loading="loading" animated :rows="1">
+        <div
+          class="user_msg"
+          v-for="usermsg in usersmsg"
+          :key="usermsg.userAccount"
+        >
+          <div class="user_msg_left">
+            <div class="img">
+              <el-avatar :size="46" src="">
+                <img src="../../assets/logo.png" />
+              </el-avatar>
+            </div>
+            <div class="message">
+              <span class="username">{{ usermsg.userName }}</span
+              ><br />
+              <span class="guanzhu">关注</span>
+              <span>{{ usermsg.followNum }}</span>
+              <span class="beiguanzhu">被关注</span>
+              <span>{{ usermsg.followedNum }}</span>
+            </div>
           </div>
-          <div class="message">
-            <span class="username">{{ usermsg.userName }}</span
-            ><br />
-            <span class="guanzhu">关注</span>
-            <span>{{ usermsg.followNum }}</span>
-            <span class="beiguanzhu">被关注</span>
-            <span>{{ usermsg.followedNum }}</span>
-          </div>
+          <div class="user_msg_right">+ 关注</div>
         </div>
-        <div class="user_msg_right">+ 关注</div>
-      </div>
-      <!--           <div class="message_all">-->
-      <!--                查看全部-->
-      <!--                <i class="el-icon-arrow-right"></i>-->
-      <!--            </div>-->
+      </el-skeleton>
+      <el-skeleton :class="randomuser_skeleton_item" :loading="loading" animated :rows="1">
+      </el-skeleton>
+      <el-skeleton :class="randomuser_skeleton_item" :loading="loading" animated :rows="1">
+      </el-skeleton>
+      <el-skeleton :class="randomuser_skeleton_item" :loading="loading" animated :rows="1">
+      </el-skeleton>
+      <el-skeleton :class="randomuser_skeleton_item" :loading="loading" animated :rows="1">
+      </el-skeleton>
+      <el-skeleton :class="randomuser_skeleton_item" :loading="loading" animated :rows="1">
+      </el-skeleton>
     </div>
   </div>
 </template>
 <script>
-// import { index } from "../../api/index";
 import * as api from "../../api/index";
 export default {
-  name:'random-user',
+  name: "random-user",
   data: function () {
     return {
       usersmsg: [],
       isLoading: "el-icon-refresh",
+      loading: true,
+      randomuser_skeleton_item:'randomuser_skeleton_item'
     };
   },
   created() {
@@ -54,16 +63,24 @@ export default {
   methods: {
     findUsers() {
       this.isLoading = "el-icon-loading";
-      // this.$api.index.randomUser().then((res) => {
+      this.loading = true;
+      this.randomuser_skeleton_item='randomuser_skeleton_item'
       api.randomUser().then((res) => {
         this.usersmsg = res.data;
         this.isLoading = "el-icon-refresh";
+        this.loading = false;
+        this.randomuser_skeleton_item=''
       });
     },
   },
 };
 </script>
 <style scope>
+.randomuser_skeleton_item{
+  width: 300%;
+  margin-top: 20px;
+  margin-bottom: 47px;
+}
 .randomUser {
   height: auto;
   border-radius: 10px;
@@ -120,21 +137,13 @@ export default {
 .username:hover {
   cursor: pointer;
 }
+.user_msg_right:hover {
+  color: #3bb0e6;
+}
 .tuijian_user .user_msg_left .message .username:hover {
   color: #3bb0e6;
 }
 .beiguanzhu {
   margin-left: 10px;
 }
-/*.message_all{*/
-/*    border: 1px solid gainsboro;*/
-/*    height: 35px;*/
-/*    border-radius: 5px;*/
-/*    background-color: rgb(249,249,249);*/
-/*    line-height: 35px;*/
-/*    text-align: center;*/
-/*    color: grey;*/
-/*    font-size: 14px;*/
-/*    margin-top: 20px;*/
-/*}*/
 </style>

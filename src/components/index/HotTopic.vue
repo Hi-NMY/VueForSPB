@@ -7,19 +7,50 @@
         刷新
       </div>
     </div>
-    <div class="content">
-      <ol type="1" v-for="totTopic in totTopics" :key="totTopic.id">
+     <div class="content">
+      <el-skeleton
+        :class="hotTopic_skeleton_item"
+        :loading="loading"
+        animated
+        :rows="1"
+      >
+       <ol type="1" v-for="totTopic in totTopics" :key="totTopic.id">
         <li>
           <span class="message">
-            <!--                        <span class="i">1</span>-->
             {{ totTopic.topicName }}
           </span>
           <span class="num">{{ hotNum(totTopic.topicBarNum) }}</span>
         </li>
-        <!--                <li><span class="message">22222222</span><span class="num">44万</span></li>-->
-        <!--                <li><span class="message">3333333333</span><span class="num">44万</span></li>-->
-        <!--            -->
       </ol>
+    </el-skeleton>
+     <el-skeleton
+         :class="hotTopic_skeleton_item"
+        :loading="loading"
+        animated
+        :rows="1"
+      >
+    </el-skeleton>
+     <el-skeleton
+        :class="hotTopic_skeleton_item"
+        :loading="loading"
+        animated
+        :rows="1"
+      >
+    </el-skeleton>
+     <el-skeleton
+        :class="hotTopic_skeleton_item"
+        :loading="loading"
+        animated
+        :rows="1"
+      >
+    </el-skeleton>
+     <el-skeleton
+       :class="hotTopic_skeleton_item"
+        :loading="loading"
+        animated
+        :rows="1"
+      >
+    </el-skeleton>
       <div class="more">查看更多热门话题</div>
     </div>
   </div>
@@ -34,6 +65,8 @@ export default {
     return {
       totTopics: [],
       isLoading: "el-icon-refresh",
+      loading:true,
+      hotTopic_skeleton_item: 'hotTopic_skeleton_item',
     };
   },
   computed: {},
@@ -43,11 +76,13 @@ export default {
   methods: {
     findUsers() {
       this.isLoading = "el-icon-loading";
-      // this.$api.index.randomUser().then((res) => {
+      this.loading = true
+      this.hotTopic_skeleton_item='hotTopic_skeleton_item',
       api.hotTopic().then((res) => {
-        //console.log(res)
-        this.totTopics = res.data;
-        this.isLoading = "el-icon-refresh";
+        this.totTopics = res.data
+        this.isLoading = "el-icon-refresh"
+         this.loading = false
+         this.hotTopic_skeleton_item=''
       });
     },
     hotNum(num) {
@@ -58,8 +93,13 @@ export default {
 </script>
 
 <style scoped>
+.hotTopic_skeleton_item {
+  margin-top: 15px;
+  margin-bottom: 27px;
+  width: 300%;
+}
 .hotTopic {
-  /*height: 420px;*/
+  height: auto;
   border-radius: 10px;
   width: 100%;
   background-color: white;
@@ -81,6 +121,7 @@ export default {
 }
 .content ol li {
   height: 45px;
+  width: 100%;
   border-bottom: 1px solid rgb(247, 247, 247);
   line-height: 45px;
   font-size: 14px;
