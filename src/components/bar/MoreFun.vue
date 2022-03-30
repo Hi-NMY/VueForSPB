@@ -1,7 +1,7 @@
 <template>
   <div class="more_fun">
-    <span>收藏</span>
-    <span>举报</span>
+    <span class="morefun_content">收藏</span>
+    <span class="morefun_content">举报</span>
   </div>
 </template>
 

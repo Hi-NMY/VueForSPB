@@ -14,12 +14,16 @@
           </div>
           <span class="date">{{ date }}</span>
         </div>
-        <!-- <div class="icon" @mouseenter="showMoreFun" @mouseleave="showMoreFun">
-          <i class="iconfont icon-xiajiantou"></i>
-          <more-fun class="moreFunClass" v-show="moreFun"></more-fun>
-        </div> -->
-        <i @click="moreFun = !moreFun" class="iconfont icon-xiajiantou"></i>
-        <more-fun class="moreFunClass" v-show="moreFun"></more-fun>
+        <div class="icon" style="height: 35px;">
+          <!--<i @click="closeSel2" class="iconfont icon-xiajiantou" style="z-index: 100"></i>-->
+          <i @click="moreFun = !moreFun" class="iconfont icon-xiajiantou"
+             style="z-index: 100;width: auto;height: auto;position: absolute;top: 10px;right: 16px;"></i>
+          <div class="moreFunClass" @clicks="closeSel" v-show="moreFun">
+            <more-fun></more-fun>
+          </div>
+        
+        </div>
+      
       </div>
       <div class="item_main">
         <div class="item_article">
@@ -40,7 +44,8 @@
         <div v-show="topic" class="item_topic">
           <el-tag v-for="(topic, index) in topicList" :key="index">{{
             topic
-          }}</el-tag>
+            }}
+          </el-tag>
         </div>
       </div>
       <div class="item_foot">
@@ -63,7 +68,7 @@
         </div>
       </div>
     </div>
-
+    
     <div class="comment_box" v-loading="commentLoading" v-show="seeComment">
       <comment-input></comment-input>
       <div class="comment_item">
@@ -84,6 +89,7 @@ import barCommentItem from '@/components/bar/BarCommentItem.vue'
 import { queryBarComment } from '@/api/postbar'
 import commentInput from '@/components/bar/CommentInput.vue'
 import moreFun from '@/components/bar/MoreFun.vue'
+
 export default {
   name: 'bar-item',
   components: {
@@ -91,6 +97,7 @@ export default {
     commentInput,
     moreFun,
   },
+
   data() {
     return {
       topics: [],
@@ -152,9 +159,6 @@ export default {
     },
   },
   methods: {
-    // showMoreFun(){
-    //   this.moreFun = !this.moreFun;
-    // },
     seeComments() {
       this.seeComment = !this.seeComment
       this.commentColor.commentColor = !this.commentColor.commentColor
@@ -174,8 +178,37 @@ export default {
         this.likeIcon = 'iconfont icon-aixin'
       }
     },
+    closeSel(e) {
+      console.log(this.moreFun)
+      let _this = this;
+      document.addEventListener('click', function (e) {
+        console.log(e.target.className)
+        if (e.target.className != 'iconfont icon-xiajiantou') {
+          if (e.target.className != 'morefun_content') {
+            _this.moreFun = false;
+          } else {
+            _this.moreFun = true;
+          }
+        }
+
+      })
+    },
+    /*closeSel2(e) {
+      let _this = this;
+      document.addEventListener('click',function (e) {
+        console.log(e.target.className)
+        if(e.target.className == 'iconfont icon-xiajiantou'){
+          _this.moreFun = !_this.moreFun;
+        } else {
+          _this.moreFun = false;
+        }
+
+      })
+    }*/
   },
+
 }
+
 </script>
 
 <style scope lang="scss">
@@ -228,11 +261,6 @@ export default {
   font-weight: lighter;
   color: rgb(201, 201, 201);
 }
-// .icon{
-//   margin-left: auto;
-//   margin-right: 15px;
-//   padding: 3px;
-// }
 .iconfont.icon-xiajiantou {
   margin-left: auto;
   margin-right: 15px;
@@ -242,7 +270,6 @@ export default {
   background-color: #3bb0e62a;
   border-radius: 20px;
 }
-
 .item_main {
   margin-left: 80px;
 }

@@ -27,7 +27,7 @@
           }
         "
       >
-        ☝
+        ↑
       </div>
     </el-backtop>
   </div>

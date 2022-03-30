@@ -8,6 +8,7 @@
 <script>
 import headBox from '@/components/head/Head.vue'
 import { login } from '@/api/login'
+
 export default {
   name: 'App',
   components: {
@@ -17,7 +18,8 @@ export default {
     let user = null
     try {
       user = JSON.parse(localStorage.getItem('user'))
-    } catch (error) {}
+    } catch (error) {
+    }
     if (user) {
       login(user).then((res) => {
         if (res.code == 200) {
@@ -36,6 +38,7 @@ export default {
   margin: 0;
   font-family: '微软雅黑';
 }
+
 #app {
   display: flex;
   height: auto;
