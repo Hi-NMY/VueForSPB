@@ -132,6 +132,6 @@ export default {
   width: 70%;
   height: auto;
   border-radius: 10px;
-  border: 1px solid red;
+  /*border: 1px solid red;*/
 }
 </style>
