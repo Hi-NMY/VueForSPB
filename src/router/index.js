@@ -1,27 +1,67 @@
 //该文件用于创建整个应用的路由器
 import VueRouter from 'vue-router'
-//引入相关依赖
-import Box from '../views/login/Box.vue'
-import Index from '../views/index/index.vue'
 //创建并暴露路由器
 export default new VueRouter({
 	mode: 'history',
 	routes: [
 		{
-			//注意/不能丢
 			path: '/',
-			redirect: '/index'
+			redirect: '/index/noVidePostBar'
 		},
 		{
-			//注意/不能丢
 			path: '/login',
-			component: Box
+			component: (resolve) => require(['@/views/login/Box.vue'], resolve)
 		},
 		{
-			//注意/不能丢
+			path: '/refresh',
+			component: (resolve) => require(['@/views/refresh/Refresh.vue'], resolve)
+		},
+		,
+		{
 			name: 'index',
 			path: '/index',
-			component: Index
+			redirect: '/index/noVidePostBar',
+			component: (resolve) => require(['@/views/index/index.vue'], resolve),
+			children: [
+				{
+					path: 'noVidePostBar',
+					component: (resolve) => require(['@/views/index/NoVidePostBar.vue'], resolve)
+				},
+				{
+					path: 'videoPostBar',
+					component: (resolve) => require(['@/views/index/VideoPostBar.vue'], resolve)
+				},
+				{
+					path: 'followPostBar',
+					component: (resolve) => require(['@/views/index/FollowPostBar.vue'], resolve)
+				}
+			]
 		},
+		{
+			path: '/home',
+			component: (resolve) => require(['@/views/home/Home.vue'], resolve)
+		},
+		{
+			name: 'topic',
+			path: '/topic',
+			redirect: '/topic/aa',
+			children: [
+
+			]
+		},
+		{
+			name: 'follow',
+			path: '/follow',
+			redirect: '/follow/aa',
+			children: [
+			]
+		},
+		{
+			name: 'message',
+			path: '/message',
+			redirect: '/message/aa',
+			children: [
+			]
+		}
 	]
 })

@@ -29,34 +29,38 @@
 </template>
 
 <script>
-import { barTimeUtil } from "@/utils/dateUtil";
-import { MessageBox } from "element-ui";
-import commentInput from "@/components/bar/CommentInput.vue";
+import { barTimeUtil } from '@/utils/dateUtil'
+import { MessageBox } from 'element-ui'
+import commentInput from '@/components/bar/CommentInput.vue'
 export default {
-  name: "comment_item",
-  props: ["commentTodo"],
+  name: 'comment_item',
+  props: ['commentTodo', 'hostAccount'],
   computed: {
     date() {
-      return barTimeUtil(this.commentTodo.commentDate.replace("T", " "));
+      return barTimeUtil(this.commentTodo.commentDate.replace('T', ' '))
     },
     isReply() {
-      return this.commentTodo.commentToUser ? true : false;
+      return this.commentTodo.commentToUser ? true : false
     },
     isHost() {
-      return this.commentTodo.commentToUser == "1231" ? true : false;
+      return this.commentTodo.commentToUser == this.hostAccount ? true : false
     },
   },
   methods: {
     replayTo(toName) {
-      const h = this.$createElement;
+      const h = this.$createElement
       MessageBox({
-        title: "回复 @" + toName,
+        title: '回复 @' + toName,
         showConfirmButton: false,
-        message: h(commentInput, { style: "margin-right: 10px" }),
-      });
+        message: h(commentInput, { style: 'margin-right: 10px' }),
+        // beforeClose: (action, instance, done) => {
+        //   console.log(instance)
+        //     done()
+        // }
+      })
     },
   },
-};
+}
 </script>
 
 <style scope lang="scss">
@@ -65,7 +69,7 @@ export default {
   display: flex;
   align-items: center;
   font-size: 12px;
-  color: #8a8a8a;
+  color: #969696;
   padding: 10px 0px;
   border-bottom: 1px solid rgba(226, 226, 226, 0.178);
 }
@@ -95,8 +99,12 @@ export default {
   display: flex;
   align-items: center;
 }
+.comment_name {
+  color: black;
+}
 .comment_art {
   width: 100%;
+  color: black;
   white-space: pre-wrap;
   margin-right: 10px;
 }

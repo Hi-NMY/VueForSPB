@@ -1,24 +1,24 @@
 <template>
   <div class="uservar">
     <div class="uname">
-      <h3>{{ userInfo.user.userName }}</h3>
+      <h3>{{ user.userInfo.userName }}</h3>
     </div>
     <div class="hand_info">
       <span>签到天数:</span>&nbsp;
-      <span class="qiandao">{{ userInfo.user.userLongDay }}</span
-      >&nbsp;&nbsp;&nbsp;&nbsp; <span>徽章</span>&nbsp;
-      <img src="../../assets/logo.png" />
+      <span class="qiandao">{{ user.userInfo.userLongday }}</span
+      >&nbsp;&nbsp;&nbsp;&nbsp; <span v-show="userBadge">徽章</span>&nbsp;
+      <img src="../../assets/logo.png" v-show="userBadge" />
     </div>
     <div class="qianming">
-      {{ userInfo.user.userProfile }}
+      {{ userProfile }}
     </div>
     <div class="info_box">
       <div class="box_left">
-        <div class="number">9</div>
+        <div class="number">{{ user.followPresenter.length }}</div>
         <div class="title_text">关注</div>
       </div>
       <div class="box_middle">
-        <div class="number">0</div>
+        <div class="number">{{ user.followedPresenter.length }}</div>
         <div class="title_text">被关注</div>
       </div>
       <div class="box_right">
@@ -30,10 +30,10 @@
         <div class="title_text">徽章</div>
       </div>
     </div>
-    <div class="userinfo_button1">
+    <div class="userinfo_button1" @click="home">
       <div class="button_left">
         <i class="el-icon-user"></i>&nbsp;&nbsp;
-        <span>个人中心</span>
+        <span>个人空间</span>
       </div>
       <div class="button_right">
         <i class="el-icon-arrow-right"></i>
@@ -50,19 +50,46 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 export default {
-  name: "user-var",
+  name: 'user-var',
+  data() {
+    return {}
+  },
   computed: {
-    ...mapState(["userInfo"]),
+    ...mapState('userInfo', ['user']),
+    userProfile() {
+      const userProfile = this.$store.state.userInfo.user.userProfile
+      if (userProfile) {
+        return userProfile
+      } else {
+        return '快去为自己写一句话吧！'
+      }
+    },
+    userBadge() {
+      const badge = this.$store.state.userInfo.user.userBadge
+      return badge ? true : false
+    },
   },
   methods: {
     loginOut() {
-      localStorage.removeItem("user");
-      this.$store.commit("index/updateIsLogin", false);
+      this.$bus.$emit('clearSelect', '/index')
+      this.$bus.$emit('returnIndex')
+      this.$store.commit('index/updateIsLogin', false)
+      localStorage.removeItem('user')
+      this.$router.replace({
+        path: '/refresh',
+      })
+    },
+    home() {
+      if (this.checkRouting(this, '/home')) {
+        this.$router.push({
+          path: '/home',
+        })
+      }
     },
   },
-};
+}
 </script>
 
 <style scoped>

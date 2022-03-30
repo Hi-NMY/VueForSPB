@@ -7,89 +7,89 @@
         刷新
       </div>
     </div>
-     <div class="content">
+    <div class="content">
       <el-skeleton
         :class="hotTopic_skeleton_item"
         :loading="loading"
         animated
         :rows="1"
       >
-       <ol type="1" v-for="totTopic in totTopics" :key="totTopic.id">
-        <li>
-          <span class="message">
-            {{ totTopic.topicName }}
-          </span>
-          <span class="num">{{ hotNum(totTopic.topicBarNum) }}</span>
-        </li>
-      </ol>
-    </el-skeleton>
-     <el-skeleton
-         :class="hotTopic_skeleton_item"
-        :loading="loading"
-        animated
-        :rows="1"
-      >
-    </el-skeleton>
-     <el-skeleton
+        <ol type="1" v-for="totTopic in totTopics" :key="totTopic.id">
+          <li>
+            <span class="message">
+              {{ totTopic.topicName }}
+            </span>
+            <span class="num">{{ hotNum(totTopic.topicBarNum) }}</span>
+          </li>
+        </ol>
+      </el-skeleton>
+      <el-skeleton
         :class="hotTopic_skeleton_item"
         :loading="loading"
         animated
         :rows="1"
       >
-    </el-skeleton>
-     <el-skeleton
+      </el-skeleton>
+      <el-skeleton
         :class="hotTopic_skeleton_item"
         :loading="loading"
         animated
         :rows="1"
       >
-    </el-skeleton>
-     <el-skeleton
-       :class="hotTopic_skeleton_item"
+      </el-skeleton>
+      <el-skeleton
+        :class="hotTopic_skeleton_item"
         :loading="loading"
         animated
         :rows="1"
       >
-    </el-skeleton>
+      </el-skeleton>
+      <el-skeleton
+        :class="hotTopic_skeleton_item"
+        :loading="loading"
+        animated
+        :rows="1"
+      >
+      </el-skeleton>
       <div class="more">查看更多热门话题</div>
     </div>
   </div>
 </template>
 
 <script>
-import * as api from "../../api/index";
-import { numberHandle } from "@/utils/dateUtil";
+import * as api from '../../api/index'
+import { numberHandle } from '@/utils/dateUtil'
 export default {
-  name: "HotTopic",
+  name: 'HotTopic',
   data() {
     return {
       totTopics: [],
-      isLoading: "el-icon-refresh",
-      loading:true,
+      isLoading: 'el-icon-refresh',
+      loading: true,
       hotTopic_skeleton_item: 'hotTopic_skeleton_item',
-    };
+    }
   },
   computed: {},
   created() {
-    this.findUsers();
+    this.findUsers()
   },
   methods: {
     findUsers() {
-      this.isLoading = "el-icon-loading";
+      this.isLoading = 'el-icon-loading'
       this.loading = true
-      this.hotTopic_skeleton_item='hotTopic_skeleton_item',
-      api.hotTopic().then((res) => {
-        this.totTopics = res.data
-        this.isLoading = "el-icon-refresh"
-         this.loading = false
-         this.hotTopic_skeleton_item=''
-      });
+      ;(this.hotTopic_skeleton_item = 'hotTopic_skeleton_item'),
+        api.hotTopic().then((res) => {
+          this.totTopics = res.data
+          this.isLoading = 'el-icon-refresh'
+          this.loading = false
+          this.hotTopic_skeleton_item = ''
+        })
     },
     hotNum(num) {
-      return numberHandle(num);
+      return numberHandle(num)
     },
   },
-};
+}
 </script>
 
 <style scoped>

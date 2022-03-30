@@ -11,12 +11,16 @@
 
 <script>
 export default {
-  name: "fun-group",
+  name: 'fun-group',
   methods: {
-    addBarFun() {},
-    addVideoFun() {},
+    addBarFun() {
+      this.$bus.$emit('sendBar', true, false)
+    },
+    addVideoFun() {
+      this.$bus.$emit('sendBar', true, true)
+    },
   },
-};
+}
 </script>
 
 <style scope lang="scss">

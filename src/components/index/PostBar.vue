@@ -1,236 +1,84 @@
 <template>
-  <div class="postbar-box">
-    <div @click="obtainPostBar" class="bar-refresh">
+  <div class="postbar_box">
+    <div @click="obtainPostBar" class="bar_refresh">
       <i :class="refreshLoading"></i>
       刷新
     </div>
     <div>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="广场" name="1">
-          <el-skeleton
-            :class="skeletonItem"
-            :loading="loading"
-            animated
-            :rows="6"
-          >
-            <bar-item
-              v-for="item in noVidePostBarList"
-              :key="item.pbOneId"
-              :todo="item"
-              class="infinite-list-item"
-            ></bar-item>
-          </el-skeleton>
-          <el-skeleton
-            :class="skeletonItem"
-            :loading="loading"
-            animated
-            :rows="6"
-          >
-          </el-skeleton>
-          <el-skeleton
-            :class="skeletonItem"
-            :loading="loading"
-            animated
-            :rows="6"
-          >
-          </el-skeleton>
-          <el-skeleton
-            :class="skeletonItem"
-            :loading="loading"
-            animated
-            :rows="6"
-          >
-          </el-skeleton>
-        </el-tab-pane>
-        <el-tab-pane label="视频" name="2">
-          <el-skeleton
-            :class="skeletonItem"
-            :loading="loading"
-            animated
-            :rows="6"
-          >
-            <bar-item
-              v-for="item in videoPostBarList"
-              :key="item.pbOneId"
-              :todo="item"
-              class="infinite-list-item"
-            ></bar-item>
-          </el-skeleton>
-          <el-skeleton
-            :class="skeletonItem"
-            :loading="loading"
-            animated
-            :rows="6"
-          >
-          </el-skeleton>
-          <el-skeleton
-            :class="skeletonItem"
-            :loading="loading"
-            animated
-            :rows="6"
-          >
-          </el-skeleton>
-          <el-skeleton
-            :class="skeletonItem"
-            :loading="loading"
-            animated
-            :rows="6"
-          >
-          </el-skeleton>
-        </el-tab-pane>
-        <el-tab-pane v-if="isLogin" label="我的关注" name="3">
-          <el-skeleton
-            :class="skeletonItem"
-            :loading="loading"
-            animated
-            :rows="6"
-          >
-            <bar-item
-              v-for="item in followPostBarList"
-              :key="item.pbOneId"
-              :todo="item"
-              class="infinite-list-item"
-            ></bar-item>
-          </el-skeleton>
-          <el-skeleton
-            :class="skeletonItem"
-            :loading="loading"
-            animated
-            :rows="6"
-          >
-          </el-skeleton>
-          <el-skeleton
-            :class="skeletonItem"
-            :loading="loading"
-            animated
-            :rows="6"
-          >
-          </el-skeleton>
-          <el-skeleton
-            :class="skeletonItem"
-            :loading="loading"
-            animated
-            :rows="6"
-          >
-          </el-skeleton>
+      <el-tabs v-model="indexTab" @tab-click="handleClick">
+        <el-tab-pane label="广场" name="/index/noVidePostBar"> </el-tab-pane>
+        <el-tab-pane label="视频" name="/index/videoPostBar"> </el-tab-pane>
+        <el-tab-pane
+          v-if="isLogin"
+          label="我的关注"
+          name="/index/followPostBar"
+        >
         </el-tab-pane>
       </el-tabs>
+      <router-view />
     </div>
   </div>
 </template>
 
 <script>
-import barItem from "@/components/bar/BarItem.vue";
-import {
-  queryNoVideoPostBarForDate,
-  queryVideoPostBarForDate,
-  queryNoVideoFollowPostBarForDate,
-} from "@/api/postbar";
 export default {
-  name: "postbar-box",
+  name: 'postbar-box',
   data() {
     return {
-      activeName: "1",
-      noVidePostBarList: [],
-      videoPostBarList: [],
-      followPostBarList: [],
-      refreshLoading: "el-icon-refresh",
-      loading: true,
-      skeletonItem: "skeleton_item",
-    };
-  },
-  components: {
-    barItem,
+      indexTab: '/index/noVidePostBar',
+      refreshLoading: 'el-icon-loading',
+    }
   },
   computed: {
     isLogin() {
-      return this.$store.state.index.isLogin;
+      return this.$store.state.index.isLogin
     },
   },
   methods: {
     handleClick(tab, event) {
-      switch (tab.index) {
-        case "0":
-          if (this.noVidePostBarList.length == 0) {
-            this.obtainPostBar();
-          }
-          break;
-        case "1":
-          if (this.videoPostBarList.length == 0) {
-            this.obtainPostBar();
-          }
-          break;
-        case "2":
-          if (this.followPostBarList.length == 0) {
-            this.obtainPostBar();
-          }
-          break;
-        default:
-          break;
+      this.indexTab = tab.name
+      if (this.checkRouting(this, tab.name)) {
+        this.$router.replace({
+          path: tab.name,
+        })
       }
     },
     obtainPostBar() {
-      this.beforeRefresh();
-      switch (this.activeName) {
-        case "1":
-          queryNoVideoPostBarForDate("").then((res) => {
-            this.noVidePostBarList = res.data;
-            this.afterRefresh();
-          });
-          break;
-        case "2":
-          queryVideoPostBarForDate("").then((res) => {
-            this.videoPostBarList = res.data;
-            this.afterRefresh();
-          });
-          break;
-        case "3":
-          queryNoVideoFollowPostBarForDate("").then((res) => {
-            this.followPostBarList = res.data;
-            this.afterRefresh();
-          });
-          break;
-        default:
-          break;
-      }
+      this.beforeRefresh()
+      this.$bus.$emit('refreshIndexBar')
     },
     beforeRefresh() {
-      this.refreshLoading = "el-icon-loading";
-      this.loading = true;
-      this.skeletonItem = "skeleton_item";
+      this.refreshLoading = 'el-icon-loading'
     },
     afterRefresh() {
-      this.refreshLoading = "el-icon-refresh";
-      this.loading = false;
-      this.skeletonItem = "";
+      this.refreshLoading = 'el-icon-refresh'
     },
   },
-  created() {
-    this.obtainPostBar();
+  mounted() {
+    this.indexTab = this.$route.path
+    this.$bus.$on('afterRefresh', this.afterRefresh)
+    this.$bus.$on('returnIndex', () => {
+      this.indexTab = '/index/noVidePostBar'
+    })
   },
-};
+  beforeDestroy() {
+    this.$bus.$off('afterRefresh')
+    this.$bus.$off('returnIndex')
+  },
+}
 </script>
 <style scope>
-.skeleton_item {
-  width: auto;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 10px;
-  background-color: white;
-}
-.postbar-box {
-  padding: 0px 5px 0px 5px;
+.postbar_box {
   height: auto;
   position: relative;
   z-index: 1;
   /* border:1px solid aqua; */
 }
 .el-tabs__nav-wrap::after {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 100%;
   height: 2px;
   background-color: #e4e7ed;
   z-index: 1;
@@ -250,6 +98,10 @@ export default {
   transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   list-style: none;
 }
+.el-tabs.el-tabs--top{
+  height: 40px;
+  margin-bottom: 10px;
+}
 .el-tabs__item:hover {
   color: rgb(70, 179, 230);
   cursor: pointer;
@@ -260,14 +112,14 @@ export default {
   background-color: white;
   border-radius: 10px;
 }
-.bar-refresh {
+.bar_refresh {
   position: absolute;
   top: 10px;
   right: 20px;
   z-index: 1;
   color: gray;
 }
-.bar-refresh:hover {
+.bar_refresh:hover {
   cursor: pointer;
 }
 </style>

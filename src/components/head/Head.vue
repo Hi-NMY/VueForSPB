@@ -2,42 +2,34 @@
   <div class="head">
     <img src="../../assets/text-logo.png" class="head_img" />
     <el-menu
-      :default-active="activeIndex"
+      :default-active="headIndex"
       mode="horizontal"
       @select="handleSelect"
       active-text-color="rgb(70,179,230)"
+      router
     >
-      <el-menu-item index="1" v-if="!isLogin">
+      <el-menu-item index="/index">
         <i class="el-icon-aim"></i>
-        首页
+        {{ indexName }}
       </el-menu-item>
-      <el-menu-item index="2" v-if="!isLogin">
+      <el-menu-item index="/downLoadApp" v-show="!isLogin">
         <i class="el-icon-download"></i>
         下载App
       </el-menu-item>
-      <el-menu-item index="3" v-if="!isLogin">
+      <el-menu-item index="/topic">
         <i class="el-icon-chat-line-square"></i>
         话题
       </el-menu-item>
-
-      <el-menu-item index="4" v-if="isLogin">
-        <i class="el-icon-aim"></i>
-        发现
-      </el-menu-item>
-      <el-menu-item index="5" v-if="isLogin">
+      <el-menu-item index="/follow" v-show="isLogin">
         <i class="el-icon-c-scale-to-original"></i>
         关注
       </el-menu-item>
-      <el-menu-item index="6" v-if="isLogin">
-        <i class="el-icon-chat-line-square"></i>
-        话题
-      </el-menu-item>
-      <el-menu-item index="7" v-if="isLogin">
+      <el-menu-item index="/message" v-show="isLogin">
         <i class="el-icon-chat-dot-round"></i>
         消息
       </el-menu-item>
     </el-menu>
-    <div class="search" :class="isLogin">
+    <div class="search">
       <el-input type="text" placeholder="搜索" v-model="search"></el-input>
       <button>
         <i class="el-icon-search"></i>
@@ -49,7 +41,11 @@
         <button @click="register()">注册</button>
       </template>
       <template v-else>
-        <div class="i" @mouseenter="showUserMsg" @mouseleave="showUserMsg">
+        <div
+          class="i"
+          @mouseenter="showUserMsg(1)"
+          @mouseleave="showUserMsg(2)"
+        >
           <div>
             <el-avatar :class="headImgAnima" :size="50" src="">
               <img src="../../assets/logo.png" />
@@ -70,53 +66,83 @@
 </template>
 
 <script>
-import UserVar from "@/components/uservar/Uservar";
+import UserVar from '@/components/uservar/Uservar'
 export default {
-  name: "Head",
+  name: 'Head',
   data() {
     return {
-      activeIndex: "1",
-      search: "",
+      headIndex: '/index',
+      search: '',
       userMsg: false,
       headImgAnima: {
         imgAnima: false,
         imgAnimaI: true,
       },
-    };
+    }
   },
   components: {
     UserVar,
   },
   computed: {
     isLogin() {
-      const isLogin = this.$store.state.index.isLogin;
-      if (isLogin) {
-        this.activeIndex = "4";
-      } else {
-        this.activeIndex = "1";
-      }
-      return isLogin;
+      const isLogin = this.$store.state.index.isLogin
+      return isLogin
+    },
+    indexName() {
+      return this.$store.state.index.isLogin ? '发现' : '首页'
     },
   },
   methods: {
-    handleSelect(key, keyPath) {},
+    handleSelect(key, keyPath) {
+      this.headIndex = key
+      window.localStorage.setItem('headIndex', this.headIndex)
+      switch (key) {
+        case '/index':
+          this.$bus.$emit('returnIndex')
+          break
+        case '5':
+          break
+        case '6':
+          break
+        case '7':
+          break
+        default:
+          break
+      }
+    },
     login() {
       this.$router.push({
-        path: "/login",
-      });
+        path: '/login',
+      })
     },
     register() {
       this.$router.push({
-        path: "/login",
-      });
+        path: '/login',
+      })
     },
-    showUserMsg() {
-      this.userMsg = !this.userMsg;
-      this.headImgAnima.imgAnima = !this.headImgAnima.imgAnima;
-      this.headImgAnima.imgAnimaI = !this.headImgAnima.imgAnimaI;
+    showUserMsg(v) {
+      if (v == 1) {
+        this.userMsg = true
+        this.headImgAnima.imgAnima = true
+        this.headImgAnima.imgAnimaI = false
+      }
+      if (v == 2) {
+        this.userMsg = false
+        this.headImgAnima.imgAnima = false
+        this.headImgAnima.imgAnimaI = true
+      }
+    },
+    clearSelect(v) {
+      this.userMsg = false
+      this.headImgAnima.imgAnima = false
+      this.headImgAnima.imgAnimaI = true
+      this.headIndex = v
     },
   },
-};
+  mounted() {
+    this.$bus.$on('clearSelect', this.clearSelect)
+  },
+}
 </script>
 
 <style scoped>
@@ -177,12 +203,12 @@ export default {
   border: 1px solid #dcdfe6;
   border-right: 0;
 }
-/deep/ .el-input__inner:focus{
-   border: 1px solid #dcdfe6;
-   border-right: none;
-   /*outline: none;*/
- }
-/deep/ .el-input__inner:hover{
+/deep/ .el-input__inner:focus {
+  border: 1px solid #dcdfe6;
+  border-right: none;
+  /*outline: none;*/
+}
+/deep/ .el-input__inner:hover {
   border: 1px solid #dcdfe6;
   border-right: none;
   /*outline: none;*/
@@ -204,6 +230,9 @@ export default {
   display: flex;
   text-align: center;
   align-items: center;
+}
+.head_right:hover {
+  cursor: default;
 }
 .head_right button {
   width: auto;

@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <div class="form">
-      <el-form :model="param" :rules="rules" class="form-center">
+      <el-form :model="param" :rules="rules" class="form_center">
         <el-form-item prop="username">
           <el-input
             type="text"
@@ -10,23 +10,23 @@
             v-model="param.username"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="userphone">
+        <el-form-item prop="userAccount">
           <el-input
             type="phone"
             placeholder="学号"
             prefix-icon="el-icon-reading"
-            v-model="param.userphone"
+            v-model="param.userAccount"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="userpwd">
+        <el-form-item prop="password">
           <el-input
             type="password"
             placeholder="设置密码"
             prefix-icon="el-icon-lock"
-            v-model="param.userpwd"
+            v-model="param.password"
           ></el-input>
         </el-form-item>
-        <div class="register-btn">
+        <div class="register_btn">
           <el-button type="primary" @click="submitForm()">注册</el-button>
         </div>
       </el-form>
@@ -42,45 +42,45 @@ export default {
   data: function () {
     return {
       param: {
-        username: "",
-        userphone: "",
-        userpwd: "",
+        username: '',
+        userAccount: '',
+        password: '',
       },
       rules: {
         username: [
-          { required: true, message: "请输入你的昵称", trigger: "blur" },
+          { required: true, message: '请输入你的昵称', trigger: 'blur' },
           {
             min: 3,
             max: 10,
-            message: "长度在 3 到 10 个字符",
-            trigger: "blur",
+            message: '长度在 3 到 10 个字符',
+            trigger: 'blur',
           },
         ],
-        userphone: [
-          { required: true, message: "请输入你的学号", trigger: "blur" },
-          { min: 9, max: 9, message: "请输入正确的学号", trigger: "blur" },
-          { pattern: /^G\d{8}/, message: "学号格式不对", trigger: "blur" },
+        userAccount: [
+          { required: true, message: '请输入你的学号', trigger: 'blur' },
+          { min: 9, max: 9, message: '请输入正确的学号', trigger: 'blur' },
+          { pattern: /^G\d{8}/, message: '学号格式不对', trigger: 'blur' },
         ],
-        userpwd: [
-          { required: true, message: "请设置密码", trigger: "blur" },
+        password: [
+          { required: true, message: '请设置密码', trigger: 'blur' },
           {
             min: 6,
             max: 16,
-            message: "长度在 6 到 16 个字符",
-            trigger: "blur",
+            message: '长度在 6 到 16 个字符',
+            trigger: 'blur',
           },
         ],
       },
-    };
+    }
   },
   methods: {
     submitForm() {},
   },
-};
+}
 </script>
 
 <style scoped>
-.form-center {
+.form_center {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -89,7 +89,7 @@ export default {
 .form {
   width: 100%;
 }
-.register-btn {
+.register_btn {
   margin: 0 0 14px 0;
   width: 70%;
 }

@@ -24,22 +24,23 @@
 
 <script>
 export default {
+  name: 'comment-input',
   data() {
     return {
-      input: "",
-    };
+      input: '',
+    }
   },
   computed: {
     inputCount() {
-      return this.input.length;
+      return this.input.length
     },
   },
   methods: {
     sendComment() {
-      console.log("发送评论");
+      console.log('发送评论')
     },
   },
-};
+}
 </script>
 
 <style scope>
@@ -71,7 +72,7 @@ export default {
 .comment_input_box .el-input__inner:hover {
   border: 2px solid #46b3e6;
 }
-.comment_input_box .el-input__inner:active {
+.comment_input_box .el-input__inner:focus {
   border: 2px solid #46b3e6;
 }
 .comment_send_box {

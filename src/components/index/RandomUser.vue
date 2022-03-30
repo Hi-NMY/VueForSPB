@@ -8,7 +8,12 @@
       </div>
     </div>
     <div class="tuijian_user">
-      <el-skeleton :class="randomuser_skeleton_item" :loading="loading" animated :rows="1">
+      <el-skeleton
+        :class="randomuser_skeleton_item"
+        :loading="loading"
+        animated
+        :rows="1"
+      >
         <div
           class="user_msg"
           v-for="usermsg in usersmsg"
@@ -32,51 +37,76 @@
           <div class="user_msg_right">+ 关注</div>
         </div>
       </el-skeleton>
-      <el-skeleton :class="randomuser_skeleton_item" :loading="loading" animated :rows="1">
+      <el-skeleton
+        :class="randomuser_skeleton_item"
+        :loading="loading"
+        animated
+        :rows="1"
+      >
       </el-skeleton>
-      <el-skeleton :class="randomuser_skeleton_item" :loading="loading" animated :rows="1">
+      <el-skeleton
+        :class="randomuser_skeleton_item"
+        :loading="loading"
+        animated
+        :rows="1"
+      >
       </el-skeleton>
-      <el-skeleton :class="randomuser_skeleton_item" :loading="loading" animated :rows="1">
+      <el-skeleton
+        :class="randomuser_skeleton_item"
+        :loading="loading"
+        animated
+        :rows="1"
+      >
       </el-skeleton>
-      <el-skeleton :class="randomuser_skeleton_item" :loading="loading" animated :rows="1">
+      <el-skeleton
+        :class="randomuser_skeleton_item"
+        :loading="loading"
+        animated
+        :rows="1"
+      >
       </el-skeleton>
-      <el-skeleton :class="randomuser_skeleton_item" :loading="loading" animated :rows="1">
+      <el-skeleton
+        :class="randomuser_skeleton_item"
+        :loading="loading"
+        animated
+        :rows="1"
+      >
       </el-skeleton>
     </div>
   </div>
 </template>
 <script>
-import * as api from "../../api/index";
+import * as api from '../../api/index'
 export default {
-  name: "random-user",
+  name: 'random-user',
   data: function () {
     return {
       usersmsg: [],
-      isLoading: "el-icon-refresh",
+      isLoading: 'el-icon-refresh',
       loading: true,
-      randomuser_skeleton_item:'randomuser_skeleton_item'
-    };
+      randomuser_skeleton_item: 'randomuser_skeleton_item',
+    }
   },
   created() {
-    this.findUsers();
+    this.findUsers()
   },
   methods: {
     findUsers() {
-      this.isLoading = "el-icon-loading";
-      this.loading = true;
-      this.randomuser_skeleton_item='randomuser_skeleton_item'
+      this.isLoading = 'el-icon-loading'
+      this.loading = true
+      this.randomuser_skeleton_item = 'randomuser_skeleton_item'
       api.randomUser().then((res) => {
-        this.usersmsg = res.data;
-        this.isLoading = "el-icon-refresh";
-        this.loading = false;
-        this.randomuser_skeleton_item=''
-      });
+        this.usersmsg = res.data
+        this.isLoading = 'el-icon-refresh'
+        this.loading = false
+        this.randomuser_skeleton_item = ''
+      })
     },
   },
-};
+}
 </script>
 <style scope>
-.randomuser_skeleton_item{
+.randomuser_skeleton_item {
   width: 300%;
   margin-top: 20px;
   margin-bottom: 47px;

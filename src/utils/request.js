@@ -12,7 +12,7 @@ const service = axios.create({
 // 响应拦截器
 service.interceptors.response.use(res => {
   const code = res.data.code
-  if (code == 200) {
+  if (code >= 0) {
     return res.data
   }
 },

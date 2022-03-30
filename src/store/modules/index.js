@@ -4,10 +4,14 @@ const index = {
 	mutations: {
 		updateIsLogin(state, value) {
 			state.isLogin = value
+		},
+		updateHasHead(state, value) {
+			state.hasHead = value
 		}
 	},
 	state: {
-		isLogin: false
+		isLogin: false,
+		hasHead: true
 	},
 }
 export default index

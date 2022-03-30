@@ -1,11 +1,11 @@
 <template>
-  <div class="bar-item">
+  <div class="bar_item">
     <div>
-      <div class="item-head">
+      <div class="item_head">
         <el-avatar :size="50" src="">
           <img src="../../assets/logo.png" />
         </el-avatar>
-        <div class="item-head-msg">
+        <div class="item_head_msg">
           <div>
             <span class="name">{{ todo.userAccount }}</span>
             <el-image
@@ -14,17 +14,18 @@
           </div>
           <span class="date">{{ date }}</span>
         </div>
-        <div class="icon" @mouseenter="showMoreFun" @mouseleave="showMoreFun">
+        <!-- <div class="icon" @mouseenter="showMoreFun" @mouseleave="showMoreFun">
           <i class="iconfont icon-xiajiantou"></i>
           <more-fun class="moreFunClass" v-show="moreFun"></more-fun>
-        </div>
-
+        </div> -->
+        <i @click="moreFun = !moreFun" class="iconfont icon-xiajiantou"></i>
+        <more-fun class="moreFunClass" v-show="moreFun"></more-fun>
       </div>
-      <div class="item-main">
-        <div class="item-article">
+      <div class="item_main">
+        <div class="item_article">
           <span>{{ todo.pbArticle }}</span>
         </div>
-        <div class="item-img">
+        <div class="item_img">
           <el-image
             src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
           ></el-image>
@@ -32,17 +33,17 @@
             src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
           ></el-image>
         </div>
-        <div v-show="location" class="item-location">
-          <img src="../../assets/location.png" />
+        <div v-show="location" class="item_location">
+          <i class="iconfont icon-location"></i>
           <span>{{ todo.pbLocation }}</span>
         </div>
-        <div v-show="topic" class="item-topic">
+        <div v-show="topic" class="item_topic">
           <el-tag v-for="(topic, index) in topicList" :key="index">{{
             topic
           }}</el-tag>
         </div>
       </div>
-      <div class="item-foot">
+      <div class="item_foot">
         <div>
           <div>
             <i class="iconfont icon-fenxiang"></i>
@@ -70,6 +71,7 @@
           v-for="(comment, index) in comments"
           :key="index"
           :commentTodo="comment"
+          :hostAccount="todo.userAccount"
         ></bar-comment-item>
       </div>
     </div>
@@ -77,13 +79,13 @@
 </template>
 
 <script scope>
-import { barTimeUtil } from "@/utils/dateUtil";
-import barCommentItem from "@/components/bar/BarCommentItem.vue";
-import { queryBarComment } from "@/api/postbar";
-import commentInput from "@/components/bar/CommentInput.vue";
-import moreFun from "@/components/bar/MoreFun.vue";
+import { barTimeUtil } from '@/utils/dateUtil'
+import barCommentItem from '@/components/bar/BarCommentItem.vue'
+import { queryBarComment } from '@/api/postbar'
+import commentInput from '@/components/bar/CommentInput.vue'
+import moreFun from '@/components/bar/MoreFun.vue'
 export default {
-  name: "item",
+  name: 'bar-item',
   components: {
     barCommentItem,
     commentInput,
@@ -100,84 +102,84 @@ export default {
       likeColor: {
         likeColor: false,
       },
-      likeIcon: "iconfont icon-aixin",
+      likeIcon: 'iconfont icon-aixin',
       commentLoading: false,
       moreFun: false,
-    };
+    }
   },
-  props: ["todo"],
+  props: ['todo'],
   computed: {
     date() {
-      return barTimeUtil(this.todo.pbDate.replace("T", " "));
+      return barTimeUtil(this.todo.pbDate.replace('T', ' '))
     },
     location() {
-      const isLocation = this.todo.pbLocation;
+      const isLocation = this.todo.pbLocation
       if (isLocation) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     },
     topic() {
-      const isTopic = this.todo.pbTopic;
+      const isTopic = this.todo.pbTopic
       if (isTopic) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     },
     topicList() {
-      let topicList = this.todo.pbTopic;
-      topicList = topicList.split("|");
-      topicList.pop();
-      return topicList;
+      let topicList = this.todo.pbTopic
+      topicList = topicList.split('|')
+      topicList.pop()
+      return topicList
     },
     pbThumbNum() {
-      const pbThumbNum = this.todo.pbThumbNum;
+      const pbThumbNum = this.todo.pbThumbNum
       if (pbThumbNum == 0) {
-        return "";
+        return ''
       } else {
-        return pbThumbNum;
+        return pbThumbNum
       }
     },
     pbCommentNum() {
-      const pbCommentNum = this.todo.pbCommentNum;
+      const pbCommentNum = this.todo.pbCommentNum
       if (pbCommentNum == 0) {
-        return "";
+        return ''
       } else {
-        return pbCommentNum;
+        return pbCommentNum
       }
     },
   },
   methods: {
-    showMoreFun(){
-      this.moreFun = !this.moreFun;
-    },
+    // showMoreFun(){
+    //   this.moreFun = !this.moreFun;
+    // },
     seeComments() {
-      this.seeComment = !this.seeComment;
-      this.commentColor.commentColor = !this.commentColor.commentColor;
+      this.seeComment = !this.seeComment
+      this.commentColor.commentColor = !this.commentColor.commentColor
       if (this.seeComment) {
-        this.commentLoading = true;
-        queryBarComment("").then((res) => {
-          this.comments = res.data;
-          this.commentLoading = false;
-        });
+        this.commentLoading = true
+        queryBarComment('').then((res) => {
+          this.comments = res.data
+          this.commentLoading = false
+        })
       }
     },
     clickLike() {
-      this.likeColor.likeColor = !this.likeColor.likeColor;
+      this.likeColor.likeColor = !this.likeColor.likeColor
       if (this.likeColor.likeColor) {
-        this.likeIcon = "iconfont icon-aixin-sel";
+        this.likeIcon = 'iconfont icon-aixin-sel'
       } else {
-        this.likeIcon = "iconfont icon-aixin";
+        this.likeIcon = 'iconfont icon-aixin'
       }
     },
   },
-};
+}
 </script>
 
 <style scope lang="scss">
-.bar-item {
+.bar_item {
   border-radius: 10px;
   background-color: white;
   width: 100%;
@@ -185,9 +187,9 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: left;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
-.item-head {
+.item_head {
   position: relative;
   margin: 20px 10px 5px 20px;
   display: flex;
@@ -200,18 +202,18 @@ export default {
   top: 36px;
   right: 16px;
 }
-.item-head-msg {
+.item_head_msg {
   margin-left: 10px;
   display: flex;
   flex-direction: column;
   align-items: left;
   position: relative;
 }
-.item-head-msg div {
+.item_head_msg div {
   display: flex;
   align-items: center;
 }
-.item-head-msg .el-image__inner {
+.item_head_msg .el-image__inner {
   margin-left: 4px;
   width: 24px;
   height: auto;
@@ -226,49 +228,47 @@ export default {
   font-weight: lighter;
   color: rgb(201, 201, 201);
 }
-.icon{
+// .icon{
+//   margin-left: auto;
+//   margin-right: 15px;
+//   padding: 3px;
+// }
+.iconfont.icon-xiajiantou {
   margin-left: auto;
   margin-right: 15px;
   padding: 3px;
-}
-.iconfont.icon-xiajiantou{
-
 }
 .iconfont.icon-xiajiantou:hover {
   background-color: #3bb0e62a;
   border-radius: 20px;
 }
 
-.item-main {
+.item_main {
   margin-left: 80px;
 }
-.item-article {
+.item_article {
   margin-right: 10px;
 }
-.item-img {
+.item_img {
   margin-top: 15px;
 }
-.item-img .el-image__inner {
+.item_img .el-image__inner {
   width: 150px;
   height: 150px;
   margin-right: 10px;
 }
-.item-location {
+.item_location {
   margin-top: 15px;
   display: flex;
   align-items: center;
   color: #bfbfbf;
   font-size: 14px;
 }
-.item-location img {
-  width: 15px;
+.item_location span {
+  line-height: 17px;
   margin-right: 1px;
 }
-.item-location span {
-  line-height: 18px;
-  margin-right: 1px;
-}
-.item-topic {
+.item_topic {
   margin-top: 15px;
 }
 .el-tag {
@@ -284,7 +284,7 @@ export default {
   border: none;
   margin-right: 15px;
 }
-.item-foot {
+.item_foot {
   color: #8a8a8a;
   font-size: 12px;
   margin-top: 20px;
@@ -292,34 +292,34 @@ export default {
   display: flex;
   align-items: center;
 }
-.item-foot div {
+.item_foot div {
   width: 100%;
 }
-.item-foot div div {
+.item_foot div div {
   display: flex;
   align-items: center;
   width: 50px;
   margin: auto;
 }
-.item-foot span {
+.item_foot span {
   line-height: 12px;
   text-align: center;
   margin-left: 2px;
 }
 .el-tag:hover,
 .el-avatar:hover,
-.item-foot > div > div > i:hover,
+.item_foot > div > div > i:hover,
 .name:hover {
   cursor: pointer;
 }
 .name:hover {
   color: #3bb0e6;
 }
-.item-foot > div > div > i {
+.item_foot > div > div > i {
   font-size: 20px;
   padding: 3px;
 }
-.item-foot > div > div:hover {
+.item_foot > div > div:hover {
   cursor: pointer;
   color: #3bb0e6;
   .iconfont.icon-xiaoxi {
@@ -328,7 +328,7 @@ export default {
     border-radius: 20px;
   }
 }
-.item-foot > div > div:hover {
+.item_foot > div > div:hover {
   cursor: pointer;
   color: #3bb0e6;
   .iconfont.icon-fenxiang {
@@ -337,7 +337,7 @@ export default {
     border-radius: 20px;
   }
 }
-.item-foot > div > div:hover {
+.item_foot > div > div:hover {
   cursor: pointer;
   color: #3bb0e6;
   .iconfont.icon-aixin {
