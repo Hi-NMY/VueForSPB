@@ -16,7 +16,6 @@ export default new VueRouter({
 			path: '/refresh',
 			component: (resolve) => require(['@/views/refresh/Refresh.vue'], resolve)
 		},
-		,
 		{
 			name: 'index',
 			path: '/index',
@@ -39,7 +38,30 @@ export default new VueRouter({
 		},
 		{
 			path: '/home',
-			component: (resolve) => require(['@/views/home/Home.vue'], resolve)
+			redirect: '/home/userHome',
+			component: (resolve) => require(['@/views/home/Home.vue'], resolve),
+			children: [
+				{
+					path: 'userHome',
+					component: (resolve) => require(['@/views/home/UserHome.vue'], resolve)
+				},
+				{
+					path: 'userFollow',
+					component: (resolve) => require(['@/views/home/UserFollow.vue'], resolve)
+				},
+				{
+					path: 'userFollowed',
+					component: (resolve) => require(['@/views/home/UserFollowed.vue'], resolve)
+				},
+				{
+					path: 'userCollect',
+					component: (resolve) => require(['@/views/home/UserCollect.vue'], resolve)
+				},
+				{
+					path: 'userInformation',
+					component: (resolve) => require(['@/views/home/UserInformation.vue'], resolve)
+				},
+			]
 		},
 		{
 			name: 'topic',

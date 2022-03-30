@@ -1,44 +1,45 @@
 <template>
   <div class="home">
     <!-- <head-box></head-box> -->
-    <div class="main">
-      <div class="main_left">
+    <div class="home_main">
+      <div class="home_main_left">
         <el-row>
           <el-col :span="12">
             <h2>个人空间</h2>
             <el-menu
-              default-active="1"
+              :default-active="homeIndex"
               class="el-menu-vertical-demo"
-              @open="handleOpen"
-              @close="handleClose"
-              active-text-color="#46B3E6">
-              <el-menu-item index="1">
+              @select="handleSelect"
+              router
+              active-text-color="#46B3E6"
+            >
+              <el-menu-item index="/home/UserHome">
                 <i class="iconfont icon-jurassic_user"></i>
                 <span slot="title">我的主页</span>
               </el-menu-item>
-              <el-menu-item index="2">
+              <el-menu-item index="/home/UserFollow">
                 <i class="iconfont icon-wodeguanzhu"></i>
                 <span slot="title">我的关注</span>
               </el-menu-item>
-              <el-menu-item index="3">
+              <el-menu-item index="/home/UserFollowed">
                 <i class="iconfont icon-yonghu"></i>
                 <span slot="title">关注我的</span>
               </el-menu-item>
-              <el-menu-item index="4">
+              <el-menu-item index="/home/UserCollect">
                 <i class="iconfont icon-wodeshoucang"></i>
                 <span slot="title">我的收藏</span>
               </el-menu-item>
-              <el-menu-item index="6">
+              <el-menu-item index="/home/UserInformation">
                 <i class="iconfont icon-shezhi"></i>
                 <span slot="title">个人信息管理</span>
               </el-menu-item>
-            
             </el-menu>
           </el-col>
         </el-row>
       </div>
-    
-    
+      <div class="home_main_right">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -47,24 +48,40 @@
 // import headBox from "@/components/head/Head.vue";
 export default {
   name: 'home',
+  data() {
+    return {
+      homeIndex: '/home/UserHome',
+    }
+  },
   components: {
     // headBox,
   },
-  created() {
+  methods: {
+    handleSelect(key, keyPath) {
+      this.homeIndex = key
+      window.localStorage.setItem('homeIndex', this.homeIndex)
+      switch (key) {
+        case '1':
+          break
+        case '5':
+          break
+        case '6':
+          break
+        case '7':
+          break
+        default:
+          break
+      }
+    },
+  },
+  mounted() {
+    this.homeIndex = this.$route.path
     this.$bus.$emit('clearSelect', '/home')
   },
-  methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
-    }
-  }
 }
 </script>
 
-<style scope>
+<style scope lang="scss">
 .home {
   background-color: #f5f5f5;
   width: 100%;
@@ -72,37 +89,49 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-.main {
+.home_main {
   margin: 20px 18% 0px 18%;
   height: auto;
   width: auto;
   /* border: 3px solid rgb(187, 54, 54); */
   min-width: 1000px;
   display: flex;
-  align-items: top;
+  align-items: left;
   margin-top: 85px;
 }
-.main_left {
-  width: 180px;
+.home_main_left {
+  width: 18%;
+  .el-menu {
+    width: 180px;
+    border-radius: 0 0 10px 10px;
+    border: none;
+    padding-bottom: 10px;
+  }
+  .el-menu-item.is-active:focus {
+    background-color: white;
+  }
 }
-.main_left h2 {
+.home_main_left h2 {
   background-color: white;
   /*border-right: solid 1px #e6e6e6;*/
   height: 50px;
+  width: 180px;
   text-indent: 20px;
   line-height: 50px;
   font-weight: 500;
   border-radius: 10px 10px 0 0;
-  padding: 10px 10px 0 10px;
+  padding: 10px 0px 0 0px;
 }
-.el-menu {
-  border-radius: 0 0 10px 10px;
-  border: none;
-  padding-bottom: 10px;
-}
-.main_left i {
+.home_main_left i {
   font-size: 20px;
   margin-right: 12px;
   margin-left: 10px;
+}
+.home_main_right {
+  margin-left: 10px;
+  width: 70%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid red;
 }
 </style>

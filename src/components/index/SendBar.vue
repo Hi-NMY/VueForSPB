@@ -21,8 +21,8 @@
       </div>
       <div class="send_topic">
         <div v-for="(topic, index) in topics" :key="index">
-          <el-tag
-            >{{ topic }}
+          <el-tag>
+            {{ topic }}
             <i class="iconfont icon-close" @click="deleteTopic"></i>
           </el-tag>
         </div>
