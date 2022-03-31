@@ -9,107 +9,104 @@
         <el-input type="text" placeholder="搜索好友" v-model="search"></el-input>
       </div>
     </div>
-    <div class="folllow_msg">
-      <div class="folllow_msg_left">
-        <div class="img">
-          <el-avatar :size="60" src="">
-            <img src="../../assets/logo.png" />
-          </el-avatar>
-        </div>
-        <div class="message">
-          <span class="folllow_name">1234</span>
-          <img src="../../assets/logo.png" />
-          <img src="../../assets/logo.png" />
-          <br />
-          <span>1111111111111111111111111111111111111111111111111111111111111111111115445615615155121111</span><br />
-          <span>2222222222222222</span>
-        </div>
-      </div>
-      <div class="folllow_msg_right">已关注</div>
-    </div>
-    <div class="folllow_msg">
-      <div class="folllow_msg_left">
-        <div class="img">
-          <el-avatar :size="60" src="">
-            <img src="../../assets/logo.png" />
-          </el-avatar>
-        </div>
-        <div class="message">
-          <span class="folllow_name">1234</span>
-          <img src="../../assets/logo.png" />
-          <img src="../../assets/logo.png" />
-          <br />
-          <span>1111111111111111111111111111111111111111111111111111111111111111111115445615615155121111</span><br />
-          <span>2222222222222222</span>
-        </div>
-      </div>
-      <div class="folllow_msg_right">已关注</div>
-    </div>
-    <div class="folllow_msg">
-      <div class="folllow_msg_left">
-        <div class="img">
-          <el-avatar :size="60" src="">
-            <img src="../../assets/logo.png" />
-          </el-avatar>
-        </div>
-        <div class="message">
-          <span class="folllow_name">1234</span>
-          <img src="../../assets/logo.png" />
-          <img src="../../assets/logo.png" />
-          <br />
-          <span>1111111111111111111111111111111111111111111111111111111111111111111115445615615155121111</span><br />
-          <span>2222222222222222</span>
-        </div>
-      </div>
-      <div class="folllow_msg_right">已关注</div>
-    </div>
-    <div class="folllow_msg">
-      <div class="folllow_msg_left">
-        <div class="img">
-          <el-avatar :size="60" src="">
-            <img src="../../assets/logo.png" />
-          </el-avatar>
-        </div>
-        <div class="message">
-          <span class="folllow_name">1234</span>
-          <img src="../../assets/logo.png" />
-          <img src="../../assets/logo.png" />
-          <br />
-          <span>1111111111111111111111111111111111111111111111111111111111111111111115445615615155121111</span><br />
-          <span>2222222222222222</span>
-        </div>
-      </div>
-      <div class="folllow_msg_right">已关注</div>
-    </div>
-
-
+    <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="2">
+      <follow-item
+        v-for="follow in follows"
+        :key="follow.id"
+        :follow="follow">
+      </follow-item>
+    </el-skeleton>
+    <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="2">
+    </el-skeleton>
+    <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="2">
+    </el-skeleton>
+    <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="2">
+    </el-skeleton>
+    <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="2">
+    </el-skeleton>
+    <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="2">
+    </el-skeleton>
+    <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="2">
+    </el-skeleton>
+    <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="2">
+    </el-skeleton>
   </div>
 </template>
 
 <script>
+import followItem from '@/components/home/FollowItem.vue'
+import * as api from '../../api/follow'
+import { queryNoVideoPostBarForDate } from '@/api/postbar'
 export default {
-  name:'UserFollow',
-  data(){
-    return{
-      search:''
+  name: 'UserFollow',
+  data() {
+    return {
+      search: '',
+      follows: [],
+      loading: true,
+      skeletonItem: 'skeleton_item',
     }
+  },
+  components: {
+    followItem,
+  },
+  created() {
+    this.findFollows()
+  },
+  mounted() {
+    this.refresh()
+  },
+  beforeDestroy() {
+    this.$bus.$off('refreshIndexBar')
+  },
+  methods: {
+    findFollows() {
+      api.queryFollowList().then((res) => {
+        this.follows = res.data
+        console.log(this.follows)
+
+      })
+    },
+    refresh() {
+      this.beforeRefresh()
+      queryNoVideoPostBarForDate('').then((res) => {
+        this.afterRefresh()
+        this.$bus.$emit('afterRefresh')
+      })
+    },
+    beforeRefresh() {
+      this.loading = true
+      this.skeletonItem = 'skeleton_item'
+    },
+    afterRefresh() {
+      this.loading = false
+      this.skeletonItem = ''
+    },
   }
+
 }
 </script>
 
 <style scope lang="scss">
-.follow{
+.skeleton_item {
+  width: auto;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background-color: white;
+}
+.follow {
   padding: 10px 20px;
   background-color: white;
   border-radius: 10px;
 }
-.follow_head{
+.follow_head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-bottom: 15px;
 }
-.search_follow{
+.search_follow {
   display: flex;
   width: 200px;
   button {
@@ -128,54 +125,6 @@ export default {
     height: 35px;
     padding: 0 10px 0 0;
   }
-}
-.folllow_msg{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 15px 0;
-  font-size: 14px;
-  border-top: 1px solid #f5f5f5;
-}
-.folllow_msg .folllow_msg_left{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .message{
-    margin-left: 5px;
-    color: grey;
-    width: 450px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    justify-content: center;
-    .folllow_name{
-      color: black;
-      line-height: 30px;
-      font-weight: bold;
-      margin-right: 2px;
-    }
-    img{
-      width: 15px;
-      height: 15px;
-      border-radius: 50%;
-      margin: 0 2px;
-    }
-  }
-}
-.folllow_msg_right{
-  border: 1px solid grey;
-  width: 75px;
-  height: 30px;
-  border-radius: 20px;
-  text-align: center;
-  line-height: 30px;
-  color: grey;
-}
-.folllow_msg_right:hover{
-  border: 1px solid #46B3E6;
-  color: #46B3E6;
 }
 
 </style>
