@@ -60,23 +60,24 @@ export default {
     handleSelect(key, keyPath) {
       this.homeIndex = key
       window.localStorage.setItem('homeIndex', this.homeIndex)
-      switch (key) {
-        case '1':
-          break
-        case '5':
-          break
-        case '6':
-          break
-        case '7':
-          break
-        default:
-          break
-      }
     },
+    popstate() {
+      this.homeIndex = this.$route.path
+    },
+  },
+  created() {
+    // 创建vm实例后执行
+    // 浏览器控制按钮前进后退触发函数
+    window.addEventListener('popstate', this.popstate, false)
   },
   mounted() {
     this.homeIndex = this.$route.path
     this.$bus.$emit('clearSelect', '/home')
+  },
+  destroyed() {
+    // 销毁vm组件
+    // 避免堆栈溢出，多次创建、多次触发
+    window.removeEventListener('popstate', this.popstate, false)
   },
 }
 </script>

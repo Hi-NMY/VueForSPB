@@ -13,15 +13,15 @@
       {{ userProfile }}
     </div>
     <div class="info_box">
-      <div class="box_left">
+      <div class="box_left" @click="homeFollow">
         <div class="number">{{ user.followPresenter.length }}</div>
         <div class="title_text">关注</div>
       </div>
-      <div class="box_middle">
+      <div class="box_middle" @click="homeFollowed">
         <div class="number">{{ user.followedPresenter.length }}</div>
         <div class="title_text">被关注</div>
       </div>
-      <div class="box_right">
+      <div class="box_right" @click="home">
         <div class="number">1</div>
         <div class="title_text">动态</div>
       </div>
@@ -82,9 +82,23 @@ export default {
       })
     },
     home() {
-      if (this.checkRouting(this, '/home')) {
+      if (this.checkRoutingFirst(this, '/home')) {
         this.$router.push({
-          path: '/home',
+          path: '/home/UserHome',
+        })
+      }
+    },
+    homeFollow() {
+      if (this.checkRoutingFirst(this, '/home')) {
+        this.$router.push({
+          path: '/home/UserFollow',
+        })
+      }
+    },
+    homeFollowed() {
+      if (this.checkRoutingFirst(this, '/home')) {
+        this.$router.push({
+          path: '/home/UserFollowed',
         })
       }
     },

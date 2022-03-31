@@ -14,16 +14,24 @@
           </div>
           <span class="date">{{ date }}</span>
         </div>
-        <div class="icon" style="height: 35px;">
+        <div class="icon" style="height: 35px">
           <!--<i @click="closeSel2" class="iconfont icon-xiajiantou" style="z-index: 100"></i>-->
-          <i @click="moreFun = !moreFun" class="iconfont icon-xiajiantou"
-             style="z-index: 100;width: auto;height: auto;position: absolute;top: 10px;right: 16px;"></i>
+          <i
+            @click="moreFun = !moreFun"
+            class="iconfont icon-xiajiantou"
+            style="
+              z-index: 100;
+              width: auto;
+              height: auto;
+              position: absolute;
+              top: 10px;
+              right: 16px;
+            "
+          ></i>
           <div class="moreFunClass" @clicks="closeSel" v-show="moreFun">
             <more-fun></more-fun>
           </div>
-        
         </div>
-      
       </div>
       <div class="item_main">
         <div class="item_article">
@@ -42,9 +50,8 @@
           <span>{{ todo.pbLocation }}</span>
         </div>
         <div v-show="topic" class="item_topic">
-          <el-tag v-for="(topic, index) in topicList" :key="index">{{
-            topic
-            }}
+          <el-tag v-for="(topic, index) in topicList" :key="index"
+            >{{ topic }}
           </el-tag>
         </div>
       </div>
@@ -68,7 +75,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="comment_box" v-loading="commentLoading" v-show="seeComment">
       <comment-input></comment-input>
       <div class="comment_item">
@@ -180,17 +187,16 @@ export default {
     },
     closeSel(e) {
       console.log(this.moreFun)
-      let _this = this;
+      let _this = this
       document.addEventListener('click', function (e) {
         console.log(e.target.className)
         if (e.target.className != 'iconfont icon-xiajiantou') {
           if (e.target.className != 'morefun_content') {
-            _this.moreFun = false;
+            _this.moreFun = false
           } else {
-            _this.moreFun = true;
+            _this.moreFun = true
           }
         }
-
       })
     },
     /*closeSel2(e) {
@@ -206,9 +212,7 @@ export default {
       })
     }*/
   },
-
 }
-
 </script>
 
 <style scope lang="scss">
@@ -261,14 +265,16 @@ export default {
   font-weight: lighter;
   color: rgb(201, 201, 201);
 }
-.iconfont.icon-xiajiantou {
-  margin-left: auto;
-  margin-right: 15px;
-  padding: 3px;
-}
-.iconfont.icon-xiajiantou:hover {
-  background-color: #3bb0e62a;
-  border-radius: 20px;
+.icon {
+  .iconfont.icon-xiajiantou {
+    margin-left: auto;
+    margin-right: 15px;
+    padding: 3px;
+  }
+  .iconfont.icon-xiajiantou:hover {
+    background-color: #3bb0e62a;
+    border-radius: 20px;
+  }
 }
 .item_main {
   margin-left: 80px;

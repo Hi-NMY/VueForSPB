@@ -7,29 +7,29 @@
         </el-avatar>
       </div>
       <div class="message">
-        <span class="folllow_name">{{follow.userName}}</span>
+        <span class="folllow_name">{{ follow.userName }}</span>
         <img src="../../assets/logo.png" /><!--{{follow.sex}}-->
         <img src="../../assets/logo.png" /><!--{{follow.userBadge}}-->
         <br />
-        <span>{{follow.userProfile}}</span><br />
+        <span>{{ follow.userProfile }}</span
+        ><br />
       </div>
     </div>
     <div class="folllow_msg_right" v-if="isfollow2">已关注</div>
     <div class="folllow_msg_right_no" v-else>未关注</div>
   </div>
-
 </template>
 
 <script>
 export default {
-  name: "FollowItem",
+  name: 'FollowItem',
   props: ['follow'],
   data() {
     return {
       isfollow: false,
-      isfollow2: true
+      isfollow2: true,
     }
-  }
+  },
 }
 </script>
 
@@ -79,11 +79,11 @@ export default {
   color: grey;
 }
 .folllow_msg_right:hover {
-  border: 1px solid #46B3E6;
-  color: #46B3E6;
+  border: 1px solid #46b3e6;
+  color: #46b3e6;
 }
 .folllow_msg_right_no {
-  background-color: #46B3E6;
+  background-color: #46b3e6;
   color: white;
   width: 75px;
   height: 30px;
@@ -92,8 +92,8 @@ export default {
   line-height: 30px;
 }
 .folllow_msg_right_no:hover {
-  border: 1px solid #46B3E6;
-  color: #46B3E6;
+  border: 1px solid #46b3e6;
+  color: #46b3e6;
   background-color: white;
 }
 </style>

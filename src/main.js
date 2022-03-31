@@ -1,4 +1,4 @@
-import {Row,Col, Avatar, Button, Form, FormItem, Input, Menu, MenuItem, Message, Submenu, TabPane, Tabs, Tag, Image, Backtop, Loading, Skeleton, SkeletonItem } from 'element-ui';
+import { Row, Col, Avatar, Button, Form, FormItem, Input, Menu, MenuItem, Message, Submenu, TabPane, Tabs, Tag, Image, Backtop, Loading, Skeleton, SkeletonItem } from 'element-ui';
 import 'element-ui/lib/theme-chalk/base.css';
 //引入store
 // import ElementUi from 'element-ui'
@@ -11,13 +11,14 @@ import App from './App.vue';
 import router from './router/index.js';
 // Vue.use(ElementUi)
 import store from './store/index.js';
-import { checkRouting } from '@/utils/checkRouting';
+import { checkRouting, checkRoutingFirst } from '@/utils/checkRouting';
 
 // const originalPush = VueRouter.prototype.push
 // VueRouter.prototype.push = function push(location) {
 //   return originalPush.call(this, location).catch(err => err)
 // }
 Vue.prototype.checkRouting = checkRouting
+Vue.prototype.checkRoutingFirst = checkRoutingFirst
 
 Vue.config.productionTip = false
 Vue.use(Button)
