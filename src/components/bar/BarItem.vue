@@ -20,7 +20,7 @@
             @click="moreFun = !moreFun"
             class="iconfont icon-xiajiantou"
             style="
-              z-index: 100;
+              z-index: 1;
               width: auto;
               height: auto;
               position: absolute;
@@ -50,7 +50,7 @@
           <span>{{ todo.pbLocation }}</span>
         </div>
         <div v-show="topic" class="item_topic">
-          <el-tag v-for="(topic, index) in topicList" :key="index"
+          <el-tag v-for="(topic, index) in topicList" :key="index" @click="lookTopic(topic)"
             >{{ topic }}
           </el-tag>
         </div>
@@ -183,6 +183,16 @@ export default {
         this.likeIcon = 'iconfont icon-aixin-sel'
       } else {
         this.likeIcon = 'iconfont icon-aixin'
+      }
+    },
+    lookTopic(data) {
+      if (this.checkRoutingFirst(this, '/topic/detailTopic')) {
+        this.$router.push({
+          name: 'detailTopic',
+          params: {
+            topicName: data,
+          },
+        })
       }
     },
     closeSel(e) {

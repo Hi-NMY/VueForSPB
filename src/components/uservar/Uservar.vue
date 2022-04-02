@@ -115,7 +115,7 @@ export default {
   height: 340px;
   background-color: white;
   border-radius: 10px;
-  z-index: 3;
+  z-index: 99;
 }
 .uname {
   position: absolute;

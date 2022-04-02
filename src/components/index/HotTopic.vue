@@ -60,7 +60,7 @@
 import * as api from '../../api/index'
 import { numberHandle } from '@/utils/dateUtil'
 export default {
-  name: 'HotTopic',
+  name: 'HotTopicBox',
   data() {
     return {
       totTopics: [],

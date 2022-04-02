@@ -128,7 +128,6 @@ export default {
       queryNoVideoPostBarForDate('').then((res) => {
         this.noVidePostBarList = res.data
         this.afterRefresh()
-        this.$bus.$emit('afterRefresh')
       })
     },
     beforeRefresh() {
@@ -141,11 +140,7 @@ export default {
     },
   },
   mounted() {
-    this.$bus.$on('refreshIndexBar', this.refresh)
     this.refresh()
-  },
-  beforeDestroy() {
-    this.$bus.$off('refreshIndexBar')
   },
 }
 </script>
@@ -269,6 +264,15 @@ export default {
 }
 .user_home_navigation {
   margin-top: 20px;
+  .el-tabs__nav {
+    z-index: 1;
+  }
+  .el-tabs__nav-wrap::after {
+    z-index: 0;
+  }
+  .el-tabs__active-bar{
+     z-index: 1;
+  }
   .el-tabs.el-tabs--top {
     height: 40px;
   }

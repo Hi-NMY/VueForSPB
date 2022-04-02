@@ -80,6 +80,12 @@ export default {
       },
     }
   },
+  watch:{
+  //解决浏览器前进后退按钮，导航正常高亮显示
+    $route(to,from){
+      this.headIndex = '/' + to.path.split('/')[1]
+    }
+  },
   components: {
     UserVar,
   },
@@ -138,23 +144,14 @@ export default {
       this.headImgAnima.imgAnimaI = true
       this.headIndex = v
     },
-    popstate() {
-      this.headIndex = '/' + this.$route.path.split('/')[1]
-    },
-  },
-  created() {
-    // 创建vm实例后执行
-    // 浏览器控制按钮前进后退触发函数
-    window.addEventListener('popstate', this.popstate, false)
   },
   mounted() {
-    this.headIndex = '/' + this.$route.path.split('/')[1]
+    if (this.$route.path.split('/')[1]) {
+      this.headIndex = '/' + this.$route.path.split('/')[1]
+    } else {
+      this.headIndex = '/index'
+    }
     this.$bus.$on('clearSelect', this.clearSelect)
-  },
-  destroyed() {
-    // 销毁vm组件
-    // 避免堆栈溢出，多次创建、多次触发
-    window.removeEventListener('popstate', this.popstate, false)
   },
 }
 </script>
@@ -295,12 +292,14 @@ export default {
   z-index: 99;
 }
 .imgAnima {
+  z-index: 100;
   transform: scale(1.5);
   transition: all 0.1s;
   position: relative;
   top: 22px;
 }
 .imgAnimaI {
+  z-index: 100;
   transform: scale(1);
   transition: all 0.1s;
   position: relative;

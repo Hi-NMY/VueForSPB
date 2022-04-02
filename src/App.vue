@@ -2,7 +2,7 @@
   <div id="app">
     <head-box v-show="this.$store.state.index.hasHead"></head-box>
     <router-view />
-      <el-backtop>
+    <el-backtop>
       <div
         style="
            {
@@ -36,8 +36,7 @@ export default {
     let user = null
     try {
       user = JSON.parse(localStorage.getItem('user'))
-    } catch (error) {
-    }
+    } catch (error) {}
     if (user) {
       login(user).then((res) => {
         if (res.code == 200) {

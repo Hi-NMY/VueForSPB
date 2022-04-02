@@ -38,13 +38,21 @@ export default {
     sendBar,
   },
   methods: {
-    showSendBar(v1,v2) {
+    showSendBar(v1, v2) {
       this.isSendBar = v1
       this.sendVideo = v2
     },
   },
   mounted() {
     this.$bus.$on('sendBar', this.showSendBar)
+    // const that = this
+    // const divTop = that.$refs['mainRight'].offsetTop
+    // window.onscroll = function () {
+    //     let scrcllTop = document.documentElement.scrollTop || document.body.scrollTop
+    //     if (scrcllTop >= divTop) {
+    //       that.$refs['mainRight'].offsetTop
+    //     }
+    // }
   },
   beforeDestroy() {
     this.$bus.$off('sendBar')
@@ -68,12 +76,15 @@ export default {
   display: flex;
   align-items: top;
   margin-top: 85px;
+  position: relative;
 }
 .main_left {
   width: 69%;
   margin-right: 0.5%;
 }
 .main_right {
+  // position: fixed;
+  // right: 256px;
   margin-left: 0.5%;
   width: 30%;
 }

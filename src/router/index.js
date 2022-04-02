@@ -37,6 +37,7 @@ export default new VueRouter({
 			]
 		},
 		{
+			name: 'home',
 			path: '/home',
 			redirect: '/home/userHome',
 			component: (resolve) => require(['@/views/home/Home.vue'], resolve),
@@ -66,9 +67,27 @@ export default new VueRouter({
 		{
 			name: 'topic',
 			path: '/topic',
-			redirect: '/topic/aa',
+			redirect: '/topic/hotTopic',
+			component: (resolve) => require(['@/views/topic/Topic.vue'], resolve),
 			children: [
-
+				{
+					path: 'hotTopic',
+					component: (resolve) => require(['@/views/topic/HotTopic.vue'], resolve)
+				},
+				{
+					path: 'allTopic',
+					component: (resolve) => require(['@/views/topic/AllTopic.vue'], resolve)
+				},
+				{
+					path: 'attentionTopic',
+					component: (resolve) => require(['@/views/topic/AttentionTopic.vue'], resolve)
+				},
+				{
+					name: 'detailTopic',
+					path: 'detailTopic/:topicName',
+					props: true,
+					component: (resolve) => require(['@/views/topic/DetailTopic.vue'], resolve)
+				},
 			]
 		},
 		{
@@ -85,5 +104,12 @@ export default new VueRouter({
 			children: [
 			]
 		}
-	]
+	],
+	scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 })
