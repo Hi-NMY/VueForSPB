@@ -1,4 +1,25 @@
-import { Row, Col, Avatar, Button, Form, FormItem, Input, Menu, MenuItem, Message, Submenu, TabPane, Tabs, Tag, Image, Backtop, Loading, Skeleton, SkeletonItem } from 'element-ui';
+import {
+  Row,
+  Col,
+  Avatar,
+  Button,
+  Form,
+  FormItem,
+  Input,
+  Menu,
+  MenuItem,
+  Message,
+  Submenu,
+  TabPane,
+  Tabs,
+  Tag,
+  Image,
+  Backtop,
+  Loading,
+  Skeleton,
+  SkeletonItem,
+  Collapse, CollapseItem, DatePicker, Cascader, Switch, RadioGroup, Radio
+} from 'element-ui';
 import 'element-ui/lib/theme-chalk/base.css';
 //引入store
 // import ElementUi from 'element-ui'
@@ -40,6 +61,13 @@ Vue.use(Skeleton)
 Vue.use(SkeletonItem)
 Vue.use(Row)
 Vue.use(Col)
+Vue.use(Collapse)
+Vue.use(CollapseItem)
+Vue.use(DatePicker)
+Vue.use(Cascader)
+Vue.use(Switch)
+Vue.use(RadioGroup)
+Vue.use(Radio)
 Vue.prototype.$message = Message;
 
 new Vue({
