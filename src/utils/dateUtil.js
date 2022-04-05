@@ -53,7 +53,6 @@ export function numberHandle(num) {
 
 export function getBirthStar(val) {
   var date = new Date(val)
-  console.log(date)
   const month = parseInt(date.getMonth() + 1);
   const day = parseInt(date.getDate());
   var birth_star = "";
@@ -81,8 +80,6 @@ export function getBirthStar(val) {
     birth_star = "人马座";
   } else if (month == 12 && day >= 22 || month == 1 && day <= 19) {
     birth_star = "摩羯座";
-  } else if (date == "" || data == null) {
-    birth_star = ""
   }
   return birth_star;
 }
