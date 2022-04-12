@@ -81,7 +81,7 @@ export default {
   display: flex;
   padding-left: 100px;
   justify-content: right;
-  color: rgb(117, 117, 117);
+  color: #909399;
   font-size: 18px;
 }
 .text_logo {

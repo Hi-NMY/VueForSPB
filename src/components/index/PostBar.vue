@@ -117,7 +117,7 @@ export default {
   top: 10px;
   right: 20px;
   z-index: 1;
-  color: gray;
+  color: #909399;
 }
 .bar_refresh:hover {
   cursor: pointer;

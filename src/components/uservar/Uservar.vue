@@ -59,7 +59,7 @@ export default {
   computed: {
     ...mapState('userInfo', ['user']),
     userProfile() {
-      const userProfile = this.$store.state.userInfo.user.userProfile
+      const userProfile = this.$store.state.userInfo.user.userInfo.userProfile
       if (userProfile) {
         return userProfile
       } else {
@@ -67,7 +67,7 @@ export default {
       }
     },
     userBadge() {
-      const badge = this.$store.state.userInfo.user.userBadge
+      const badge = this.$store.state.userInfo.user.userInfo.userBadge
       return badge ? true : false
     },
   },
@@ -122,7 +122,7 @@ export default {
   top: 45px;
   text-align: center;
   width: 100%;
-  color: black;
+  color: #303133;
   /*height: 10px;*/
 }
 .hand_info {
@@ -130,7 +130,7 @@ export default {
   height: 30px;
   top: 80px;
   font-size: 12px;
-  color: gray;
+  color: #909399;
   /*line-height: 25px;*/
   display: flex;
   align-items: center;
@@ -138,7 +138,7 @@ export default {
   width: 100%;
 }
 .qiandao {
-  color: black;
+  color: #303133;
   font-size: 16px;
 }
 .hand_info img {
@@ -155,7 +155,7 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 180px;
-  color: lightgray;
+  color: #C0C4CC;
   text-align: center;
 }
 .info_box {
@@ -168,12 +168,12 @@ export default {
   width: 200px;
 }
 .number {
-  color: black;
+  color: #303133;
   font-size: 16px;
   font-weight: bold;
 }
 .title_text {
-  color: gray;
+  color: #909399;
   font-size: 14px;
 }
 /*.userinfo_button1,.userinfo_button2,.userinfo_button3,.userinfo_button4,.userinfo_button5,.userinfo_button6{*/

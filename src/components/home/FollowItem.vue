@@ -49,14 +49,14 @@ export default {
   justify-content: center;
   .message {
     margin-left: 5px;
-    color: grey;
+    color: #909399;
     width: 450px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     justify-content: center;
     .folllow_name {
-      color: black;
+      color: #303133;
       line-height: 30px;
       font-weight: bold;
       margin-right: 2px;
@@ -76,7 +76,7 @@ export default {
   border-radius: 20px;
   text-align: center;
   line-height: 30px;
-  color: grey;
+  color: #909399;
 }
 .folllow_msg_right:hover {
   border: 1px solid #46b3e6;

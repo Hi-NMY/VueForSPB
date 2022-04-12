@@ -45,14 +45,6 @@ export default {
   },
   mounted() {
     this.$bus.$on('sendBar', this.showSendBar)
-    // const that = this
-    // const divTop = that.$refs['mainRight'].offsetTop
-    // window.onscroll = function () {
-    //     let scrcllTop = document.documentElement.scrollTop || document.body.scrollTop
-    //     if (scrcllTop >= divTop) {
-    //       that.$refs['mainRight'].offsetTop
-    //     }
-    // }
   },
   beforeDestroy() {
     this.$bus.$off('sendBar')

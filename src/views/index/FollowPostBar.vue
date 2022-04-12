@@ -27,7 +27,21 @@ export default {
       followPostBarList: [],
       loading: true,
       skeletonItem: 'skeleton_item',
+      selBody: {
+        pbDate: '0',
+        userAccount: '',
+      },
     }
+  },
+  watch: {
+    '$store.state.userInfo.user.userInfo.userAccount': {
+      handler(newValue, oldValue) {
+        if (newValue != '' && oldValue == '') {
+          this.selBody.userAccount = newValue
+          this.refresh()
+        }
+      },
+    },
   },
   components: {
     barItem,
@@ -35,11 +49,21 @@ export default {
   methods: {
     refresh() {
       this.beforeRefresh()
-      queryNoVideoFollowPostBarForDate('').then((res) => {
+      if (!this.$store.state.userInfo.user.userInfo.userAccount) {
+        return
+      } else {
+        this.selBody.userAccount =
+          this.$store.state.userInfo.user.userInfo.userAccount
+      }
+      queryNoVideoFollowPostBarForDate(this.selBody).then((res) => {
         this.followPostBarList = res.data
         this.afterRefresh()
         this.$bus.$emit('afterRefresh')
       })
+    },
+    firstRefresh() {
+      this.selBody.pbDate = '0'
+      this.refresh()
     },
     beforeRefresh() {
       this.loading = true
@@ -51,7 +75,7 @@ export default {
     },
   },
   mounted() {
-    this.$bus.$on('refreshIndexBar', this.refresh)
+    this.$bus.$on('refreshIndexBar', this.firstRefresh)
     this.refresh()
   },
   beforeDestroy() {

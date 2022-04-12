@@ -195,7 +195,7 @@ export default {
   align-items: center;
   .iconfont.icon-close {
     margin-left: 2px;
-    color: black;
+    color: #303133;
   }
   .iconfont.icon-close:hover {
     color: #46b3e6;
@@ -228,7 +228,7 @@ export default {
     cursor: default;
   }
   .iconfont.icon-close {
-    color: black;
+    color: #303133;
   }
   .iconfont.icon-close:hover {
     color: #46b3e6;

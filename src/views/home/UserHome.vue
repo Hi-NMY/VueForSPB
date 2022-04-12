@@ -205,12 +205,12 @@ export default {
   width: 100%;
   display: flex;
   align-items: center;
-  color: #939393;
+  color: #909399;
   font-size: 14px;
 }
 .follow_count {
   margin-left: 4px;
-  color: black;
+  color: #303133;
 }
 .user_home_user_followed {
   margin-left: 20px;
@@ -225,7 +225,7 @@ export default {
 }
 .user_home_user_info {
   margin-top: 90px;
-  color: #939393;
+  color: #909399;
   display: flex;
   flex-direction: column;
   align-items: center;

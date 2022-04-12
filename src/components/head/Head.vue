@@ -191,7 +191,7 @@ export default {
   height: 100%;
   padding: 0px 10px;
   font-size: 16px;
-  color: black;
+  color: #303133;
   width: auto;
   text-align: center;
   border: none;

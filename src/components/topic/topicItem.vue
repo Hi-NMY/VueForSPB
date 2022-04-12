@@ -4,15 +4,26 @@
       src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
     ></el-image>
     <div class="topic_item_msg">
-      <span class="topic_item_msg_name" @click="lookTopic(topicInfo.topicName)">{{ topicInfo.topicName }}</span>
+      <span
+        class="topic_item_msg_name"
+        @click="lookTopic(topicInfo.id,topicInfo.topicName)"
+        >{{ topicInfo.topicName }}</span
+      >
       <span class="topic_item_msg_des">{{ topicInfo.topicSlogan }}</span>
       <div class="topic_item_msg_count">
-        <span style="color: black">关注</span>
-        <span style="margin-left: 2px">{{ topicInfo.topicAttentionNum }}</span>
-        <span style="color: black; margin-left: 6px">发帖</span>
-        <span style="margin-left: 2px">{{ topicInfo.topicBarNum }}</span>
+        <span style="color: #303133">关注</span>
+        <span style="margin-left: 2px">{{ topicInfo.topicAttentionnum }}</span>
+        <span style="color: #303133; margin-left: 6px">发帖</span>
+        <span style="margin-left: 2px">{{ topicInfo.topicBarnum }}</span>
       </div>
-      <el-button class="noAt" type="primary" round>关注</el-button>
+      <el-button
+        v-if="isAttentionTopic(topicInfo.id)"
+        class="noAt"
+        type="primary"
+        round
+        >关注</el-button
+      >
+      <el-button v-else class="At" type="primary" round>已关注</el-button>
     </div>
   </div>
 </template>
@@ -22,16 +33,22 @@ export default {
   name: 'TopicItem',
   props: ['topicInfo'],
   methods: {
-    lookTopic(data){
+    lookTopic(id,name) {
       if (this.checkRoutingFirst(this, '/topic/detailTopic')) {
         this.$router.push({
-          name:'detailTopic',
-           params:{
-           		topicName:data
-           }
+          name: 'detailTopic',
+          params: {
+            topicId: id,
+            topicName: name
+          },
         })
       }
-    }
+    },
+    isAttentionTopic(index) {
+      const attentionTopic =
+        this.$store.state.userInfo.user.attentionTopicPresenter
+      return attentionTopic.indexOf(index) == -1
+    },
   },
 }
 </script>
@@ -40,7 +57,7 @@ export default {
 .topic_item {
   width: 290px;
   height: auto;
-  padding: 8px;
+  padding: 12px;
   border-radius: 10px;
   background-color: white;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -69,19 +86,21 @@ export default {
     right: 0;
     bottom: 0;
     height: 24px;
-    border: 0px;
   }
   .noAt {
     color: white;
     background-color: #46b3e6;
+    border: 1px solid #46b3e6;
   }
   .noAt:hover {
     background-color: #46b3e6bc;
+    border: 1px solid #46b3e6bc;
   }
   .At {
-    color: #909399;
+    color: #46b3e6;
+    border: 1px solid #46b3e6;
     background-color: #ffffff;
-    border: 1px solid #909399;
+    padding: 2px 8px;
   }
 }
 .topic_item_msg_name {

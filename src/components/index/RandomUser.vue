@@ -28,13 +28,12 @@
             <div class="message">
               <span class="username">{{ usermsg.userName }}</span
               ><br />
-              <span class="guanzhu">关注</span>
-              <span>{{ usermsg.followNum }}</span>
               <span class="beiguanzhu">被关注</span>
-              <span>{{ usermsg.followedNum }}</span>
+              <span>{{ usermsg.followNum }}</span>
             </div>
           </div>
-          <div class="user_msg_right">+ 关注</div>
+          <div class="user_msg_right" v-if="!filterFollow(usermsg.userAccount)">+ 关注</div>
+          <div class="user_msg_right_right" v-else>已关注</div>
         </div>
       </el-skeleton>
       <el-skeleton
@@ -87,6 +86,9 @@ export default {
       randomuser_skeleton_item: 'randomuser_skeleton_item',
     }
   },
+  computed: {
+    
+  },
   created() {
     this.findUsers()
   },
@@ -95,12 +97,21 @@ export default {
       this.isLoading = 'el-icon-loading'
       this.loading = true
       this.randomuser_skeleton_item = 'randomuser_skeleton_item'
-      api.randomUser().then((res) => {
+      api.randomUser(0).then((res) => {
         this.usersmsg = res.data
         this.isLoading = 'el-icon-refresh'
         this.loading = false
         this.randomuser_skeleton_item = ''
       })
+    },
+    filterFollow(account) {
+      const followedPresenter =
+        this.$store.state.userInfo.user.followedPresenter
+      if (followedPresenter.indexOf(account) === -1) {
+        return false
+      } else {
+        return true
+      }
     },
   },
 }
@@ -127,7 +138,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   width: 88%;
-  color: gray;
+  color: #909399;
 }
 .head_right:hover {
   cursor: pointer;
@@ -152,18 +163,29 @@ export default {
   margin-right: 10px;
 }
 .tuijian_user .user_msg_left .message {
-  color: grey;
+  color: #909399;
   font-size: 12px;
   line-height: 22.5px;
 }
 .tuijian_user .user_msg_left .message .username {
-  color: black;
+  color: #303133;
   font-size: 14px;
 }
-.tuijian_user .user_msg_right {
+.tuijian_user {
   color: #46b3e6;
 }
-.user_msg_right:hover,
+.user_msg_right {
+  color: #46b3e6;
+  border: 1px solid #ffffff;
+  padding: 2px 8px;
+}
+.user_msg_right_right {
+  color: #46b3e6;
+  border-radius: 20px;
+  border: 1px solid #46b3e6;
+  padding: 2px 8px;
+}
+.user_msg_right:hover,.user_msg_right_right:hover,
 .username:hover {
   cursor: pointer;
 }
@@ -174,6 +196,6 @@ export default {
   color: #3bb0e6;
 }
 .beiguanzhu {
-  margin-left: 10px;
+  margin-right: 4px;
 }
 </style>

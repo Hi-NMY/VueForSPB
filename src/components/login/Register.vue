@@ -95,7 +95,7 @@ export default {
 }
 .tishi {
   font-size: 12px;
-  color: darkgrey;
+  color: #909399;
   text-align: center;
 }
 .tishi a {
@@ -115,8 +115,8 @@ export default {
   width: 300px;
   background-color: rgb(247, 247, 247);
   height: 50px;
-  color: darkgrey;
-  border: 1px solid darkgrey;
+  color: #909399;
+  border: 1px solid #909399;
 }
 /deep/ .el-icon-user,
 /deep/ .el-icon-reading,
@@ -127,12 +127,4 @@ export default {
 /deep/ .el-input--prefix .el-input__inner {
   padding-left: 34px;
 }
-/*a{*/
-/*    color: #46B3E6;*/
-/*    color: #4D80E4;*/
-/*    color: #A685E2;*/
-/*    color: #DFF6F0;*/
-/*    color: #ffcc29;*/
-/*    color: #E93B81;*/
-/*}*/
 </style>

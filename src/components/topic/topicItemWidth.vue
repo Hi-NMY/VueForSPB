@@ -4,15 +4,20 @@
       src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
     ></el-image>
     <div class="topic_item_msg_width">
-      <span class="topic_item_msg_name_width" @click="lookTopic(topicInfo.topicName)">{{ topicInfo.topicName }}</span>
+      <span
+        class="topic_item_msg_name_width"
+        @click="lookTopic(topicInfo.id,topicInfo.topicName)"
+        >{{ topicInfo.topicName }}</span
+      >
       <span class="topic_item_msg_des_width">{{ topicInfo.topicSlogan }}</span>
       <div class="topic_item_msg_count_width">
-        <span style="color: black">关注</span>
-        <span style="margin-left: 2px">{{ topicInfo.topicAttentionNum }}</span>
-        <span style="color: black; margin-left: 12px">发帖</span>
-        <span style="margin-left: 2px">{{ topicInfo.topicBarNum }}</span>
+        <span style="color: #303133">关注</span>
+        <span style="margin-left: 2px">{{ topicInfo.topicAttentionnum }}</span>
+        <span style="color: #303133; margin-left: 12px">发帖</span>
+        <span style="margin-left: 2px">{{ topicInfo.topicBarnum }}</span>
       </div>
-      <el-button class="noAt_width" type="primary" round>关注</el-button>
+      <el-button v-if="isAttentionTopic(topicInfo.id)" class="noAt_width" type="primary" round>关注</el-button>
+      <el-button v-else class="At_width" type="primary" round>已关注</el-button>
     </div>
   </div>
 </template>
@@ -22,15 +27,20 @@ export default {
   name: 'TopicItem',
   props: ['topicInfo'],
   methods: {
-    lookTopic(data){
+    lookTopic(id,name) {
       if (this.checkRoutingFirst(this, '/topic/detailTopic')) {
         this.$router.push({
-           name:'detailTopic',
-           params:{
-           		topicName:data
-           }
+          name: 'detailTopic',
+          params: {
+            topicId: id,
+            topicName: name,
+          },
         })
       }
+    },
+    isAttentionTopic(index){
+      const attentionTopic = this.$store.state.userInfo.user.attentionTopicPresenter;
+      return (attentionTopic.indexOf(index) == -1)
     }
   },
 }
@@ -72,7 +82,7 @@ export default {
     right: 0;
     bottom: 0;
     height: 30px;
-    border: 0px;
+    border: 1px solid #46b3e6;
   }
   .noAt_width {
     color: white;
@@ -80,11 +90,13 @@ export default {
   }
   .noAt_width:hover {
     background-color: #46b3e6bc;
+    border: 1px solid #46b3e6bc;
   }
   .At_width {
-    color: #909399;
+    color: #46b3e6;
+    border: 1px solid #46b3e6;
     background-color: #ffffff;
-    border: 1px solid #909399;
+    padding: 2px 8px;
   }
 }
 .topic_item_msg_name_width {
@@ -97,7 +109,7 @@ export default {
   color: #46b3e6;
 }
 .topic_item_msg_des_width {
-  margin-top: 4px;
+  margin-top: 5px;
   width: auto;
   height: auto;
   font-size: 13px;

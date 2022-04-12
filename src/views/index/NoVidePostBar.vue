@@ -27,6 +27,7 @@ export default {
       noVidePostBarList: [],
       loading: true,
       skeletonItem: 'skeleton_item',
+      moreDate: '0',
     }
   },
   components: {
@@ -35,11 +36,15 @@ export default {
   methods: {
     refresh() {
       this.beforeRefresh()
-      queryNoVideoPostBarForDate('').then((res) => {
+      queryNoVideoPostBarForDate(this.moreDate).then((res) => {
         this.noVidePostBarList = res.data
         this.afterRefresh()
         this.$bus.$emit('afterRefresh')
       })
+    },
+    firstRefresh() {
+      this.moreDate = '0'
+      this.refresh()
     },
     beforeRefresh() {
       this.loading = true
@@ -51,7 +56,7 @@ export default {
     },
   },
   mounted() {
-    this.$bus.$on('refreshIndexBar', this.refresh)
+    this.$bus.$on('refreshIndexBar', this.firstRefresh)
     this.refresh()
   },
   beforeDestroy() {

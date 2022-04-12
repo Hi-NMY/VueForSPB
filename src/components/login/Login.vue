@@ -110,7 +110,7 @@ export default {
 }
 .tishi {
   font-size: 12px;
-  color: darkgrey;
+  color: #909399;
   text-align: center;
 }
 .tishi a {
@@ -123,12 +123,12 @@ export default {
   float: left;
 }
 .remember_me_forget a {
-  color: rgb(117, 117, 117);
+  color: #909399;
   text-decoration: none;
   float: right;
 }
 .remember_me_forget a:hover {
-  color: rgb(12, 12, 12);
+  color: #606266;
   text-decoration: none;
   float: right;
 }
@@ -146,8 +146,8 @@ export default {
   width: 300px;
   background-color: rgb(247, 247, 247);
   height: 50px;
-  color: darkgrey;
-  border: 1px solid darkgrey;
+  color: #909399;
+  border: 1px solid #909399;
 }
 /deep/ .el-icon-user,
 /deep/ .el-icon-reading,

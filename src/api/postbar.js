@@ -2,9 +2,8 @@ import request from '@/utils/request';
 
 export function queryNoVideoPostBarForDate(date) {
     return request({
-        url: '/postbar/queryNoVideoPostBarForDate',
+        url: '/postbarlist/queryNoVideoBarListForDate/' + date,
         method: 'post',
-        data: date
     })
 }
 
@@ -16,18 +15,17 @@ export function queryVideoPostBarForDate(date) {
     })
 }
 
-export function queryNoVideoFollowPostBarForDate(date) {
+export function queryNoVideoFollowPostBarForDate(data) {
     return request({
-        url: '/postbar/queryNoVideoFollowPostBarForDate',
+        url: '/postbarlist/queryNoVideoFollowBarListForDate',
         method: 'post',
-        data: date
+        data: data
     })
 }
 
 export function queryBarComment(date) {
     return request({
-        url: '/postbar/queryComment',
+        url: '/postbarComment/queryCommentList/' + date,
         method: 'post',
-        data: date
     })
 }

@@ -84,7 +84,7 @@ export default new VueRouter({
 				},
 				{
 					name: 'detailTopic',
-					path: 'detailTopic/:topicName',
+					path: 'detailTopic/:topicId/:topicName',
 					props: true,
 					component: (resolve) => require(['@/views/topic/DetailTopic.vue'], resolve)
 				},

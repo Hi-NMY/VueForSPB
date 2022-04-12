@@ -1,17 +1,15 @@
 import request from '@/utils/request'
 
 // export const randomUser = (params) => {
-export function randomUser(params) {
+export function randomUser(num) {
     return request({
-        url: '/index/randomUser',
+        url: '/follow/queryRandomUserList?num=' + num,
         method: 'get',
-        params
     })
 }
-export function hotTopic(params) {
+export function hotTopic() {
     return request({
-        url: '/index/hotTopic',
+        url: '/topic/queryHotTopicList',
         method: 'get',
-        params
     })
 }

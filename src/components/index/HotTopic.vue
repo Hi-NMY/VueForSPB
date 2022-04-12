@@ -14,12 +14,12 @@
         animated
         :rows="1"
       >
-        <ol type="1" v-for="totTopic in totTopics" :key="totTopic.id">
-          <li>
+        <ol type="1" v-for="hotTopic in hotTopics" :key="hotTopic.id">
+          <li @click="goToDetailTopic(hotTopic.topicName)">
             <span class="message">
-              {{ totTopic.topicName }}
+              {{ hotTopic.topicName }}
             </span>
-            <span class="num">{{ hotNum(totTopic.topicBarNum) }}</span>
+            <span class="num">{{ hotNum(hotTopic.topicBarnum) }}</span>
           </li>
         </ol>
       </el-skeleton>
@@ -51,7 +51,7 @@
         :rows="1"
       >
       </el-skeleton>
-      <div class="more">查看更多热门话题</div>
+      <div @click="goToHotTopic" class="more">查看更多热门话题</div>
     </div>
   </div>
 </template>
@@ -63,7 +63,7 @@ export default {
   name: 'HotTopicBox',
   data() {
     return {
-      totTopics: [],
+      hotTopics: [],
       isLoading: 'el-icon-refresh',
       loading: true,
       hotTopic_skeleton_item: 'hotTopic_skeleton_item',
@@ -77,16 +77,30 @@ export default {
     findUsers() {
       this.isLoading = 'el-icon-loading'
       this.loading = true
-      ;(this.hotTopic_skeleton_item = 'hotTopic_skeleton_item'),
-        api.hotTopic().then((res) => {
-          this.totTopics = res.data
-          this.isLoading = 'el-icon-refresh'
-          this.loading = false
-          this.hotTopic_skeleton_item = ''
-        })
+      this.hotTopic_skeleton_item = 'hotTopic_skeleton_item'
+      api.hotTopic().then((res) => {
+        this.hotTopics = res.data.slice(0, 5)
+        this.isLoading = 'el-icon-refresh'
+        this.loading = false
+        this.hotTopic_skeleton_item = ''
+      })
     },
     hotNum(num) {
       return numberHandle(num)
+    },
+    goToHotTopic() {
+      this.$router.push({
+        path: '/topic/hotTopic',
+      })
+    },
+    goToDetailTopic(name) {
+      this.$router.push({
+        name: 'detailTopic',
+        params: {
+          topicId: -1,
+          topicName: name,
+        },
+      })
     },
   },
 }
@@ -113,7 +127,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   width: 88%;
-  color: gray;
+  color: #909399;
   margin: 20px 0px 10px 0px;
 }
 .content {
@@ -125,7 +139,7 @@ export default {
   border-bottom: 1px solid rgb(247, 247, 247);
   line-height: 45px;
   font-size: 14px;
-  color: grey;
+  color: #909399;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -133,7 +147,7 @@ export default {
 .content ol li .message {
   /*font-size: 18px;*/
   display: inline-block;
-  color: black;
+  color: #303133;
   width: 70%;
   white-space: nowrap;
   overflow: hidden;
@@ -152,6 +166,6 @@ export default {
 .more {
   text-align: center;
   margin: 20px 0px;
-  color: grey;
+  color: #909399;
 }
 </style>

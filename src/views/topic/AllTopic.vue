@@ -8,8 +8,9 @@
         </button>
         <el-input
           type="text"
-          placeholder="搜索话题"
+          placeholder="按下enter搜索话题"
           v-model="search"
+          @keyup.enter.native="queryTopicList"
         ></el-input>
       </div>
     </div>
@@ -21,7 +22,7 @@
 
 <script>
 import topicItem from '@/components/topic/topicItem.vue'
-import { queryHotTopic } from '@/api/topic'
+import { queryAllTopic } from '@/api/topic'
 export default {
   name: 'AllTopic',
   components: {
@@ -33,10 +34,15 @@ export default {
       search: '',
     }
   },
+  methods: {
+    queryTopicList() {
+      queryAllTopic(this.search).then((res) => {
+        this.topicList = res.data
+      })
+    },
+  },
   mounted() {
-    queryHotTopic('').then((res) => {
-      this.topicList = res.data
-    })
+    this.queryTopicList()
   },
 }
 </script>
@@ -51,8 +57,8 @@ export default {
 }
 .all_topic_item_box {
   float: left;
-  margin-left: 28px;
-  margin-bottom: 28px;
+  margin-left: 24px;
+  margin-bottom: 24px;
 }
 .all_topic_head {
   width: 97%;

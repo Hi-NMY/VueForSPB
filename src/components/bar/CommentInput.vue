@@ -91,7 +91,7 @@ export default {
 .txtCount {
   white-space: nowrap;
   font-size: 13px;
-  color: #bfbfbf;
+  color: #C0C4CC;
 }
 .comment_send_box .el-button.is-round {
   width: 73px;

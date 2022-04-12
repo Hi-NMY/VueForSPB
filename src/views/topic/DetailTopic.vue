@@ -11,15 +11,28 @@
         ></el-image>
       </div>
       <div class="detail_topic_head_msg_box">
-        <span class="detail_topic_head_msg_name">{{topicName}}</span>
-        <span class="detail_topic_head_msg_des">{{}}</span>
+        <span class="detail_topic_head_msg_name">{{
+          topicInfo.topicName
+        }}</span>
+        <span class="detail_topic_head_msg_des">{{
+          topicInfo.topicSlogan
+        }}</span>
         <div class="detail_topic_head_msg_count">
-          <span style="color: black">关注</span>
-          <span style="margin-left: 2px">{{}}</span>
-          <span style="color: black; margin-left: 18px">发帖</span>
-          <span style="margin-left: 2px">{{}}</span>
+          <span style="color: #303133">关注</span>
+          <span style="margin-left: 2px">{{
+            topicInfo.topicAttentionnum
+          }}</span>
+          <span style="color: #303133; margin-left: 18px">发帖</span>
+          <span style="margin-left: 2px">{{ topicInfo.topicBarnum }}</span>
         </div>
-        <el-button class="noAt" type="primary" round>关注</el-button>
+        <el-button
+          v-if="isAttentionTopic(topicInfo.id)"
+          class="noAt"
+          type="primary"
+          round
+          >关注</el-button
+        >
+        <el-button v-else class="At" type="primary" round>已关注</el-button>
       </div>
       <i @click="returnPage" class="iconfont icon-topic_fanhui"></i>
       <div class="detail_topic_navigation">
@@ -51,16 +64,33 @@
 </template>
 <script>
 import barItem from '@/components/bar/BarItem.vue'
-import { queryNoVideoPostBarForDate } from '@/api/postbar'
+import { getTopicFull,getNewTopicPostBar } from '@/api/topic'
 export default {
   name: 'DetailTopic',
-  props:['topicName'],
+  props: ['topicId','topicName'],
   data() {
     return {
       topicNav: '1',
       noVidePostBarList: [],
       loading: true,
       skeletonItem: 'skeleton_item',
+      topicInfo: {
+        id: 0,
+        topicAttentionnum: 0,
+        topicBarnum: 0,
+        topicImage: '',
+        topicName: '',
+        topicSlogan: '',
+      },
+      queryParam: {
+        pbTopic: '',
+        pbDate: '',
+        pbThumbNum: -1,
+      },
+      firstQuery:{
+        topicId: -1,
+        topicName:''
+      }
     }
   },
   components: {
@@ -68,11 +98,22 @@ export default {
   },
   methods: {
     handleClick(tab, event) {
+      switch (tab.index) {
+        case '1':
+          this.queryParam.pbDate = ''
+          break
+        case '2':
+          this.queryParam.pbThumbNum = -1
+          break
+        default:
+          this.queryParam.pbDate = ''
+          break
+      }
       this.refresh()
     },
     refresh() {
       this.beforeRefresh()
-      queryNoVideoPostBarForDate('').then((res) => {
+      getNewTopicPostBar(this.queryParam).then((res) => {
         this.noVidePostBarList = res.data
         this.afterRefresh()
       })
@@ -85,12 +126,23 @@ export default {
       this.loading = false
       this.skeletonItem = ''
     },
-    returnPage(){
-      this.$router.back() 
-    }
+    returnPage() {
+      this.$router.back()
+    },
+    isAttentionTopic(index) {
+      const attentionTopic =
+        this.$store.state.userInfo.user.attentionTopicPresenter
+      return attentionTopic.indexOf(index) == -1
+    },
   },
   mounted() {
-    this.refresh()
+    this.firstQuery.topicId = this.topicId
+    this.firstQuery.topicName = this.topicName
+    getTopicFull(this.firstQuery).then((res) => {
+      this.topicInfo = res.data
+      this.queryParam.pbTopic = this.topicInfo.topicName
+      this.refresh()
+    })
   },
 }
 </script>
@@ -163,19 +215,21 @@ export default {
       bottom: 0;
       top: 38%;
       height: 34px;
-      border: 0px;
     }
     .noAt {
       color: white;
       background-color: #46b3e6;
+      border: 1px solid #46b3e6;
     }
     .noAt:hover {
       background-color: #65bce4;
+      border: 1px solid #46b3e6bc;
     }
     .At {
-      color: #909399;
-      background-color: #ffffff;
-      border: 1px solid #909399;
+      color: #46b3e6;
+      border: 1px solid #46b3e6;
+      background-color: #ffffff00;
+      padding: 2px 8px;
     }
   }
 }

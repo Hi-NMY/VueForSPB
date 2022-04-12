@@ -57,9 +57,10 @@ export default {
 }
 
 #app {
+  color: #303133;
   display: flex;
   height: auto;
-  min-height: 700px;
+  min-height: 800px;
   overflow-x: hidden;
   height: 100%;
   overflow: auto;

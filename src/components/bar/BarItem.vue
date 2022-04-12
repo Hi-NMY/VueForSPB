@@ -7,7 +7,7 @@
         </el-avatar>
         <div class="item_head_msg">
           <div>
-            <span class="name">{{ todo.userAccount }}</span>
+            <span class="name">{{ todo.userName }}</span>
             <el-image
               src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
             ></el-image>
@@ -62,7 +62,7 @@
           </div>
         </div>
         <div>
-          <div :class="commentColor" @click="seeComments">
+          <div :class="commentColor" @click="seeComments(todo.pbOneId)">
             <i class="iconfont icon-xiaoxi"></i>
             <span>{{ pbCommentNum }}</span>
           </div>
@@ -166,12 +166,12 @@ export default {
     },
   },
   methods: {
-    seeComments() {
+    seeComments(oneId) {
       this.seeComment = !this.seeComment
       this.commentColor.commentColor = !this.commentColor.commentColor
       if (this.seeComment) {
         this.commentLoading = true
-        queryBarComment('').then((res) => {
+        queryBarComment(oneId).then((res) => {
           this.comments = res.data
           this.commentLoading = false
         })
@@ -185,12 +185,13 @@ export default {
         this.likeIcon = 'iconfont icon-aixin'
       }
     },
-    lookTopic(data) {
+    lookTopic(name) {
       if (this.checkRoutingFirst(this, '/topic/detailTopic')) {
         this.$router.push({
           name: 'detailTopic',
           params: {
-            topicName: data,
+            topicId: -1,
+            topicName: name
           },
         })
       }
@@ -209,18 +210,13 @@ export default {
         }
       })
     },
-    /*closeSel2(e) {
-      let _this = this;
-      document.addEventListener('click',function (e) {
-        console.log(e.target.className)
-        if(e.target.className == 'iconfont icon-xiajiantou'){
-          _this.moreFun = !_this.moreFun;
-        } else {
-          _this.moreFun = false;
-        }
-
-      })
-    }*/
+  },
+  mounted() {
+    const likeBar = this.$store.state.userInfo.user.likeBar
+    if (likeBar.indexOf(this.todo.pbOneId) != -1) {
+      this.likeColor.likeColor = true
+      this.likeIcon = 'iconfont icon-aixin-sel'
+    }
   },
 }
 </script>
@@ -273,7 +269,7 @@ export default {
   font-size: 12px;
   margin-top: 5px;
   font-weight: lighter;
-  color: rgb(201, 201, 201);
+  color: #909399;
 }
 .icon {
   .iconfont.icon-xiajiantou {
@@ -304,7 +300,7 @@ export default {
   margin-top: 15px;
   display: flex;
   align-items: center;
-  color: #bfbfbf;
+  color: #909399;
   font-size: 14px;
 }
 .item_location span {
@@ -328,7 +324,7 @@ export default {
   margin-right: 15px;
 }
 .item_foot {
-  color: #8a8a8a;
+  color: #909399;
   font-size: 12px;
   margin-top: 20px;
   margin-bottom: 10px;

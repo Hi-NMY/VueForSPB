@@ -8,8 +8,9 @@
         </button>
         <el-input
           type="text"
-          placeholder="搜索话题"
-          v-model="search"
+          placeholder="按下enter搜索话题"
+          v-model="queryParam.search"
+          @keyup.enter.native="queryTopic"
         ></el-input>
       </div>
     </div>
@@ -21,22 +22,32 @@
 
 <script>
 import topicItem from '@/components/topic/topicItem.vue'
-import { queryHotTopic } from '@/api/topic'
+import { queryAttentionTopic } from '@/api/topic'
 export default {
-name:'AttTopic',
- components: {
+  name: 'AttTopic',
+  components: {
     topicItem,
   },
   data() {
     return {
       topicList: [],
-      search:''
+      queryParam: {
+        search: '',
+        userAccount: '',
+        topicDate:''
+      },
     }
   },
+  methods: {
+    queryTopic() {
+      this.queryParam.userAccount = this.$store.state.userInfo.user.userInfo.userAccount
+      queryAttentionTopic(this.queryParam).then((res) => {
+        this.topicList = res.data
+      })
+    },
+  },
   mounted() {
-    queryHotTopic('').then((res) => {
-      this.topicList = res.data
-    })
+    this.queryTopic()
   },
 }
 </script>
@@ -51,17 +62,17 @@ name:'AttTopic',
 }
 .att_topic_item_box {
   float: left;
-  margin-left: 28px;
-  margin-bottom: 28px;
+  margin-left: 24px;
+  margin-bottom: 24px;
 }
-.att_topic_head{
+.att_topic_head {
   width: 97%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin:0 auto 28px auto;
+  margin: 0 auto 28px auto;
 }
-.att_topic_title{
+.att_topic_title {
   font-size: 16px;
 }
 .search_topic {

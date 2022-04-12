@@ -1,5 +1,5 @@
 const { defineConfig } = require('@vue/cli-service')
-const apiHost = true ? "https://dev.usemock.com/623a87988701bab02ba90d14" : "http://localhost:8888"
+const apiHost = false ? "https://dev.usemock.com/623a87988701bab02ba90d14" : "http://localhost:8888"
 module.exports = defineConfig({
   transpileDependencies: true,
   lintOnSave: false,
