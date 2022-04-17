@@ -14,14 +14,19 @@
 
 <script>
 import barItem from '@/components/bar/BarItem.vue'
-import { queryNoVideoPostBarForDate } from '@/api/postbar'
+import { queryCollectBarListForDate } from '@/api/home'
 export default {
   name: 'UserCollect',
+  props: ['userAccount'],
   data() {
     return {
       collects: [],
       loading: true,
       skeletonItem: 'skeleton_item',
+      queryParam: {
+        id: 0,
+        userAccount: '',
+      },
     }
   },
   components: {
@@ -33,9 +38,10 @@ export default {
   methods: {
     refresh() {
       this.beforeRefresh()
-      queryNoVideoPostBarForDate('').then((res) => {
-        this.afterRefresh()
+      this.queryParam.userAccount = this.userAccount
+      queryCollectBarListForDate(this.queryParam).then((res) => {
         this.collects = res.data
+        this.afterRefresh()
       })
     },
     beforeRefresh() {

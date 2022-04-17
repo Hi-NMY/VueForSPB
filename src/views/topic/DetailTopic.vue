@@ -136,6 +136,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.$route)
     this.firstQuery.topicId = this.topicId
     this.firstQuery.topicName = this.topicName
     getTopicFull(this.firstQuery).then((res) => {

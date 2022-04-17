@@ -2,17 +2,27 @@
   <div class="folllow_msg">
     <div class="folllow_msg_left">
       <div class="img">
-        <el-avatar :size="60" src="">
+        <el-avatar
+          :size="60"
+          src=""
+          @click="gotoHome(follow.userAccount)"
+        >
           <img src="../../assets/logo.png" />
         </el-avatar>
       </div>
       <div class="message">
-        <span class="folllow_name">{{ follow.userName }}</span>
-        <img src="../../assets/logo.png" /><!--{{follow.sex}}-->
-        <img src="../../assets/logo.png" /><!--{{follow.userBadge}}-->
-        <br />
-        <span>{{ follow.userProfile }}</span
-        ><br />
+        <div>
+          <span
+            class="folllow_name"
+            @click="gotoHome(follow.userAccount)"
+            >{{ follow.userName }}</span
+          >
+          <img src="../../assets/logo.png" /><!--{{follow.sex}}-->
+          <img src="../../assets/logo.png" /><!--{{follow.userBadge}}-->
+        </div>
+        <div>
+          <span>{{ follow.userProfile }}</span>
+        </div>
       </div>
     </div>
     <div class="folllow_msg_right" v-if="isfollow2">已关注</div>
@@ -29,6 +39,16 @@ export default {
       isfollow: false,
       isfollow2: true,
     }
+  },
+  methods: {
+    gotoHome(userAccount) {
+      this.$router.push({
+        name: 'home',
+        params: {
+          userAccount: userAccount,
+        },
+      })
+    },
   },
 }
 </script>
@@ -48,25 +68,37 @@ export default {
   align-items: center;
   justify-content: center;
   .message {
-    margin-left: 5px;
+    margin-left: 8px;
     color: #909399;
     width: 450px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    justify-content: center;
+    div {
+      display: flex;
+      flex-direction: row;
+    }
     .folllow_name {
       color: #303133;
-      line-height: 30px;
+      font-size: 14px;
+
       font-weight: bold;
-      margin-right: 2px;
+      margin-right: 4px;
+      margin-bottom: 10px;
+    }
+    .folllow_name:hover {
+      color: #46b3e6;
+      cursor: pointer;
     }
     img {
-      width: 15px;
-      height: 15px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      margin: 0 2px;
+      margin-right: 4px;
     }
+  }
+  .img:hover {
+    cursor: pointer;
   }
 }
 .folllow_msg_right {
@@ -81,6 +113,7 @@ export default {
 .folllow_msg_right:hover {
   border: 1px solid #46b3e6;
   color: #46b3e6;
+  cursor: pointer;
 }
 .folllow_msg_right_no {
   background-color: #46b3e6;
@@ -95,5 +128,6 @@ export default {
   border: 1px solid #46b3e6;
   color: #46b3e6;
   background-color: white;
+  cursor: pointer;
 }
 </style>

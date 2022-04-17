@@ -84,21 +84,30 @@ export default {
     home() {
       if (this.checkRoutingFirst(this, '/home')) {
         this.$router.push({
-          path: '/home/UserHome',
+          name: 'home',
+          params: {
+            userAccount: this.$store.state.userInfo.user.userInfo.userAccount,
+          },
         })
       }
     },
     homeFollow() {
       if (this.checkRoutingFirst(this, '/home')) {
         this.$router.push({
-          path: '/home/UserFollow',
+          name: 'userFollow',
+          params: {
+            userAccount: this.$store.state.userInfo.user.userInfo.userAccount,
+          },
         })
       }
     },
     homeFollowed() {
       if (this.checkRoutingFirst(this, '/home')) {
         this.$router.push({
-          path: '/home/UserFollowed',
+          name: 'userFollowed',
+          params: {
+            userAccount: this.$store.state.userInfo.user.userInfo.userAccount,
+          },
         })
       }
     },
@@ -155,7 +164,7 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 180px;
-  color: #C0C4CC;
+  color: #c0c4cc;
   text-align: center;
 }
 .info_box {

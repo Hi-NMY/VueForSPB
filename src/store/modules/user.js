@@ -11,7 +11,7 @@ const userInfo = {
     mutations: {
         obtainUserInfo(state, value) {
             state.user = value
-            console.log(value)
+            console.log(state.user);
         }
     },
     state: {
@@ -37,7 +37,8 @@ const userInfo = {
                 userHome: '',
                 userLongday: 0,
                 userName: '',
-                userProfile: ''
+                userProfile: '',
+                userPrivacy:''
             }
         }
     }

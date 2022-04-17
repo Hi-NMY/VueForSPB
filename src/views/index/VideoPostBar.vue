@@ -27,6 +27,9 @@ export default {
       videoPostBarList: [],
       loading: true,
       skeletonItem: 'skeleton_item',
+      queryParam: {
+        id: 0
+      }
     }
   },
   components: {
@@ -35,6 +38,7 @@ export default {
   methods: {
     refresh() {
       this.beforeRefresh()
+      //开发中
       queryVideoPostBarForDate('').then((res) => {
         this.videoPostBarList = res.data
         this.afterRefresh()

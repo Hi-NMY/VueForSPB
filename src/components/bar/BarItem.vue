@@ -2,12 +2,14 @@
   <div class="bar_item">
     <div>
       <div class="item_head">
-        <el-avatar :size="50" src="">
+        <el-avatar :size="50" src="" @click.native="gotoHome(todo.userAccount)">
           <img src="../../assets/logo.png" />
         </el-avatar>
         <div class="item_head_msg">
           <div>
-            <span class="name">{{ todo.userName }}</span>
+            <span class="name" @click="gotoHome(todo.userAccount)">{{
+              todo.userName
+            }}</span>
             <el-image
               src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
             ></el-image>
@@ -50,7 +52,10 @@
           <span>{{ todo.pbLocation }}</span>
         </div>
         <div v-show="topic" class="item_topic">
-          <el-tag v-for="(topic, index) in topicList" :key="index" @click="lookTopic(topic)"
+          <el-tag
+            v-for="(topic, index) in topicList"
+            :key="index"
+            @click="lookTopic(topic)"
             >{{ topic }}
           </el-tag>
         </div>
@@ -192,6 +197,16 @@ export default {
           params: {
             topicId: -1,
             topicName: name
+          },
+        })
+      }
+    },
+    gotoHome(userAccount){
+      if (this.checkRoutingFirst(this, '/home')) {
+        this.$router.push({
+          name: 'home',
+          params: {
+            userAccount: userAccount,
           },
         })
       }

@@ -1,5 +1,9 @@
 //该文件用于创建整个应用的路由器
 import VueRouter from 'vue-router'
+const errorRouter = {
+	path: '*',
+	component: (resolve) => require(['@/views/error/Error.vue'], resolve)
+}
 //创建并暴露路由器
 export default new VueRouter({
 	mode: 'history',
@@ -39,30 +43,56 @@ export default new VueRouter({
 		{
 			name: 'home',
 			path: '/home',
-			redirect: '/home/userHome',
+			redirect: '/home/userHome/:userAccount',
 			component: (resolve) => require(['@/views/home/Home.vue'], resolve),
 			children: [
 				{
-					path: 'userHome',
-					component: (resolve) => require(['@/views/home/UserHome.vue'], resolve)
+					name:'userHome',
+					path: 'userHome/:userAccount',
+					props: true,
+					component: (resolve) => require(['@/views/home/UserHome.vue'], resolve),
+					children: [
+						// errorRouter
+					]
 				},
 				{
-					path: 'userFollow',
-					component: (resolve) => require(['@/views/home/UserFollow.vue'], resolve)
+					name:'userFollow',
+					path: 'userFollow/:userAccount',
+					props: true,
+					component: (resolve) => require(['@/views/home/UserFollow.vue'], resolve),
+					children: [
+						// errorRouter
+					]
 				},
 				{
-					path: 'userFollowed',
-					component: (resolve) => require(['@/views/home/UserFollowed.vue'], resolve)
+					name:'userFollowed',
+					path: 'userFollowed/:userAccount',
+					props: true,
+					component: (resolve) => require(['@/views/home/UserFollowed.vue'], resolve),
+					children: [
+						// errorRouter
+					]
 				},
 				{
-					path: 'userCollect',
-					component: (resolve) => require(['@/views/home/UserCollect.vue'], resolve)
+					name:'userCollect',
+					path: 'userCollect/:userAccount',
+					props: true,
+					component: (resolve) => require(['@/views/home/UserCollect.vue'], resolve),
+					children: [
+						// errorRouter
+					]
 				},
 				{
-					path: 'userInformation',
-					component: (resolve) => require(['@/views/home/UserInformation.vue'], resolve)
+					name:'userInformation',
+					path: 'userInformation/:userAccount',
+					props: true,
+					component: (resolve) => require(['@/views/home/UserInformation.vue'], resolve),
+					children: [
+						// errorRouter
+					]
 				},
-			]
+				// errorRouter
+			],
 		},
 		{
 			name: 'topic',
@@ -84,9 +114,12 @@ export default new VueRouter({
 				},
 				{
 					name: 'detailTopic',
-					path: 'detailTopic/:topicId/:topicName',
+					path: 'detailTopic/:topicId?/:topicName?',
 					props: true,
-					component: (resolve) => require(['@/views/topic/DetailTopic.vue'], resolve)
+					component: (resolve) => require(['@/views/topic/DetailTopic.vue'], resolve),
+					children: [
+						//errorRouter
+					]
 				},
 			]
 		},
@@ -102,6 +135,7 @@ export default new VueRouter({
 			path: '/message',
 			redirect: '/message/aa',
 			children: [
+				
 			]
 		}
 	],

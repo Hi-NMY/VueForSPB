@@ -71,13 +71,13 @@ export function getBirthStar(val) {
   } else if (month == 7 && day >= 23 || month == 8 && day <= 22) {
     birth_star = "狮子座";
   } else if (month == 8 && day >= 23 || month == 9 && day <= 22) {
-    birth_star = "室女座";
+    birth_star = "处女座";
   } else if (month == 9 && day >= 23 || month == 10 && day <= 22) {
     birth_star = "天秤座";
   } else if (month == 10 && day >= 23 || month == 11 && day <= 21) {
     birth_star = "天蝎座";
   } else if (month == 11 && day >= 22 || month == 12 && day <= 21) {
-    birth_star = "人马座";
+    birth_star = "射手座";
   } else if (month == 12 && day >= 22 || month == 1 && day <= 19) {
     birth_star = "摩羯座";
   }

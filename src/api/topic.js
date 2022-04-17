@@ -2,8 +2,9 @@ import request from '@/utils/request'
 
 export function queryAllTopic(search) {
   return request({
-    url: '/topic/querySearchTopicFullList?search=' + search,
+    url: '/topic/querySearchTopicFullList',
     method: 'get',
+    params: search
   })
 }
 

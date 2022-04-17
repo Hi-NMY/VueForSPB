@@ -1,25 +1,26 @@
-import request from '@/utils/request';
+ import request from '@/utils/request';
 
 export function queryNoVideoPostBarForDate(date) {
     return request({
-        url: '/postbarlist/queryNoVideoBarListForDate/' + date,
-        method: 'post',
+        url: '/postbarlist/queryNoVideoBarListForDate',
+        method: 'get',
+        params:date
     })
 }
 
 export function queryVideoPostBarForDate(date) {
     return request({
         url: '/postbar/queryVideoPostBarForDate',
-        method: 'post',
-        data: date
+        method: 'get',
+        params: date
     })
 }
 
 export function queryNoVideoFollowPostBarForDate(data) {
     return request({
         url: '/postbarlist/queryNoVideoFollowBarListForDate',
-        method: 'post',
-        data: data
+        method: 'get',
+        params: data
     })
 }
 

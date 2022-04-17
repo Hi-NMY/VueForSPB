@@ -13,7 +13,7 @@
         </el-avatar>
         <div class="user_home_user_msg_base">
           <div class="user_home_user_name">
-            <span>{{ userName }}</span>
+            <span>{{ user.userInfo.userName }}</span>
             <el-image
               src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
             ></el-image>
@@ -21,14 +21,18 @@
               src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
             ></el-image>
           </div>
-          <div class="user_home_user_friend">
-            <div class="user_home_user_follow">
+          <div v-show="isPrivacyFriend" class="user_home_user_friend">
+            <div class="user_home_user_follow" @click="goToFollow">
               <span>关注</span>
-              <span class="follow_count">12</span>
+              <span class="follow_count">{{
+                user.followedPresenter.length
+              }}</span>
             </div>
-            <div class="user_home_user_followed">
+            <div class="user_home_user_followed" @click="goToFollowed">
               <span>被关注</span>
-              <span class="follow_count">12</span>
+              <span class="follow_count">{{
+                user.followPresenter.length
+              }}</span>
             </div>
           </div>
         </div>
@@ -36,26 +40,26 @@
           <div class="user_home_user_info_head">
             <div>
               <i class="iconfont icon-profile"></i>
-              <span>暂无简介</span>
+              <span>{{ userProfile }}</span>
             </div>
             <i @click="showMoreMsg" class="moreMsg" :class="moreMsg"></i>
           </div>
           <div v-show="isMoreMsg" class="user_home_user_info_msg">
             <div>
               <i class="iconfont icon-home"></i>
-              <span>南京</span>
+              <span>{{ userHome }}</span>
             </div>
             <div>
               <i class="iconfont icon-bitrh"></i>
-              <span>2020-12-23</span>
+              <span>{{ userBirth }}</span>
             </div>
             <div>
               <i class="iconfont icon-star"></i>
-              <span>射手座</span>
+              <span>{{ userStar }}</span>
             </div>
             <div>
               <i class="iconfont icon-favorite"></i>
-              <span>南京</span>
+              <span>{{ userFavorite }}</span>
             </div>
           </div>
         </div>
@@ -89,9 +93,13 @@
 
 <script>
 import barItem from '@/components/bar/BarItem.vue'
-import { queryNoVideoPostBarForDate } from '@/api/postbar'
+import { getBirthStar } from '@/utils/dateUtil'
+import { queryNoVideoUserBarListForDate } from '@/api/home'
+import { homeChildren } from '@/mixin/home'
 export default {
   name: 'UserHome',
+  props: ['userAccount'],
+  mixins: [homeChildren],
   data() {
     return {
       userNav: '1',
@@ -99,18 +107,74 @@ export default {
       noVidePostBarList: [],
       loading: true,
       skeletonItem: 'skeleton_item',
+      queryParam: {
+        id: 0,
+        userAccount: '',
+      },
+      isPrivacyFriend: true,
     }
   },
   components: {
     barItem,
   },
   computed: {
-    userName() {
-      return '看那个月亮爬上来'
-    },
     isMoreMsg() {
       return this.moreMsg == 'iconfont icon-shangjiantou' ? false : true
     },
+    userProfile() {
+      if (!this.user.userInfo.userProfile) {
+        return '暂无简介'
+      } else {
+        return this.user.userInfo.userProfile
+      }
+    },
+    //第一个展示在线天数
+    userBirth() {
+      if (
+        !this.user.userInfo.userBirth ||
+        (this.isOtherUser && this.userPrivacy[1] != 1)
+      ) {
+        return '未知'
+      } else {
+        return this.user.userInfo.userBirth
+      }
+    },
+    userStar() {
+      if (!this.user.userInfo.userBirth || (this.isOtherUser && this.userPrivacy[1] != 1)) {
+        return '未知'
+      } else {
+        return getBirthStar(this.user.userInfo.userBirth)
+      }
+    },
+    userHome() {
+      if (
+        !this.user.userInfo.userHome ||
+        (this.isOtherUser && this.userPrivacy[2] != 1)
+      ) {
+        return '未知'
+      } else {
+        return this.user.userInfo.userHome
+      }
+    },
+    userFavorite() {
+      if (
+        !this.user.userInfo.userFavorite ||
+        (this.isOtherUser && this.userPrivacy[3] != 1)
+      ) {
+        return '未知'
+      } else {
+        let favorite = this.user.userInfo.userFavorite
+        return favorite
+          .substring(0, favorite.lastIndexOf('|'))
+          .replaceAll('|', ' | ')
+      }
+    },
+    userFollow() {
+      if (this.userPrivacy[4] != 1) {
+        this.isPrivacyFriend = false
+      }
+    },
+    //是否查看全部徽章
   },
   methods: {
     handleClick(tab, event) {
@@ -125,7 +189,8 @@ export default {
     },
     refresh() {
       this.beforeRefresh()
-      queryNoVideoPostBarForDate('').then((res) => {
+      this.queryParam.userAccount = this.user.userInfo.userAccount
+      queryNoVideoUserBarListForDate(this.queryParam).then((res) => {
         this.noVidePostBarList = res.data
         this.afterRefresh()
       })
@@ -137,6 +202,16 @@ export default {
     afterRefresh() {
       this.loading = false
       this.skeletonItem = ''
+    },
+    goToFollow() {
+      this.$router.push({
+        path: '/home/userFollow/' + this.userAccount,
+      })
+    },
+    goToFollowed() {
+      this.$router.push({
+        path: '/home/userFollowed/' + this.userAccount,
+      })
     },
   },
   mounted() {
@@ -186,7 +261,7 @@ export default {
   top: 14px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   font-size: 16px;
 }
 .user_home_user_name {
@@ -270,8 +345,8 @@ export default {
   .el-tabs__nav-wrap::after {
     z-index: 0;
   }
-  .el-tabs__active-bar{
-     z-index: 1;
+  .el-tabs__active-bar {
+    z-index: 1;
   }
   .el-tabs.el-tabs--top {
     height: 40px;

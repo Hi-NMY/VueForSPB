@@ -7,6 +7,7 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 import index from './modules/index'
 import userInfo from './modules/user'
+import home from './modules/home'
 
 Vue.use(Vuex)
 
@@ -14,7 +15,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 	modules: {
 		index,
-		userInfo
+		userInfo,
+		home
 	}
 })
 

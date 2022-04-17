@@ -1,7 +1,10 @@
 <template>
   <div class="follow">
     <div class="follow_head">
-      <div class="folllowcount">全部关注（<span>32</span>）</div>
+      <div class="folllowcount">
+        全部关注（<span>{{ follows.length }}</span
+        >）
+      </div>
       <div class="search_follow">
         <button>
           <i class="el-icon-search"></i>
@@ -37,15 +40,25 @@
 <script>
 import followItem from '@/components/home/FollowItem.vue'
 import { queryFollowedList } from '@/api/follow'
+import { homeChildren } from '@/mixin/home'
 export default {
   name: 'UserFollow',
+  props: ['userAccount'],
+  mixins: [homeChildren],
   data() {
     return {
       search: '',
       follows: [],
       loading: true,
       skeletonItem: 'skeleton_item',
+      queryParam: {
+        userAccount: '',
+        id: 0,
+      }
     }
+  },
+  computed: {
+
   },
   components: {
     followItem,
@@ -56,7 +69,12 @@ export default {
   methods: {
     refresh() {
       this.beforeRefresh()
-      queryFollowedList('').then((res) => {
+      if (this.user.followedPresenter.length = 0 || (this.isOtherUser && this.userPrivacy[4] != 1)) {
+        this.afterRefresh()
+        return
+      }
+      this.queryParam.userAccount = this.user.userInfo.userAccount
+      queryFollowedList(this.queryParam).then((res) => {
         this.afterRefresh()
         this.follows = res.data
       })

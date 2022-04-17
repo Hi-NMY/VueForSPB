@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div v-if="isAlreadyLogin" id="app">
     <head-box v-show="this.$store.state.index.hasHead"></head-box>
     <router-view />
     <el-backtop>
@@ -32,6 +32,11 @@ export default {
   components: {
     headBox,
   },
+  data() {
+    return {
+      isAlreadyLogin:false
+    }
+  },
   created() {
     let user = null
     try {
@@ -42,8 +47,11 @@ export default {
         if (res.code == 200) {
           this.$store.commit('index/updateIsLogin', true)
           this.$store.commit('userInfo/obtainUserInfo', res.data)
+          this.isAlreadyLogin = true
         }
       })
+    }else{
+      this.isAlreadyLogin = true
     }
   },
 }

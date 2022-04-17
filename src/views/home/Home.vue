@@ -4,7 +4,7 @@
     <div class="home_main">
       <div class="home_main_left">
         <el-row>
-          <el-col :span="12">
+          <el-col :key="account" :span="12">
             <h2>个人空间</h2>
             <el-menu
               :default-active="homeIndex"
@@ -13,23 +13,23 @@
               router
               active-text-color="#46B3E6"
             >
-              <el-menu-item index="/home/UserHome">
+              <el-menu-item :index="urlList[0]">
                 <i class="iconfont icon-jurassic_user"></i>
-                <span slot="title">我的主页</span>
+                <span slot="title">{{ titleOne }}</span>
               </el-menu-item>
-              <el-menu-item index="/home/UserFollow">
+              <el-menu-item :index="urlList[1]">
                 <i class="iconfont icon-wodeguanzhu"></i>
-                <span slot="title">我的关注</span>
+                <span slot="title">{{ titleTwo }}</span>
               </el-menu-item>
-              <el-menu-item index="/home/UserFollowed">
+              <el-menu-item :index="urlList[2]">
                 <i class="iconfont icon-yonghu"></i>
-                <span slot="title">关注我的</span>
+                <span slot="title">{{ titleThree }}</span>
               </el-menu-item>
-              <el-menu-item index="/home/UserCollect">
+              <el-menu-item v-show="!isOtherUser" :index="urlList[3]">
                 <i class="iconfont icon-wodeshoucang"></i>
                 <span slot="title">我的收藏</span>
               </el-menu-item>
-              <el-menu-item index="/home/UserInformation">
+              <el-menu-item v-show="!isOtherUser" :index="urlList[4]">
                 <i class="iconfont icon-shezhi"></i>
                 <span slot="title">个人信息管理</span>
               </el-menu-item>
@@ -37,7 +37,7 @@
           </el-col>
         </el-row>
       </div>
-      <div class="home_main_right">
+      <div v-if="isAlreadyLoad" class="home_main_right">
         <router-view></router-view>
       </div>
     </div>
@@ -45,33 +45,86 @@
 </template>
 
 <script>
-// import headBox from "@/components/head/Head.vue";
 export default {
   name: 'home',
   data() {
     return {
-      homeIndex: '/home/UserHome',
+      isAlreadyLoad: false,
+      homeIndex: '',
+      isOtherUser: false,
+      urlList: [],
+      account: '',
     }
   },
   watch: {
-    //解决浏览器前进后退按钮，导航正常高亮显示
     $route(to, from) {
       this.homeIndex = to.path
     },
   },
-  components: {
-    // headBox,
+  computed: {
+    titleOne() {
+      return this.isOtherUser ? '他的主页' : '我的主页'
+    },
+    titleTwo() {
+      return this.isOtherUser ? '他的关注' : '我的关注'
+    },
+    titleThree() {
+      return this.isOtherUser ? '关注他的' : '关注我的'
+    },
   },
+  components: {},
   methods: {
     handleSelect(key, keyPath) {
       this.homeIndex = key
       window.localStorage.setItem('homeIndex', this.homeIndex)
     },
+    init() {
+      let path = this.$route.path
+      const userAccount = path.substring(path.lastIndexOf('/') + 1)
+      if (this.account == userAccount) {
+        return
+      }
+      this.isAlreadyLoad = false
+      this.account = userAccount
+      this.urlList = [
+        '/home/userHome/' + userAccount,
+        '/home/userFollow/' + userAccount,
+        '/home/userFollowed/' + userAccount,
+        '/home/userCollect/' + userAccount,
+        '/home/userInformation/' + userAccount,
+      ]
+      this.homeIndex = path
+      if (userAccount != this.$store.state.userInfo.user.userInfo.userAccount) {
+        this.isOtherUser = true
+        this.$store.dispatch('home/obtainUserInfo', {
+          userAccount,
+          goto: (key) => {
+            if (key) {
+              this.isAlreadyLoad = true
+            } else {
+              this.$message({
+                duration: 2000,
+                showClose: true,
+                message: '双向关注才能查看他(她)的主页哦^_^',
+              })
+            }
+          },
+        })
+      } else {
+        this.isOtherUser = false
+        this.isAlreadyLoad = true
+      }
+    }
+  },
+  created() {
+    this.init()
   },
   mounted() {
-    this.homeIndex = this.$route.path
     this.$bus.$emit('clearSelect', '/home')
   },
+  updated() {
+    this.init()
+  }
 }
 </script>
 

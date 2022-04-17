@@ -6,17 +6,42 @@
     <div class="comment_item_main">
       <div class="comment_item_head">
         <div class="head_left">
-          <span v-show="isHosta" style="color: #46b3e6"> 楼主 </span>
-          <span v-show="!isHosta" class="comment_name">{{ commentTodo.userName }}</span>
+          <span
+            v-show="isHosta"
+            style="color: #46b3e6; cursor: pointer"
+            @click="gotoHome(commentTodo.commentUser)"
+          >
+            楼主
+          </span>
+          <span
+            v-show="!isHosta"
+            style="cursor: pointer"
+            class="comment_name"
+            @click="gotoHome(commentTodo.commentUser)"
+            >{{ commentTodo.userName }}</span
+          >
           <div v-show="isReply">
             <span>&nbsp;回复</span>
-            <span v-show="isHost" style="color: #46b3e6"> 楼主 </span>
-            <span v-show="!isHost">{{ commentTodo.userToname }}</span>
+            <span
+              v-show="isHost"
+              style="color: #46b3e6; cursor: pointer"
+              @click="gotoHome(commentTodo.commentTouser)"
+            >
+              楼主
+            </span>
+            <span
+              v-show="!isHost"
+              style="cursor: pointer"
+              @click="gotoHome(commentTodo.commentTouser)"
+              >{{ commentTodo.userToname }}</span
+            >
           </div>
           <span>&nbsp;:&nbsp;</span>
         </div>
         <div class="comment_art">{{ commentTodo.commentArt }}</div>
-        <span style="margin-left: auto; white-space: nowrap">{{ commentTodo.commentId }}楼</span>
+        <span style="margin-left: auto; white-space: nowrap"
+          >{{ commentTodo.commentId }}楼</span
+        >
       </div>
       <div class="comment_item_foot">
         <span>{{ date }}</span>
@@ -59,6 +84,16 @@ export default {
         message: h(commentInput, { style: 'margin-right: 10px' }),
       })
     },
+    gotoHome(userAccount) {
+      if (this.checkRoutingFirst(this, '/home')) {
+        this.$router.push({
+          name: 'home',
+          params: {
+            userAccount: userAccount,
+          },
+        })
+      }
+    }
   },
 }
 </script>

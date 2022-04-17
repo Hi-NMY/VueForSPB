@@ -27,7 +27,9 @@ export default {
       noVidePostBarList: [],
       loading: true,
       skeletonItem: 'skeleton_item',
-      moreDate: '0',
+      queryParam:{
+        id: 0
+      }
     }
   },
   components: {
@@ -36,14 +38,14 @@ export default {
   methods: {
     refresh() {
       this.beforeRefresh()
-      queryNoVideoPostBarForDate(this.moreDate).then((res) => {
+      queryNoVideoPostBarForDate(this.queryParam).then((res) => {
         this.noVidePostBarList = res.data
         this.afterRefresh()
         this.$bus.$emit('afterRefresh')
       })
     },
     firstRefresh() {
-      this.moreDate = '0'
+      this.queryParam.id = 0
       this.refresh()
     },
     beforeRefresh() {

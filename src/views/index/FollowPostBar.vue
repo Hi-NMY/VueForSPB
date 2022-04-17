@@ -27,8 +27,8 @@ export default {
       followPostBarList: [],
       loading: true,
       skeletonItem: 'skeleton_item',
-      selBody: {
-        pbDate: '0',
+      queryParam: {
+        id: 0,
         userAccount: '',
       },
     }
@@ -37,7 +37,7 @@ export default {
     '$store.state.userInfo.user.userInfo.userAccount': {
       handler(newValue, oldValue) {
         if (newValue != '' && oldValue == '') {
-          this.selBody.userAccount = newValue
+          this.queryParam.userAccount = newValue
           this.refresh()
         }
       },
@@ -52,17 +52,17 @@ export default {
       if (!this.$store.state.userInfo.user.userInfo.userAccount) {
         return
       } else {
-        this.selBody.userAccount =
+        this.queryParam.userAccount =
           this.$store.state.userInfo.user.userInfo.userAccount
       }
-      queryNoVideoFollowPostBarForDate(this.selBody).then((res) => {
+      queryNoVideoFollowPostBarForDate(this.queryParam).then((res) => {
         this.followPostBarList = res.data
         this.afterRefresh()
         this.$bus.$emit('afterRefresh')
       })
     },
     firstRefresh() {
-      this.selBody.pbDate = '0'
+      this.queryParam.id = 0
       this.refresh()
     },
     beforeRefresh() {

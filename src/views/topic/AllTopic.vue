@@ -9,7 +9,7 @@
         <el-input
           type="text"
           placeholder="按下enter搜索话题"
-          v-model="search"
+          v-model="queryParam.search"
           @keyup.enter.native="queryTopicList"
         ></el-input>
       </div>
@@ -31,12 +31,15 @@ export default {
   data() {
     return {
       topicList: [],
-      search: '',
+      queryParam: {
+        search: '',
+        id: 0
+      },
     }
   },
   methods: {
     queryTopicList() {
-      queryAllTopic(this.search).then((res) => {
+      queryAllTopic(this.queryParam).then((res) => {
         this.topicList = res.data
       })
     },

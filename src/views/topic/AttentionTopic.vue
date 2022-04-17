@@ -34,7 +34,7 @@ export default {
       queryParam: {
         search: '',
         userAccount: '',
-        topicDate:''
+        id: 0
       },
     }
   },

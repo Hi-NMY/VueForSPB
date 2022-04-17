@@ -18,6 +18,9 @@ import {
   Loading,
   Skeleton,
   SkeletonItem,
+  Dialog,
+  CheckboxGroup,
+  Checkbox, 
   Collapse, CollapseItem, DatePicker, Cascader, Switch, RadioGroup, Radio
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/base.css';
@@ -68,6 +71,9 @@ Vue.use(Cascader)
 Vue.use(Switch)
 Vue.use(RadioGroup)
 Vue.use(Radio)
+Vue.use(Dialog)
+Vue.use(CheckboxGroup)
+Vue.use(Checkbox)
 Vue.prototype.$message = Message;
 
 new Vue({
