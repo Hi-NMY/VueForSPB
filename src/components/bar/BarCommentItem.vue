@@ -1,7 +1,6 @@
 <template>
   <div class="comment_item_box">
-    <el-avatar :size="35" src="">
-      <img src="../../assets/logo.png" />
+    <el-avatar :size="35" :src="headImg(commentTodo.commentHeadImg)">
     </el-avatar>
     <div class="comment_item_main">
       <div class="comment_item_head">
@@ -51,16 +50,31 @@
         ></i>
       </div>
     </div>
+    <el-dialog
+      :append-to-body="true"
+      :title="dialogTitle"
+      :visible.sync="replayToDialog"
+    >
+      <comment-input></comment-input>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { barTimeUtil } from '@/utils/dateUtil'
-import { MessageBox } from 'element-ui'
 import commentInput from '@/components/bar/CommentInput.vue'
 export default {
   name: 'comment_item',
   props: ['commentTodo', 'hostAccount'],
+  data() {
+    return {
+      replayToDialog: false,
+      dialogTitle: ''
+    }
+  },
+  components: {
+    commentInput
+  },
   computed: {
     date() {
       return barTimeUtil(this.commentTodo.commentDate.replace('T', ' '))
@@ -76,13 +90,12 @@ export default {
     },
   },
   methods: {
+    headImg(value) {
+      return this.urlJudge(value)
+    },
     replayTo(toName) {
-      const h = this.$createElement
-      MessageBox({
-        title: '回复 @' + toName,
-        showConfirmButton: false,
-        message: h(commentInput, { style: 'margin-right: 10px' }),
-      })
+      this.replayToDialog = true
+      this.dialogTitle = '回复 @' + toName
     },
     gotoHome(userAccount) {
       if (this.checkRoutingFirst(this, '/home')) {
@@ -107,6 +120,14 @@ export default {
   color: #909399;
   padding: 10px 0px;
   border-bottom: 1px solid rgba(226, 226, 226, 0.178);
+}
+.el-dialog {
+  border-radius: 10px;
+  min-width: 300px;
+  max-width: 600px;
+}
+.el-dialog__body {
+  padding: 0 20px 20px 20px;
 }
 .comment_item_box > .el-avatar {
   flex-shrink: 0;

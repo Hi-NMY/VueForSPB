@@ -2,23 +2,16 @@
   <div class="user_home">
     <div class="user_home_head">
       <div class="user_home_head_bg">
-        <img
-          class="user_home_head_bg_img"
-          src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
-        />
+        <img class="user_home_head_bg_img" :src="bgImg" />
       </div>
       <div class="user_home_user_msg_box">
-        <el-avatar :size="100" src="">
-          <img src="../../assets/logo.png" />
-        </el-avatar>
+        <el-avatar :size="100" :src="headImg"> </el-avatar>
         <div class="user_home_user_msg_base">
           <div class="user_home_user_name">
             <span>{{ user.userInfo.userName }}</span>
-            <el-image
-              src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
-            ></el-image>
-            <el-image
-              src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
+            <i :class="sexClass"></i>
+            <el-image v-if="user.userInfo.userBadge"
+              :src="badgeImg"
             ></el-image>
           </div>
           <div v-show="isPrivacyFriend" class="user_home_user_friend">
@@ -112,12 +105,22 @@ export default {
         userAccount: '',
       },
       isPrivacyFriend: true,
+      sexClass: 'iconfont icon-girl'
     }
   },
   components: {
     barItem,
   },
   computed: {
+    headImg() {
+      return this.urlJudge(this.user.userInfo.userHeadImage)
+    },
+    bgImg() {
+      return this.urlJudge(this.user.userInfo.userBgImage)
+    },
+    badgeImg() {
+      return this.urlBadgeImg(this.user.userInfo.userBadge)
+    },
     isMoreMsg() {
       return this.moreMsg == 'iconfont icon-shangjiantou' ? false : true
     },
@@ -177,6 +180,13 @@ export default {
     //是否查看全部徽章
   },
   methods: {
+    initSex() {
+      if (this.user.userInfo.stuSex == '女') {
+        this.sexClass = 'iconfont icon-girl'
+      } else {
+        this.sexClass = 'iconfont icon-boy'
+      }
+    },
     handleClick(tab, event) {
       this.refresh()
     },
@@ -215,6 +225,7 @@ export default {
     },
   },
   mounted() {
+    this.initSex()
     this.refresh()
   },
 }
@@ -267,6 +278,15 @@ export default {
 .user_home_user_name {
   display: flex;
   align-items: center;
+  .iconfont.icon-girl {
+    color: #ff7486;
+  }
+  .iconfont.icon-boy {
+    color: #4bb7ea;
+  }
+  i {
+    margin-left: 5px;
+  }
   .el-image__inner {
     width: 24px;
     margin-left: 5px;

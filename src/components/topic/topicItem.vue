@@ -1,12 +1,10 @@
 <template>
   <div class="topic_item">
-    <el-image
-      src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
-    ></el-image>
+    <el-image :src="headImg"><img style="width:88px" slot = error src="../../assets/defaultTopic.png"/></el-image>
     <div class="topic_item_msg">
       <span
         class="topic_item_msg_name"
-        @click="lookTopic(topicInfo.id,topicInfo.topicName)"
+        @click="lookTopic(topicInfo.id, topicInfo.topicName)"
         >{{ topicInfo.topicName }}</span
       >
       <span class="topic_item_msg_des">{{ topicInfo.topicSlogan }}</span>
@@ -32,8 +30,13 @@
 export default {
   name: 'TopicItem',
   props: ['topicInfo'],
+  computed: {
+    headImg() {
+      return this.urlJudge(this.topicInfo.topicImage)
+    }
+  },
   methods: {
-    lookTopic(id,name) {
+    lookTopic(id, name) {
       if (this.checkRoutingFirst(this, '/topic/detailTopic')) {
         this.$router.push({
           name: 'detailTopic',
@@ -49,7 +52,7 @@ export default {
         this.$store.state.userInfo.user.attentionTopicPresenter
       return attentionTopic.indexOf(index) == -1
     },
-  },
+  }
 }
 </script>
 
@@ -57,6 +60,7 @@ export default {
 .topic_item {
   width: 290px;
   height: auto;
+  min-height: 80px;
   padding: 12px;
   border-radius: 10px;
   background-color: white;

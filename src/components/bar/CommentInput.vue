@@ -1,8 +1,7 @@
 <template>
   <div class="comment_head">
     <div class="comment_input_box">
-      <el-avatar :size="35" src="">
-        <img src="../../assets/logo.png" />
+      <el-avatar :size="35" :src="headImg">
       </el-avatar>
       <el-input v-model="input" placeholder="请输入内容"></el-input>
     </div>
@@ -31,6 +30,9 @@ export default {
     }
   },
   computed: {
+    headImg() {
+      return this.urlJudge(this.$store.state.userInfo.user.userInfo.userHeadImage)
+    },
     inputCount() {
       return this.input.length
     },

@@ -3,12 +3,14 @@
     <div class="detail_topic_head_bg">
       <img
         class="detail_topic_head_bg_img"
-        src="https://tva3.sinaimg.cn/large/005LlRGlgy1h0vdavpdimj30dw0dmweq.jpg"
+        :src="bgImg"
       />
       <div class="detail_topic_head_head_img">
         <el-image
-          src="https://tvax3.sinaimg.cn/large/005LlRGlgy1h0vda23shrj30dw0dmwf4.jpg"
-        ></el-image>
+          :src="headImg"
+        >
+        <img style="width:88px" slot = error src="../../assets/defaultTopic.png"/>
+        </el-image>
       </div>
       <div class="detail_topic_head_msg_box">
         <span class="detail_topic_head_msg_name">{{
@@ -64,10 +66,10 @@
 </template>
 <script>
 import barItem from '@/components/bar/BarItem.vue'
-import { getTopicFull,getNewTopicPostBar } from '@/api/topic'
+import { getTopicFull, getNewTopicPostBar } from '@/api/topic'
 export default {
   name: 'DetailTopic',
-  props: ['topicId','topicName'],
+  props: ['topicId', 'topicName'],
   data() {
     return {
       topicNav: '1',
@@ -87,10 +89,23 @@ export default {
         pbDate: '',
         pbThumbNum: -1,
       },
-      firstQuery:{
+      firstQuery: {
         topicId: -1,
-        topicName:''
+        topicName: ''
       }
+    }
+  },
+  computed: {
+    headImg() {
+      return this.urlJudge(this.topicInfo.topicImage)
+    },
+    bgImg() {
+      if (!this.topicInfo.topicImage) {
+        return require('../../assets/defaultTopic.png')
+      }
+      const a = this.topicInfo.topicImage.lastIndexOf('.')
+      const str = this.topicInfo.topicImage.substring(0,a) + 'A' + this.topicInfo.topicImage.substring(a)
+      return this.urlJudge(str)
     }
   },
   components: {
@@ -136,7 +151,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$route)
     this.firstQuery.topicId = this.topicId
     this.firstQuery.topicName = this.topicName
     getTopicFull(this.firstQuery).then((res) => {

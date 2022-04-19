@@ -21,13 +21,11 @@
         >
           <div class="user_msg_left">
             <div class="img">
-              <el-avatar :size="46" src="">
-                <img src="../../assets/logo.png" />
+              <el-avatar  @click="gotoHome(usermsg.userAccount)" :size="46" :src="headImg(usermsg.userHeadImg)">
               </el-avatar>
             </div>
             <div class="message">
-              <span class="username">{{ usermsg.userName }}</span
-              ><br />
+              <span class="username" @click="gotoHome(usermsg.userAccount)">{{ usermsg.userName }}</span><br />
               <span class="beiguanzhu">被关注</span>
               <span>{{ usermsg.followNum }}</span>
             </div>
@@ -93,6 +91,19 @@ export default {
     this.findUsers()
   },
   methods: {
+    headImg(value){
+      return this.urlJudge(value)
+    },
+    gotoHome(userAccount) {
+      if (this.checkRoutingFirst(this, '/home')) {
+        this.$router.push({
+          name: 'home',
+          params: {
+            userAccount: userAccount,
+          },
+        })
+      }
+    },
     findUsers() {
       this.isLoading = 'el-icon-loading'
       this.loading = true

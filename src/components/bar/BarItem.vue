@@ -2,17 +2,18 @@
   <div class="bar_item">
     <div>
       <div class="item_head">
-        <el-avatar :size="50" src="" @click.native="gotoHome(todo.userAccount)">
-          <img src="../../assets/logo.png" />
+        <el-avatar
+          :size="50"
+          :src="headImg"
+          @click.native="gotoHome(todo.userAccount)"
+        >
         </el-avatar>
         <div class="item_head_msg">
           <div>
             <span class="name" @click="gotoHome(todo.userAccount)">{{
               todo.userName
             }}</span>
-            <el-image
-              src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
-            ></el-image>
+            <el-image v-if="todo.userBadge" :src="badgeImg"></el-image>
           </div>
           <span class="date">{{ date }}</span>
         </div>
@@ -39,12 +40,12 @@
         <div class="item_article">
           <span>{{ todo.pbArticle }}</span>
         </div>
-        <div class="item_img">
+        <div :class="itemImg">
           <el-image
-            src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
-          ></el-image>
-          <el-image
-            src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
+            v-for="(img, index) in imageA"
+            :key="index"
+            :src="img"
+            :preview-src-list="imageA"
           ></el-image>
         </div>
         <div v-show="location" class="item_location">
@@ -81,7 +82,7 @@
       </div>
     </div>
 
-    <div class="comment_box" v-loading="commentLoading" v-show="seeComment">
+    <div class="comment_box" v-loading="commentLoading" v-if="seeComment">
       <comment-input></comment-input>
       <div class="comment_item">
         <bar-comment-item
@@ -113,6 +114,8 @@ export default {
   data() {
     return {
       topics: [],
+      image: [],
+      imageA: [],
       comments: [],
       seeComment: false,
       commentColor: {
@@ -124,10 +127,17 @@ export default {
       likeIcon: 'iconfont icon-aixin',
       commentLoading: false,
       moreFun: false,
+      itemImg: 'item_img'
     }
   },
   props: ['todo'],
   computed: {
+    headImg() {
+      return this.urlJudge(this.todo.userHeadImg)
+    },
+    badgeImg() {
+      return this.urlBadgeImg(this.todo.userBadge)
+    },
     date() {
       return barTimeUtil(this.todo.pbDate.replace('T', ' '))
     },
@@ -171,6 +181,33 @@ export default {
     },
   },
   methods: {
+    initImage() {
+      if (this.todo.pbImageUrl) {
+        let arr = this.todo.pbImageUrl.split('@')
+        if (arr[0].indexOf('|') != -1) {
+          this.image = this.imgUrl(arr[0].split('|'))
+          if (this.image.length > 3) {
+            this.itemImg = 'item_img_width'
+          }
+        } else {
+          this.image.unshift(this.imgUrl(arr[0]))
+        }
+        if (arr[1].indexOf('|') != -1) {
+          this.imageA = this.imgUrl(arr[1].split('|'))
+        } else {
+          this.imageA.unshift(this.imgUrl(arr[1]))
+        }
+      }
+    },
+    imgUrl(imgList) {
+      if (typeof (imgList) == 'string') {
+        return this.urlJudge(imgList)
+      }
+      for (let i = 0; i < imgList.length; i++) {
+        imgList[i] = this.urlJudge(imgList[i])
+      }
+      return imgList
+    },
     seeComments(oneId) {
       this.seeComment = !this.seeComment
       this.commentColor.commentColor = !this.commentColor.commentColor
@@ -201,7 +238,7 @@ export default {
         })
       }
     },
-    gotoHome(userAccount){
+    gotoHome(userAccount) {
       if (this.checkRoutingFirst(this, '/home')) {
         this.$router.push({
           name: 'home',
@@ -227,6 +264,7 @@ export default {
     },
   },
   mounted() {
+    this.initImage()
     const likeBar = this.$store.state.userInfo.user.likeBar
     if (likeBar.indexOf(this.todo.pbOneId) != -1) {
       this.likeColor.likeColor = true
@@ -305,11 +343,22 @@ export default {
 }
 .item_img {
   margin-top: 15px;
+  .el-image__inner {
+    width: 150px;
+    height: 150px;
+    margin-right: 5px;
+    border-radius: 10px;
+  }
 }
-.item_img .el-image__inner {
-  width: 150px;
-  height: 150px;
-  margin-right: 10px;
+.item_img_width {
+  margin-top: 15px;
+  max-width: 400px;
+  .el-image__inner {
+    width: 150px;
+    height: 150px;
+    margin-right: 5px;
+    border-radius: 10px;
+  }
 }
 .item_location {
   margin-top: 15px;

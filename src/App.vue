@@ -68,7 +68,7 @@ export default {
   color: #303133;
   display: flex;
   height: auto;
-  min-height: 800px;
+  min-height: 1000px;
   overflow-x: hidden;
   height: 100%;
   overflow: auto;

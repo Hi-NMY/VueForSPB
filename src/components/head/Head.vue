@@ -47,11 +47,8 @@
           @mouseleave="showUserMsg(2)"
         >
           <div>
-            <el-avatar :class="headImgAnima" :size="50" src="">
-              <img src="../../assets/logo.png" />
+            <el-avatar :class="headImgAnima" :size="50" :src="headImg">
             </el-avatar>
-            <!-- <img src="../../assets/logo.png" /> -->
-            <!--                        <i class="el-icon-arrow-down"></i>-->
             <transition name="el-fade-in-linear">
               <div v-show="userMsg" class="userMsgVar">
                 <user-var></user-var>
@@ -90,6 +87,9 @@ export default {
     UserVar,
   },
   computed: {
+    headImg(){
+      return this.urlJudge(this.$store.state.userInfo.user.userInfo.userHeadImage)
+    },
     isLogin() {
       const isLogin = this.$store.state.index.isLogin
       return isLogin

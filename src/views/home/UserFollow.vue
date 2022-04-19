@@ -75,8 +75,8 @@ export default {
       }
       this.queryParam.userAccount = this.user.userInfo.userAccount
       queryFollowedList(this.queryParam).then((res) => {
-        this.afterRefresh()
         this.follows = res.data
+        this.afterRefresh()
       })
     },
     beforeRefresh() {

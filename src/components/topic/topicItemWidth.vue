@@ -1,12 +1,13 @@
 <template>
   <div class="topic_item_width">
     <el-image
-      src="https://tva4.sinaimg.cn/large/005LlRGlgy1h0k69p2l15j30tz0tzjxv.jpg"
-    ></el-image>
+      :src="headImg"
+    >
+    <img style="width:88px" slot = error src="../../assets/defaultTopic.png"/></el-image>
     <div class="topic_item_msg_width">
       <span
         class="topic_item_msg_name_width"
-        @click="lookTopic(topicInfo.id,topicInfo.topicName)"
+        @click="lookTopic(topicInfo.id, topicInfo.topicName)"
         >{{ topicInfo.topicName }}</span
       >
       <span class="topic_item_msg_des_width">{{ topicInfo.topicSlogan }}</span>
@@ -16,7 +17,13 @@
         <span style="color: #303133; margin-left: 12px">发帖</span>
         <span style="margin-left: 2px">{{ topicInfo.topicBarnum }}</span>
       </div>
-      <el-button v-if="isAttentionTopic(topicInfo.id)" class="noAt_width" type="primary" round>关注</el-button>
+      <el-button
+        v-if="isAttentionTopic(topicInfo.id)"
+        class="noAt_width"
+        type="primary"
+        round
+        >关注</el-button
+      >
       <el-button v-else class="At_width" type="primary" round>已关注</el-button>
     </div>
   </div>
@@ -26,8 +33,13 @@
 export default {
   name: 'TopicItem',
   props: ['topicInfo'],
+  computed: {
+    headImg() {
+      return this.urlJudge(this.topicInfo.topicImage)
+    }
+  },
   methods: {
-    lookTopic(id,name) {
+    lookTopic(id, name) {
       if (this.checkRoutingFirst(this, '/topic/detailTopic')) {
         this.$router.push({
           name: 'detailTopic',
@@ -38,7 +50,7 @@ export default {
         })
       }
     },
-    isAttentionTopic(index){
+    isAttentionTopic(index) {
       const attentionTopic = this.$store.state.userInfo.user.attentionTopicPresenter;
       return (attentionTopic.indexOf(index) == -1)
     }
@@ -50,6 +62,7 @@ export default {
 .topic_item_width {
   width: 87%;
   height: auto;
+  min-height: 80px;
   padding: 18px;
   border-radius: 10px;
   background-color: white;

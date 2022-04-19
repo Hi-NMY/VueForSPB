@@ -20,7 +20,7 @@ import {
   SkeletonItem,
   Dialog,
   CheckboxGroup,
-  Checkbox, 
+  Checkbox,
   Collapse, CollapseItem, DatePicker, Cascader, Switch, RadioGroup, Radio
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/base.css';
@@ -37,12 +37,16 @@ import router from './router/index.js';
 import store from './store/index.js';
 import { checkRouting, checkRoutingFirst } from '@/utils/checkRouting';
 
+import { urlJudge, urlBadgeImg } from '@/utils/urlTool';
+
 // const originalPush = VueRouter.prototype.push
 // VueRouter.prototype.push = function push(location) {
 //   return originalPush.call(this, location).catch(err => err)
 // }
 Vue.prototype.checkRouting = checkRouting
 Vue.prototype.checkRoutingFirst = checkRoutingFirst
+Vue.prototype.urlJudge = urlJudge
+Vue.prototype.urlBadgeImg = urlBadgeImg
 
 Vue.config.productionTip = false
 Vue.use(Button)
@@ -75,7 +79,6 @@ Vue.use(Dialog)
 Vue.use(CheckboxGroup)
 Vue.use(Checkbox)
 Vue.prototype.$message = Message;
-
 new Vue({
   render: h => h(App),
   store,

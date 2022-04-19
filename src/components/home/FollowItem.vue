@@ -2,23 +2,16 @@
   <div class="folllow_msg">
     <div class="folllow_msg_left">
       <div class="img">
-        <el-avatar
-          :size="60"
-          src=""
-          @click="gotoHome(follow.userAccount)"
-        >
-          <img src="../../assets/logo.png" />
+        <el-avatar :size="60" :src="headImg" @click="gotoHome(follow.userAccount)">
         </el-avatar>
       </div>
       <div class="message">
         <div>
-          <span
-            class="folllow_name"
-            @click="gotoHome(follow.userAccount)"
-            >{{ follow.userName }}</span
-          >
-          <img src="../../assets/logo.png" /><!--{{follow.sex}}-->
-          <img src="../../assets/logo.png" /><!--{{follow.userBadge}}-->
+          <span class="folllow_name" @click="gotoHome(follow.userAccount)">{{
+            follow.userName
+          }}</span>
+          <i :class="sexClass"></i>
+          <el-image v-if="follow.userBadge" :src="badgeImg"></el-image>
         </div>
         <div>
           <span>{{ follow.userProfile }}</span>
@@ -38,9 +31,25 @@ export default {
     return {
       isfollow: false,
       isfollow2: true,
+      sexClass: 'iconfont icon-girl'
     }
   },
+  computed: {
+    headImg() {
+      return this.urlJudge(this.follow.userHeadImg)
+    },
+    badgeImg() {
+      return this.urlBadgeImg(this.follow.userBadge)
+    },
+  },
   methods: {
+    initSex() {
+      if (this.follow.sex == '女') {
+        this.sexClass = 'iconfont icon-girl'
+      } else {
+        this.sexClass = 'iconfont icon-boy'
+      }
+    },
     gotoHome(userAccount) {
       this.$router.push({
         name: 'home',
@@ -49,6 +58,9 @@ export default {
         },
       })
     },
+  },
+  mounted() {
+    this.initSex()
   },
 }
 </script>
@@ -74,6 +86,15 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    i {
+      margin-top: 3px;
+    }
+    .iconfont.icon-girl {
+      color: #ff7486;
+    }
+    .iconfont.icon-boy {
+      color: #4bb7ea;
+    }
     div {
       display: flex;
       flex-direction: row;
@@ -81,7 +102,6 @@ export default {
     .folllow_name {
       color: #303133;
       font-size: 14px;
-
       font-weight: bold;
       margin-right: 4px;
       margin-bottom: 10px;
@@ -90,11 +110,9 @@ export default {
       color: #46b3e6;
       cursor: pointer;
     }
-    img {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      margin-right: 4px;
+    .el-image__inner {
+      width: 24px;
+      height: 24px;
     }
   }
   .img:hover {
