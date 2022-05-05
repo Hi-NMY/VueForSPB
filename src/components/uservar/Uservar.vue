@@ -76,6 +76,7 @@ export default {
       this.$bus.$emit('clearSelect', '/index')
       this.$bus.$emit('returnIndex')
       this.$store.commit('index/updateIsLogin', false)
+      this.$store.commit('userInfo/removeUser')
       localStorage.removeItem('user')
       this.$router.replace({
         path: '/refresh',

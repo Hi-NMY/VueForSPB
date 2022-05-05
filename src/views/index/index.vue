@@ -61,7 +61,7 @@ export default {
 }
 .main {
   margin: 20px 18% 0px 18%;
-  height: auto;
+  height: 100%;
   width: auto;
   /* border: 3px solid rgb(187, 54, 54); */
   min-width: 1000px;

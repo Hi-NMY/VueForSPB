@@ -1,15 +1,14 @@
 <template>
   <div class="detail_topic">
     <div class="detail_topic_head_bg">
-      <img
-        class="detail_topic_head_bg_img"
-        :src="bgImg"
-      />
+      <img class="detail_topic_head_bg_img" :src="bgImg" />
       <div class="detail_topic_head_head_img">
-        <el-image
-          :src="headImg"
-        >
-        <img style="width:88px" slot = error src="../../assets/defaultTopic.png"/>
+        <el-image :src="headImg">
+          <img
+            style="width: 88px"
+            slot="error"
+            src="../../assets/defaultTopic.png"
+          />
         </el-image>
       </div>
       <div class="detail_topic_head_msg_box">
@@ -28,13 +27,16 @@
           <span style="margin-left: 2px">{{ topicInfo.topicBarnum }}</span>
         </div>
         <el-button
-          v-if="isAttentionTopic(topicInfo.id)"
+          v-if="!isAtention"
           class="noAt"
           type="primary"
+          @click="toAttention()"
           round
           >关注</el-button
         >
-        <el-button v-else class="At" type="primary" round>已关注</el-button>
+        <el-button v-else class="At" type="primary" @click="toAttention()" round
+          >已关注</el-button
+        >
       </div>
       <i @click="returnPage" class="iconfont icon-topic_fanhui"></i>
       <div class="detail_topic_navigation">
@@ -69,7 +71,10 @@ import barItem from '@/components/bar/BarItem.vue'
 import { getTopicFull, getNewTopicPostBar } from '@/api/topic'
 export default {
   name: 'DetailTopic',
-  props: ['topicId', 'topicName'],
+  props: [
+    'topicId',
+    'topicName'
+  ],
   data() {
     return {
       topicNav: '1',
@@ -92,7 +97,8 @@ export default {
       firstQuery: {
         topicId: -1,
         topicName: ''
-      }
+      },
+      isAtention: false
     }
   },
   computed: {
@@ -104,7 +110,7 @@ export default {
         return require('../../assets/defaultTopic.png')
       }
       const a = this.topicInfo.topicImage.lastIndexOf('.')
-      const str = this.topicInfo.topicImage.substring(0,a) + 'A' + this.topicInfo.topicImage.substring(a)
+      const str = this.topicInfo.topicImage.substring(0, a) + 'A' + this.topicInfo.topicImage.substring(a)
       return this.urlJudge(str)
     }
   },
@@ -144,10 +150,37 @@ export default {
     returnPage() {
       this.$router.back()
     },
-    isAttentionTopic(index) {
-      const attentionTopic =
-        this.$store.state.userInfo.user.attentionTopicPresenter
-      return attentionTopic.indexOf(index) == -1
+    toAttention() {
+      this.$store.commit('index/getLoginAuthority', {
+        _this: this,
+        goto: (key) => {
+          if (key) {
+            if (this.isAtention) {
+              this.$store.dispatch('userInfo/removeAttentionTopic', {
+                query: {
+                  topicId: this.topicInfo.id,
+                  topicName: this.topicInfo.topicName
+                },
+                _this: this,
+                goto: () => {
+                  this.isAtention = !this.isAtention
+                }
+              })
+            } else {
+              this.$store.dispatch('userInfo/addAttentionTopic', {
+                query: {
+                  topicId: this.topicInfo.id,
+                  topicName: this.topicInfo.topicName
+                },
+                _this: this,
+                goto: () => {
+                  this.isAtention = !this.isAtention
+                }
+              })
+            }
+          }
+        }
+      })
     },
   },
   mounted() {
@@ -155,6 +188,8 @@ export default {
     this.firstQuery.topicName = this.topicName
     getTopicFull(this.firstQuery).then((res) => {
       this.topicInfo = res.data
+      const attentionTopic = this.$store.state.userInfo.user.attentionTopicPresenter;
+      this.isAtention = !(attentionTopic.indexOf(this.topicInfo.id) == -1)
       this.queryParam.pbTopic = this.topicInfo.topicName
       this.refresh()
     })

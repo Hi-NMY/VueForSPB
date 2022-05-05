@@ -2,8 +2,10 @@
   <div class="topic_item_width">
     <el-image
       :src="headImg"
+      @click="lookTopic(topicInfo.id, topicInfo.topicName)"
     >
-    <img style="width:88px" slot = error src="../../assets/defaultTopic.png"/></el-image>
+      <img style="width: 88px" slot="error" src="../../assets/defaultTopic.png"
+    /></el-image>
     <div class="topic_item_msg_width">
       <span
         class="topic_item_msg_name_width"
@@ -18,13 +20,21 @@
         <span style="margin-left: 2px">{{ topicInfo.topicBarnum }}</span>
       </div>
       <el-button
-        v-if="isAttentionTopic(topicInfo.id)"
+        v-if="!isAtention"
         class="noAt_width"
         type="primary"
         round
+        @click="toAttention()"
         >关注</el-button
       >
-      <el-button v-else class="At_width" type="primary" round>已关注</el-button>
+      <el-button
+        v-else
+        class="At_width"
+        type="primary"
+        @click="toAttention()"
+        round
+        >已关注</el-button
+      >
     </div>
   </div>
 </template>
@@ -36,9 +46,46 @@ export default {
   computed: {
     headImg() {
       return this.urlJudge(this.topicInfo.topicImage)
+    },
+  },
+  data() {
+    return {
+      queryParam: {
+        topicId: this.topicInfo.id,
+        topicName: this.topicInfo.topicName
+      },
+      isAtention: false
     }
   },
   methods: {
+    toAttention() {
+      this.$store.commit('index/getLoginAuthority', {
+        _this: this,
+        goto: (key) => {
+          if (key) {
+            if (this.isAtention) {
+              if (this.isAtention) {
+                this.$store.dispatch('userInfo/removeAttentionTopic', {
+                  query: this.queryParam,
+                  _this: this,
+                  goto: () => {
+                    this.isAtention = !this.isAtention
+                  }
+                })
+              } else {
+                this.$store.dispatch('userInfo/addAttentionTopic', {
+                  query: this.queryParam,
+                  _this: this,
+                  goto: () => {
+                    this.isAtention = !this.isAtention
+                  }
+                })
+              }
+            }
+          }
+        }
+      })
+    },
     lookTopic(id, name) {
       if (this.checkRoutingFirst(this, '/topic/detailTopic')) {
         this.$router.push({
@@ -50,10 +97,10 @@ export default {
         })
       }
     },
-    isAttentionTopic(index) {
-      const attentionTopic = this.$store.state.userInfo.user.attentionTopicPresenter;
-      return (attentionTopic.indexOf(index) == -1)
-    }
+  },
+  mounted() {
+    const attentionTopic = this.$store.state.userInfo.user.attentionTopicPresenter;
+    this.isAtention = !(!attentionTopic || attentionTopic.indexOf(this.topicInfo.id) == -1)
   },
 }
 </script>

@@ -44,10 +44,17 @@
       </div>
       <div class="comment_item_foot">
         <span>{{ date }}</span>
-        <i
-          @click="replayTo(commentTodo.userName)"
-          class="iconfont icon-xiaoxi"
-        ></i>
+        <div class="tool">
+          <div class="tool1" v-if="deletePower">
+            <i @click="deleteTo()" class="iconfont icon-lajitong"></i>
+          </div>
+          <div>
+            <i
+              @click="replayTo(commentTodo.userName)"
+              class="iconfont icon-xiaoxi"
+            ></i>
+          </div>
+        </div>
       </div>
     </div>
     <el-dialog
@@ -55,7 +62,31 @@
       :title="dialogTitle"
       :visible.sync="replayToDialog"
     >
-      <comment-input></comment-input>
+      <comment-input
+        :pbId="commentTodo.pbOneId"
+        :commentTouser="commentTodo.commentUser"
+        :userToname="commentTodo.userName"
+      ></comment-input>
+    </el-dialog>
+    <el-dialog
+      class="deleteDialog"
+      width="1%"
+      :show-close="false"
+      :append-to-body="true"
+      :visible.sync="deleteDialog"
+    >
+      <div class="deleteTitle"><span>确定删除评论么？</span></div>
+      <div class="deleteButton">
+        <el-button @click="deleteCancel" class="button_cancel" round
+          >取消</el-button
+        >
+        <el-button
+          @click="deletec(commentTodo.commentId, commentTodo.pbOneId)"
+          class="button_right"
+          round
+          >确定</el-button
+        >
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -63,13 +94,16 @@
 <script>
 import { barTimeUtil } from '@/utils/dateUtil'
 import commentInput from '@/components/bar/CommentInput.vue'
+import { deleteComment } from '@/api/comment'
 export default {
   name: 'comment_item',
-  props: ['commentTodo', 'hostAccount'],
+  props: ['commentTodo', 'hostAccount', 'index'],
   data() {
     return {
       replayToDialog: false,
-      dialogTitle: ''
+      deleteDialog: false,
+      dialogTitle: '',
+      deletePower: false,
     }
   },
   components: {
@@ -77,16 +111,20 @@ export default {
   },
   computed: {
     date() {
+      const ac = this.$store.state.userInfo.user.userInfo.userAccount
+      if (ac && (this.hostAccount == ac || this.commentTodo.commentUser == ac)) {
+        this.deletePower = true
+      }
       return barTimeUtil(this.commentTodo.commentDate.replace('T', ' '))
     },
     isReply() {
-      return this.commentTodo.commentTouser ? true : false
+      return this.commentTodo.commentTouser
     },
     isHost() {
-      return this.commentTodo.commentTouser == this.hostAccount ? true : false
+      return this.commentTodo.commentTouser == this.hostAccount
     },
     isHosta() {
-      return this.commentTodo.commentUser == this.hostAccount ? true : false
+      return this.commentTodo.commentUser == this.hostAccount
     },
   },
   methods: {
@@ -94,8 +132,15 @@ export default {
       return this.urlJudge(value)
     },
     replayTo(toName) {
-      this.replayToDialog = true
-      this.dialogTitle = '回复 @' + toName
+      this.$store.commit('index/getLoginAuthority', {
+        _this: this,
+        goto: (key) => {
+          if (key) {
+            this.replayToDialog = true
+            this.dialogTitle = '回复 @' + toName
+          }
+        }
+      })
     },
     gotoHome(userAccount) {
       if (this.checkRoutingFirst(this, '/home')) {
@@ -106,7 +151,38 @@ export default {
           },
         })
       }
+    },
+    deleteTo() {
+      this.deleteDialog = true
+    },
+    deleteCancel() {
+      this.deleteDialog = false
+    },
+    deletec(commentId, pbOneId) {
+      deleteComment({ commentId, pbOneId }).then((res) => {
+        this.deleteCancel()
+        if (res.data) {
+          this.$bus.$emit('deleteComment', this.index)
+          this.$message({
+            duration: 2000,
+            showClose: true,
+            message: '评论已删除',
+          })
+        } else {
+          this.$message({
+            duration: 2000,
+            showClose: true,
+            type: 'error',
+            message: '错误，请重试！',
+          })
+        }
+      })
     }
+  },
+  mounted() {
+    this.$bus.$on('addComment', () => {
+      this.replayToDialog = false
+    })
   },
 }
 </script>
@@ -126,6 +202,9 @@ export default {
   min-width: 300px;
   max-width: 600px;
 }
+.el-dialog__title {
+  font-weight: bold;
+}
 .el-dialog__body {
   padding: 0 20px 20px 20px;
 }
@@ -140,8 +219,8 @@ export default {
   align-items: center;
 }
 .comment_item_box:hover {
-  .iconfont.icon-xiaoxi {
-    display: block;
+  .tool {
+    display: flex;
   }
 }
 .comment_item_head {
@@ -159,7 +238,7 @@ export default {
   color: #303133;
 }
 .comment_art {
-  width: 100%;
+  width: 400px;
   color: #303133;
   white-space: pre-wrap;
   margin-right: 10px;
@@ -167,15 +246,21 @@ export default {
 .comment_item_foot {
   width: 100%;
   height: 10px;
-  margin-top: 3px;
+  margin-top: 6px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.comment_item_foot > .iconfont.icon-xiaoxi {
+.comment_item_foot > .tool {
   display: none;
 }
+.tool > .tool1 {
+  margin-right: 4px;
+}
 .iconfont.icon-xiaoxi:hover {
+  cursor: pointer;
+}
+.iconfont.icon-lajitong:hover {
   cursor: pointer;
 }
 .el-message-box {
@@ -188,5 +273,53 @@ export default {
 }
 .el-message-box__content {
   padding: 2px 15px;
+}
+.deleteDialog {
+  .el-dialog__header {
+    padding: 0;
+  }
+  .el-dialog__body {
+    padding: 32px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .deleteTitle {
+    font-size: 18px;
+    color: #303133;
+    font-weight: bold;
+    text-align: center;
+  }
+  .deleteButton {
+    width: 70%;
+    margin-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+  }
+  .el-button.is-round {
+    border-radius: 20px;
+    border: 0;
+    width: 124px;
+    height: 36px;
+    line-height: 0.8;
+    font-weight: bold;
+  }
+  .button_cancel {
+    background-color: #eeeeee;
+    color: #303133;
+  }
+  .button_right {
+    background-color: #3bb0e6;
+    color: #ffffff;
+  }
+  .button_cancel:hover {
+    background-color: #e0e0e0;
+    color: #303133;
+  }
+  .button_right:hover {
+    background-color: #2e8db9;
+    color: #ffffff;
+  }
 }
 </style>

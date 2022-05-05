@@ -13,6 +13,10 @@ export default {
       vm.$router.replace('/index')
     })
   },
+  beforeRouteLeave(to, from, next) {
+    to.meta.keepAlive = false;
+    next();
+  }
 }
 </script>
 <style scoped>

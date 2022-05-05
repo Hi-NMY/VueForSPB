@@ -1,4 +1,4 @@
- import request from '@/utils/request';
+import request from '@/utils/request';
 
 export function queryNoVideoPostBarForDate(date) {
     return request({
@@ -28,5 +28,21 @@ export function queryBarComment(date) {
     return request({
         url: '/postbarComment/queryCommentList/' + date,
         method: 'post',
+    })
+}
+
+export function addLikeBar(data) {
+    return request({
+        url: '/likepb/addLike',
+        method: 'post',
+        data
+    })
+}
+
+export function removeLikeBar(data) {
+    return request({
+        url: '/likepb/deleteLike',
+        method: 'post',
+        data
     })
 }

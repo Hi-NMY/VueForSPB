@@ -1,7 +1,7 @@
 <template>
   <div class="att_topic">
     <div class="att_topic_head">
-      <div class="att_topic_title">关注的话题</div>
+      <div class="att_topic_title">关注的话题（<span>{{ topicList.length }}</span>）</div>
       <div class="search_topic">
         <button>
           <i class="el-icon-search"></i>

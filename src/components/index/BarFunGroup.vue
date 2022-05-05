@@ -14,10 +14,24 @@ export default {
   name: 'fun-group',
   methods: {
     addBarFun() {
-      this.$bus.$emit('sendBar', true, false)
+      this.$store.commit('index/getLoginAuthority', {
+        _this: this,
+        goto: (key) => {
+          if (key) {
+            this.$bus.$emit('sendBar', true, false)
+          }
+        }
+      })
     },
     addVideoFun() {
-      this.$bus.$emit('sendBar', true, true)
+      this.$store.commit('index/getLoginAuthority', {
+        _this: this,
+        goto: (key) => {
+          if (key) {
+            this.$bus.$emit('sendBar', true, true)
+          }
+        }
+      })
     },
   },
 }

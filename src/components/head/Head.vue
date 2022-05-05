@@ -164,7 +164,7 @@ export default {
   align-items: center;
   border: 1px solid rgb(243, 243, 243);
   height: 60px;
-  width: 100%;
+  width: inherit;
   position: fixed;
   z-index: 2;
 }

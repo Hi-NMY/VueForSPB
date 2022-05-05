@@ -20,8 +20,10 @@
 <script>
 import barItem from '@/components/bar/BarItem.vue'
 import { queryNoVideoFollowPostBarForDate } from '@/api/postbar'
+import { listLoad } from '@/mixin/list'
 export default {
   name: 'FollowBar',
+  mixins: [listLoad],
   data() {
     return {
       followPostBarList: [],
@@ -49,6 +51,9 @@ export default {
   methods: {
     refresh() {
       this.beforeRefresh()
+      this.obtainData()
+    },
+    obtainData() {
       if (!this.$store.state.userInfo.user.userInfo.userAccount) {
         return
       } else {
@@ -56,7 +61,12 @@ export default {
           this.$store.state.userInfo.user.userInfo.userAccount
       }
       queryNoVideoFollowPostBarForDate(this.queryParam).then((res) => {
-        this.followPostBarList = res.data
+        if (this.queryParam.id == 0) {
+          this.followPostBarList = res.data
+        }else{
+          this.followPostBarList.push.apply(this.followPostBarList, res.data)
+        }
+        this.queryParam.id = this.followPostBarList[this.followPostBarList.length - 1].id
         this.afterRefresh()
         this.$bus.$emit('afterRefresh')
       })
@@ -70,6 +80,7 @@ export default {
       this.skeletonItem = 'skeleton_item'
     },
     afterRefresh() {
+      this.loadAfter()
       this.loading = false
       this.skeletonItem = ''
     },

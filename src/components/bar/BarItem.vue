@@ -2,17 +2,11 @@
   <div class="bar_item">
     <div>
       <div class="item_head">
-        <el-avatar
-          :size="50"
-          :src="headImg"
-          @click.native="gotoHome(todo.userAccount)"
-        >
+        <el-avatar :size="50" :src="headImg" @click.native="gotoHome">
         </el-avatar>
         <div class="item_head_msg">
           <div>
-            <span class="name" @click="gotoHome(todo.userAccount)">{{
-              todo.userName
-            }}</span>
+            <span class="name" @click="gotoHome">{{ todo.userName }}</span>
             <el-image v-if="todo.userBadge" :src="badgeImg"></el-image>
           </div>
           <span class="date">{{ date }}</span>
@@ -68,7 +62,7 @@
           </div>
         </div>
         <div>
-          <div :class="commentColor" @click="seeComments(todo.pbOneId)">
+          <div :class="commentColor" @click="seeComments">
             <i class="iconfont icon-xiaoxi"></i>
             <span>{{ pbCommentNum }}</span>
           </div>
@@ -83,11 +77,12 @@
     </div>
 
     <div class="comment_box" v-loading="commentLoading" v-if="seeComment">
-      <comment-input></comment-input>
+      <comment-input :pbId="todo.pbOneId" :commentTouser="''"></comment-input>
       <div class="comment_item">
         <bar-comment-item
           v-for="(comment, index) in comments"
           :key="index"
+          :index="index"
           :commentTodo="comment"
           :hostAccount="todo.userAccount"
         ></bar-comment-item>
@@ -110,7 +105,6 @@ export default {
     commentInput,
     moreFun,
   },
-
   data() {
     return {
       topics: [],
@@ -125,7 +119,7 @@ export default {
         likeColor: false,
       },
       likeIcon: 'iconfont icon-aixin',
-      commentLoading: false,
+      commentLoading: true,
       moreFun: false,
       itemImg: 'item_img'
     }
@@ -208,27 +202,53 @@ export default {
       }
       return imgList
     },
-    seeComments(oneId) {
+    initLike() {
+      const likeBar = this.$store.state.userInfo.user.likeBar
+      if (!likeBar) {
+        return
+      }
+      if (likeBar.indexOf(this.todo.pbOneId) != -1) {
+        this.likeColor.likeColor = true
+        this.likeIcon = 'iconfont icon-aixin-sel'
+      }
+    },
+    seeComments() {
+      this.$bus.$on('addComment', this.addComment)
+      this.$bus.$on('deleteComment', this.deleteComment)
       this.seeComment = !this.seeComment
       this.commentColor.commentColor = !this.commentColor.commentColor
+      this.comments = []
       if (this.seeComment) {
         this.commentLoading = true
-        queryBarComment(oneId).then((res) => {
-          this.comments = res.data
-          this.commentLoading = false
-        })
+        setTimeout(() => {
+          queryBarComment(this.todo.pbOneId).then((res) => {
+            this.comments = res.data
+            this.commentLoading = false
+          })
+        }, 200)
       }
     },
     clickLike() {
-      this.likeColor.likeColor = !this.likeColor.likeColor
-      if (this.likeColor.likeColor) {
-        this.likeIcon = 'iconfont icon-aixin-sel'
-      } else {
-        this.likeIcon = 'iconfont icon-aixin'
-      }
+      this.$store.commit('index/getLoginAuthority', {
+        _this: this,
+        goto: (key) => {
+          if (key) {
+            this.likeColor.likeColor = !this.likeColor.likeColor
+            if (this.likeColor.likeColor) {
+              this.$store.dispatch('userInfo/addLikeBar', this.todo.pbOneId)
+              this.likeIcon = 'iconfont icon-aixin-sel animate__heartBeat'
+              this.todo.pbThumbNum += 1
+            } else {
+              this.$store.dispatch('userInfo/removeLikeBar', this.todo.pbOneId)
+              this.likeIcon = 'iconfont icon-aixin'
+              this.todo.pbThumbNum -= 1
+            }
+          }
+        }
+      })
     },
     lookTopic(name) {
-      if (this.checkRoutingFirst(this, '/topic/detailTopic')) {
+      if (this.$route.params.topicName != name) {
         this.$router.push({
           name: 'detailTopic',
           params: {
@@ -238,15 +258,23 @@ export default {
         })
       }
     },
-    gotoHome(userAccount) {
+    gotoHome() {
       if (this.checkRoutingFirst(this, '/home')) {
         this.$router.push({
           name: 'home',
           params: {
-            userAccount: userAccount,
+            userAccount: this.todo.userAccount,
           },
         })
       }
+    },
+    addComment(data) {
+      this.comments.unshift(data)
+      this.todo.pbCommentNum += 1
+    },
+    deleteComment(index) {
+      this.comments.splice(index, 1)
+      this.todo.pbCommentNum -= 1
     },
     closeSel(e) {
       console.log(this.moreFun)
@@ -265,11 +293,12 @@ export default {
   },
   mounted() {
     this.initImage()
-    const likeBar = this.$store.state.userInfo.user.likeBar
-    if (likeBar.indexOf(this.todo.pbOneId) != -1) {
-      this.likeColor.likeColor = true
-      this.likeIcon = 'iconfont icon-aixin-sel'
-    }
+    this.initLike()
+  },
+  beforeDestroy() {
+    this._timer && clearTimeout(this._timer)
+    this.$bus.$off('addComment')
+    this.$bus.$off('deleteComment')
   },
 }
 </script>

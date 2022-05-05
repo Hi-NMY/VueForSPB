@@ -21,8 +21,10 @@ import {
   Dialog,
   CheckboxGroup,
   Checkbox,
-  Collapse, CollapseItem, DatePicker, Cascader, Switch, RadioGroup, Radio
+  Collapse, CollapseItem, DatePicker, Cascader, Switch, RadioGroup, Radio, InfiniteScroll ,Popover
 } from 'element-ui';
+import { Picker } from "emoji-mart-vue"
+// import {infiniteScroll} from "vue-infinite-scroll";
 import 'element-ui/lib/theme-chalk/base.css';
 //引入store
 // import ElementUi from 'element-ui'
@@ -38,6 +40,8 @@ import store from './store/index.js';
 import { checkRouting, checkRoutingFirst } from '@/utils/checkRouting';
 
 import { urlJudge, urlBadgeImg } from '@/utils/urlTool';
+
+import 'animate.css';
 
 // const originalPush = VueRouter.prototype.push
 // VueRouter.prototype.push = function push(location) {
@@ -78,6 +82,9 @@ Vue.use(Radio)
 Vue.use(Dialog)
 Vue.use(CheckboxGroup)
 Vue.use(Checkbox)
+Vue.use(InfiniteScroll)
+Vue.use(Popover)
+Vue.component('picker',Picker)
 Vue.prototype.$message = Message;
 new Vue({
   render: h => h(App),

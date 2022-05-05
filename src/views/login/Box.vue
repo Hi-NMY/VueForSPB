@@ -60,12 +60,16 @@ export default {
   beforeDestroy() {
     this.$store.commit('index/updateHasHead', true)
   },
+  beforeRouteLeave(to, from, next) {
+    to.meta.keepAlive = false;
+    next();
+  }
 }
 </script>
 <style scope>
 .download_button {
   margin-top: 40px;
-  width: 100%;
+  width: auto;
   padding: 0px 20px;
   font-size: 18px;
   line-height: 48px;
@@ -75,9 +79,7 @@ export default {
   border-radius: 360px;
 }
 .box {
-  width: auto;
-  height: 70%;
-  margin: auto;
+  margin: 160px auto;
   display: flex;
   padding-left: 100px;
   justify-content: right;

@@ -2,12 +2,12 @@
   <div class="folllow_msg">
     <div class="folllow_msg_left">
       <div class="img">
-        <el-avatar :size="60" :src="headImg" @click="gotoHome(follow.userAccount)">
+        <el-avatar :size="60" :src="headImg" @click.native="gotoHome">
         </el-avatar>
       </div>
       <div class="message">
         <div>
-          <span class="folllow_name" @click="gotoHome(follow.userAccount)">{{
+          <span class="folllow_name" @click="gotoHome">{{
             follow.userName
           }}</span>
           <i :class="sexClass"></i>
@@ -50,11 +50,11 @@ export default {
         this.sexClass = 'iconfont icon-boy'
       }
     },
-    gotoHome(userAccount) {
+    gotoHome() {
       this.$router.push({
         name: 'home',
         params: {
-          userAccount: userAccount,
+          userAccount: this.follow.userAccount,
         },
       })
     },

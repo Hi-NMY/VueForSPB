@@ -7,6 +7,17 @@ const index = {
 		},
 		updateHasHead(state, value) {
 			state.hasHead = value
+		},
+		getLoginAuthority(state, data) {
+			if (!state.isLogin) {
+				data._this.$message({
+					duration: 1000,
+					showClose: true,
+					type: 'error',
+					message: '请先登录！',
+				})
+			}
+			data.goto(state.isLogin)
 		}
 	},
 	state: {

@@ -15,7 +15,7 @@
         :rows="1"
       >
         <ol type="1" v-for="hotTopic in hotTopics" :key="hotTopic.id">
-          <li @click="goToDetailTopic(hotTopic.topicName)">
+          <li @click="goToDetailTopic(hotTopic.id,hotTopic.topicName)">
             <span class="message">
               {{ hotTopic.topicName }}
             </span>
@@ -93,11 +93,11 @@ export default {
         path: '/topic/hotTopic',
       })
     },
-    goToDetailTopic(name) {
+    goToDetailTopic(id,name) {
       this.$router.push({
         name: 'detailTopic',
         params: {
-          topicId: -1,
+          topicId: id,
           topicName: name,
         },
       })

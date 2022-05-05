@@ -54,6 +54,8 @@
                     @change="birthdayChange"
                     default-value=""
                     style="width: 100%"
+                    format="yyyy - MM - dd"
+                    value-format="yyyy-MM-dd"
                   >
                   </el-date-picker>
                 </el-form-item>
@@ -225,7 +227,8 @@ export default {
         userFavorite: undefined,
         userHome: undefined,
         userProfile: undefined,
-        userPrivacy: undefined
+        userPrivacy: undefined,
+        userAccount: this.userAccount
       },
       optionsplaes: [],
       citySelect: [],
@@ -318,6 +321,13 @@ export default {
     },
     submitForm() {
       this.isLoading = true
+      this.$store.dispatch('userInfo/changeInformation', {
+        query : this.queryParam,
+        _this : this,
+        goto: () => {
+          this.isLoading = false
+        },
+      })
     }
   }
 }

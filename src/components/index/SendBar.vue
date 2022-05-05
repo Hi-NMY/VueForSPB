@@ -2,14 +2,16 @@
   <div class="send_bar_box">
     <i class="iconfont icon-close" @click="closeSendBar"></i>
     <div class="send_bar_input">
-      <el-input
-        :autosize="{ minRows: 2, maxRows: 8 }"
-        type="textarea"
-        resize="none"
-        v-model="input"
-        placeholder="进校吧分享新鲜事......"
-        show-word-limit
-      ></el-input>
+      <div class="send_bar_input_div">
+        <el-input
+          :autosize="{ minRows: 2, maxRows: 8 }"
+          type="textarea"
+          resize="none"
+          v-model="input"
+          placeholder="进校吧分享新鲜事......"
+          show-word-limit
+        ></el-input>
+      </div>
       <div class="send_image">
         <div class="image_box" v-for="item in urls" :key="item">
           <i class="el-icon-error" @click="deleteImage"></i>
@@ -132,10 +134,23 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: left;
+  .send_bar_input_div {
+    background-color: #f0f1f4;
+    background-image: none;
+    border: 1.5px solid #f0f1f4;
+    border-radius: 10px;
+    padding:3px 4px 3px 3px;
+  }
+  .send_bar_input_div:focus-within {
+    background-color: white;
+    border: 1.5px solid #46b3e6;
+    .el-textarea__inner{
+      background-color: white;
+    }
+  }
   .el-textarea__inner {
     display: block;
     resize: vertical;
-    padding: 5px 10px;
     line-height: 1.7;
     box-sizing: border-box;
     width: 100%;
@@ -143,16 +158,8 @@ export default {
     font-size: inherit;
     color: #606266;
     background-color: #f0f1f4;
+    border:0;
     background-image: none;
-    border: 1px solid #f0f1f4;
-    border-radius: 10px;
-  }
-  .el-textarea__inner:hover {
-    border: 1px solid #f0f1f4;
-  }
-  .el-textarea__inner:focus {
-    background-color: white;
-    border: 1.5px solid #46b3e6;
   }
 }
 .send_image {

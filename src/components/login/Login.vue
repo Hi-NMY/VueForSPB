@@ -65,6 +65,7 @@ export default {
   methods: {
     submitForm() {
       if (!this.loginDto.userAccount || !this.loginDto.password) {
+        console.log(this.$route);
         return
       }
       this.loading = true

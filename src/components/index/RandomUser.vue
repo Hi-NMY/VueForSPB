@@ -21,16 +21,25 @@
         >
           <div class="user_msg_left">
             <div class="img">
-              <el-avatar  @click="gotoHome(usermsg.userAccount)" :size="46" :src="headImg(usermsg.userHeadImg)">
+              <el-avatar
+                @click.native="gotoHome(usermsg.userAccount)"
+                :size="46"
+                :src="headImg(usermsg.userHeadImg)"
+              >
               </el-avatar>
             </div>
             <div class="message">
-              <span class="username" @click="gotoHome(usermsg.userAccount)">{{ usermsg.userName }}</span><br />
+              <span class="username" @click="gotoHome(usermsg.userAccount)">{{
+                usermsg.userName
+              }}</span
+              ><br />
               <span class="beiguanzhu">被关注</span>
               <span>{{ usermsg.followNum }}</span>
             </div>
           </div>
-          <div class="user_msg_right" v-if="!filterFollow(usermsg.userAccount)">+ 关注</div>
+          <div class="user_msg_right" v-if="!filterFollow(usermsg.userAccount)">
+            + 关注
+          </div>
           <div class="user_msg_right_right" v-else>已关注</div>
         </div>
       </el-skeleton>
@@ -85,13 +94,13 @@ export default {
     }
   },
   computed: {
-    
+
   },
   created() {
     this.findUsers()
   },
   methods: {
-    headImg(value){
+    headImg(value) {
       return this.urlJudge(value)
     },
     gotoHome(userAccount) {
@@ -116,9 +125,8 @@ export default {
       })
     },
     filterFollow(account) {
-      const followedPresenter =
-        this.$store.state.userInfo.user.followedPresenter
-      if (followedPresenter.indexOf(account) === -1) {
+      const followedPresenter = this.$store.state.userInfo.user.followedPresenter
+      if (!followedPresenter || followedPresenter.indexOf(account) === -1) {
         return false
       } else {
         return true
@@ -196,7 +204,8 @@ export default {
   border: 1px solid #46b3e6;
   padding: 2px 8px;
 }
-.user_msg_right:hover,.user_msg_right_right:hover,
+.user_msg_right:hover,
+.user_msg_right_right:hover,
 .username:hover {
   cursor: pointer;
 }

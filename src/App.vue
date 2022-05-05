@@ -1,26 +1,29 @@
 <template>
-  <div v-if="isAlreadyLogin" id="app">
-    <head-box v-show="this.$store.state.index.hasHead"></head-box>
-    <router-view />
-    <el-backtop>
-      <div
-        style="
-           {
-            height: 100%;
-            width: 100%;
-            background-color: #f2f5f6;
-            box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
-            text-align: center;
-            line-height: 40px;
-            border-radius: 5px;
-            color: #1989fa;
-          }
-        "
-      >
-        ↑
-      </div>
-    </el-backtop>
-  </div>
+    <div id="app" v-if="isAlreadyLogin">
+      <head-box v-show="this.$store.state.index.hasHead"></head-box>
+      <keep-alive>
+        <router-view v-if="$route.meta.keepAlive"></router-view>
+      </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
+      <el-backtop>
+        <div
+          style="
+             {
+              height: 100%;
+              width: 100%;
+              background-color: #f2f5f6;
+              box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+              text-align: center;
+              line-height: 40px;
+              border-radius: 5px;
+              color: #1989fa;
+            }
+          "
+        >
+          ↑
+        </div>
+      </el-backtop>
+    </div>
 </template>
 
 <script>
@@ -32,16 +35,32 @@ export default {
   components: {
     headBox,
   },
+  watch: {
+  },
   data() {
     return {
-      isAlreadyLogin:false
+      isAlreadyLogin: false,
+      isLoad: false
+    }
+  },
+  methods: {
+    handleScroll (e) {
+      if (e.srcElement.scrollingElement.scrollTop + e.srcElement.scrollingElement.offsetHeight + 100 >= e.srcElement.scrollingElement.scrollHeight) {
+        if (this.isLoad) {
+          return
+        }
+        this.isLoad = true
+        this.$bus.$emit('load')
+      } else {
+        this.isLoad = false
+      }
     }
   },
   created() {
     let user = null
     try {
       user = JSON.parse(localStorage.getItem('user'))
-    } catch (error) {}
+    } catch (error) { }
     if (user) {
       login(user).then((res) => {
         if (res.code == 200) {
@@ -50,10 +69,16 @@ export default {
           this.isAlreadyLogin = true
         }
       })
-    }else{
+    } else {
       this.isAlreadyLogin = true
     }
   },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  destroyed () {
+  window.removeEventListener('scroll', this.handleScroll)
+},
 }
 </script>
 
@@ -63,14 +88,19 @@ export default {
   margin: 0;
   font-family: '微软雅黑';
 }
-
 #app {
+  background-color: #f5f5f5;
   color: #303133;
   display: flex;
+  width: 100%;
   height: auto;
-  min-height: 1000px;
   overflow-x: hidden;
-  height: 100%;
   overflow: auto;
+}
+.el-dialog {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0px !important;
 }
 </style>

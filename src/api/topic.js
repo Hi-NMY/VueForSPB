@@ -32,6 +32,22 @@ export function getNewTopicPostBar(data) {
   })
 }
 
+export function addAttention(data) {
+  return request({
+    url: '/attentiontopic/addAttentionTopic',
+    method: 'post',
+    data:data
+  })
+}
+
+export function deleteAttention(data) {
+  return request({
+    url: '/attentiontopic/deleteAttentionTopicById',
+    method: 'post',
+    data:data
+  })
+}
+
 // export function getHotTopicPostBar(data) {
 //   return request({
 //     url: '/topic/queryNoVideoTopicBarListForDate',

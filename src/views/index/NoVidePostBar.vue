@@ -14,20 +14,23 @@
     </el-skeleton>
     <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="6">
     </el-skeleton>
+    <div style="width: 100%; text-align: center">加载中，请稍后.....</div>
   </div>
 </template>
 
 <script>
 import barItem from '@/components/bar/BarItem.vue'
 import { queryNoVideoPostBarForDate } from '@/api/postbar'
+import { listLoad } from '@/mixin/list'
 export default {
   name: 'NoVideoBar',
+  mixins: [listLoad],
   data() {
     return {
       noVidePostBarList: [],
       loading: true,
       skeletonItem: 'skeleton_item',
-      queryParam:{
+      queryParam: {
         id: 0
       }
     }
@@ -38,8 +41,16 @@ export default {
   methods: {
     refresh() {
       this.beforeRefresh()
+      this.obtainData()
+    },
+    obtainData() {
       queryNoVideoPostBarForDate(this.queryParam).then((res) => {
-        this.noVidePostBarList = res.data
+        if (this.queryParam.id == 0) {
+          this.noVidePostBarList = res.data
+        }else{
+          this.noVidePostBarList.push.apply(this.noVidePostBarList,res.data)
+        }
+        this.queryParam.id = this.noVidePostBarList[this.noVidePostBarList.length - 1].id
         this.afterRefresh()
         this.$bus.$emit('afterRefresh')
       })
@@ -53,6 +64,7 @@ export default {
       this.skeletonItem = 'skeleton_item'
     },
     afterRefresh() {
+      this.loadAfter()
       this.loading = false
       this.skeletonItem = ''
     },
@@ -64,6 +76,10 @@ export default {
   beforeDestroy() {
     this.$bus.$off('refreshIndexBar')
   },
+  beforeRouteLeave(to, from, next) {
+    from.meta.keepAlive = true;
+    next();
+  }
 }
 </script>
 

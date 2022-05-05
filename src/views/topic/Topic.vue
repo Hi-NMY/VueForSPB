@@ -19,7 +19,7 @@
                 <i class="iconfont icon-xingzhuang"></i>
                 <span slot="title">全部话题</span>
               </el-menu-item>
-              <el-menu-item index="/topic/attentionTopic">
+              <el-menu-item v-if="isLogin" index="/topic/attentionTopic">
                 <i class="iconfont icon-attention"></i>
                 <span slot="title">我的关注</span>
               </el-menu-item>
@@ -28,7 +28,7 @@
         </el-row>
       </div>
       <div class="topic_main_right">
-        <router-view></router-view>
+        <router-view :key="$route.fullPath"></router-view>
       </div>
     </div>
   </div>
@@ -40,6 +40,7 @@ export default {
   data() {
     return {
       topicIndex: '/topic/hotTopic',
+      isLogin:false
     }
   },
   watch: {
@@ -55,6 +56,7 @@ export default {
     },
   },
   mounted() {
+    this.isLogin = this.$store.state.index.isLogin
     this.topicIndex = this.$route.path
   },
 }
@@ -97,7 +99,7 @@ export default {
 }
 .topic_main_right {
   margin-left: 10px;
-  width: 70%;
+  width: 700px;
   height: auto;
   border-radius: 10px;
   /*border: 1px solid red;*/

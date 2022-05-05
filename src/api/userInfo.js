@@ -6,3 +6,11 @@ export function getInfo(data) {
         method: 'post',
     })
 }
+
+export function changeInfo(data) {
+    return request({
+        url: '/user/updateUserPersonalInformation',
+        method: 'post',
+        data: data
+    })
+}
