@@ -1,10 +1,11 @@
 import request from '@/utils/request';
+import axios from 'axios'
 
 export function queryNoVideoPostBarForDate(date) {
     return request({
         url: '/postbarlist/queryNoVideoBarListForDate',
         method: 'get',
-        params:date
+        params: date
     })
 }
 
@@ -45,4 +46,17 @@ export function removeLikeBar(data) {
         method: 'post',
         data
     })
+}
+
+export function addBar(data,onReturn) {
+    axios({
+        method: 'post',
+        url: '/api/postbarlist/addBar',
+        headers: { 'Content-Type': 'multipart/form-data' },
+        data: data
+    }).then((res) => {
+        onReturn(res)
+    }).catch((err) => {
+        reject(err)
+    });
 }

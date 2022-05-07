@@ -153,9 +153,12 @@ export default {
     },
     topicList() {
       let topicList = this.todo.pbTopic
-      topicList = topicList.split('|')
-      topicList.pop()
-      return topicList
+      if (topicList) {
+        topicList = topicList.split('|')
+        topicList.pop()
+        return topicList
+      }
+      return []
     },
     pbThumbNum() {
       const pbThumbNum = this.todo.pbThumbNum
@@ -177,19 +180,26 @@ export default {
   methods: {
     initImage() {
       if (this.todo.pbImageUrl) {
-        let arr = this.todo.pbImageUrl.split('@')
-        if (arr[0].indexOf('|') != -1) {
-          this.image = this.imgUrl(arr[0].split('|'))
-          if (this.image.length > 3) {
-            this.itemImg = 'item_img_width'
+        if (this.todo.pbImageUrl.indexOf('@') != -1) {
+          let arr = this.todo.pbImageUrl.split('@')
+          if (arr[0].indexOf('|') != -1) {
+            this.image = this.imgUrl(arr[0].split('|'))
+            if (this.image.length > 3) {
+              this.itemImg = 'item_img_width'
+            }
+          } else {
+            this.image.unshift(this.imgUrl(arr[0]))
+          }
+          if (arr[1].indexOf('|') != -1) {
+            this.imageA = this.imgUrl(arr[1].split('|'))
+          } else {
+            this.imageA.unshift(this.imgUrl(arr[1]))
           }
         } else {
-          this.image.unshift(this.imgUrl(arr[0]))
-        }
-        if (arr[1].indexOf('|') != -1) {
-          this.imageA = this.imgUrl(arr[1].split('|'))
-        } else {
-          this.imageA.unshift(this.imgUrl(arr[1]))
+          this.imageA = this.todo.pbImageUrl.substring(0, this.todo.pbImageUrl.lastIndexOf('|')).split('|')
+          if (this.imageA.length > 3) {
+            this.itemImg = 'item_img_width'
+          }
         }
       }
     },

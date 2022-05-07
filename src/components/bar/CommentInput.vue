@@ -18,7 +18,7 @@
       <div class="emoji_box">
         <el-popover>
           <picker
-            style="width: 320px; height: 320px; border: 0"
+            style="width: 288px; height: 292px; border: 0"
             color="#3bb0e6"
             :i18n="e18"
             :include="['recent', 'people', 'nature', 'places', 'symbols']"
@@ -199,12 +199,6 @@ export default {
     background-color: #3bb0e62a;
     border-radius: 20px;
   }
-}
-.el-popper[x-placement^='bottom'] {
-  margin-top: 4px;
-}
-.el-popper {
-  border-radius: 10px;
 }
 .send_box {
   display: flex;

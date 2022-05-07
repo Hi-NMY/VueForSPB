@@ -103,4 +103,10 @@ export default {
   transform: translate(-50%, -50%);
   margin: 0px !important;
 }
+.el-popper[x-placement^='bottom'] {
+  margin-top: 4px;
+}
+.el-popper {
+  border-radius: 10px;
+}
 </style>

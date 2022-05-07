@@ -12,7 +12,7 @@ export function queryAttentionTopic(search) {
   return request({
     url: '/attentiontopic/queryAttentionTopic',
     method: 'post',
-    data:search
+    data: search
   })
 }
 
@@ -20,7 +20,7 @@ export function getTopicFull(data) {
   return request({
     url: '/topic/getTopicFull',
     method: 'post',
-    data:data
+    data: data
   })
 }
 
@@ -28,7 +28,7 @@ export function getNewTopicPostBar(data) {
   return request({
     url: '/postbarlist/queryNoVideoTopicBarListForDate',
     method: 'post',
-    data:data
+    data: data
   })
 }
 
@@ -36,7 +36,7 @@ export function addAttention(data) {
   return request({
     url: '/attentiontopic/addAttentionTopic',
     method: 'post',
-    data:data
+    data: data
   })
 }
 
@@ -44,7 +44,14 @@ export function deleteAttention(data) {
   return request({
     url: '/attentiontopic/deleteAttentionTopicById',
     method: 'post',
-    data:data
+    data: data
+  })
+}
+
+export function querySearchTopicName(data) {
+  return request({
+    url: '/topic/querySearchTopicNameList?topicSearch=' + data,
+    method: 'get'
   })
 }
 

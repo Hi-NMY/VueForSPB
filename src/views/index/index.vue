@@ -3,7 +3,7 @@
     <!-- <head-box></head-box> -->
     <div class="main">
       <div class="main_left">
-        <send-bar v-show="isSendBar" :isVideo="sendVideo"></send-bar>
+        <send-bar v-if="isSendBar" :isVideo="sendVideo"></send-bar>
         <post-bar class="postBar"></post-bar>
       </div>
       <div class="main_right">

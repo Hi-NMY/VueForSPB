@@ -9,6 +9,31 @@ const service = axios.create({
   timeout: 10000,
 })
 
+// request拦截器
+service.interceptors.request.use(config => {
+  // if (config.url == '/postbarlist/addBar') {
+  //   console.log("gai");
+  //   axios.defaults.headers['Content-Type'] = 'multipart/form-data';
+  // }
+  // console.log(config);
+  // // 是否需要防止数据重复提交
+  // const isRepeatSubmit = (config.headers || {}).repeatSubmit === false
+  // if (getToken() && !isToken) {
+  //   config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+  // }
+  // // get请求映射params参数
+  // if (config.method === 'get' && config.params) {
+  //   let url = config.url + '?' + tansParams(config.params);
+  //   url = url.slice(0, -1);
+  //   config.params = {};
+  //   config.url = url;
+  // }
+  return config
+}, error => {
+    console.log(error)
+    Promise.reject(error)
+})
+
 // 响应拦截器
 service.interceptors.response.use(res => {
   const code = res.data.code
