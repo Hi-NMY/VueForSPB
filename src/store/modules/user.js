@@ -1,6 +1,7 @@
 import { addLikeBar, removeLikeBar } from '@/api/postbar'
 import { changeInfo } from '@/api/userInfo'
 import { addAttention, deleteAttention } from '@/api/topic'
+import { addFollow,deleteFollow } from "@/api/follow";
 
 const userInfo = {
     namespaced: true,
@@ -85,7 +86,48 @@ const userInfo = {
                     })
                 }
             })
-        }
+        },
+        addFollow(context, data) {
+            data.query.followAccount = context.state.user.userInfo.userAccount
+            addFollow(data.query).then((res) => {
+                if (res.data) {
+                    context.commit('addFollow', data.query.followedAccount)
+                    data._this.$message({
+                        duration: 2000,
+                        showClose: true,
+                        type: 'success',
+                        message: '关注成功',
+                    })
+                } else {
+                    data._this.$message({
+                        duration: 2000,
+                        showClose: true,
+                        type: 'error',
+                        message: '出错了，请重试！',
+                    })
+                }
+            })
+        },
+        removeFollow(context, data) {
+            data.query.followAccount = context.state.user.userInfo.userAccount
+            deleteFollow(data.query).then((res) => {
+                if (res.data) {
+                    context.commit('removeFollow', data.query.followedAccount)
+                    data._this.$message({
+                        duration: 2000,
+                        showClose: true,
+                        message: '已取消关注',
+                    })
+                } else {
+                    data._this.$message({
+                        duration: 2000,
+                        showClose: true,
+                        type: 'error',
+                        message: '出错了，请重试！',
+                    })
+                }
+            })
+        },
     },
     mutations: {
         changeInformation(state, data) {
@@ -116,6 +158,15 @@ const userInfo = {
             const index = state.user.attentionTopicPresenter.indexOf(id);
             if (index > -1) {
                 state.user.attentionTopicPresenter.splice(index, 1);
+            }
+        },
+        addFollow(state, account) {
+            state.user.followedPresenter.push(account)
+        },
+        removeFollow(state, account) {
+            const index = state.user.followedPresenter.indexOf(account);
+            if (index > -1) {
+                state.user.followedPresenter.splice(index, 1);
             }
         },
         removeUser(state) {

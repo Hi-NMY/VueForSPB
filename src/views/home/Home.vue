@@ -38,7 +38,7 @@
         </el-row>
       </div>
       <div v-if="isAlreadyLoad" class="home_main_right">
-        <router-view></router-view>
+        <router-view :key="$route.fullPath"></router-view>
       </div>
     </div>
   </div>

@@ -17,7 +17,7 @@
       </div>
     </div>
     <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="2">
-      <follow-item v-for="follow in follows" :key="follow.id" :follow="follow">
+      <follow-item v-for="follow in follows" :key="follow.id" :follow="follow" :isOtherUser="isOtherUser">
       </follow-item>
     </el-skeleton>
     <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="2">
@@ -67,7 +67,7 @@ export default {
   methods: {
     refresh() {
       this.beforeRefresh()
-      if (this.user.followedPresenter.length = 0 || (this.isOtherUser && this.userPrivacy[4] != 1)) {
+      if (this.user.followPresenter.length == 0 || (this.isOtherUser && this.userPrivacy[4] != 1)) {
         this.afterRefresh()
         return
       }

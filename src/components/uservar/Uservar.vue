@@ -14,11 +14,11 @@
     </div>
     <div class="info_box">
       <div class="box_left" @click="homeFollow">
-        <div class="number">{{ user.followPresenter.length }}</div>
+        <div class="number">{{ user.followedPresenter.length }}</div>
         <div class="title_text">关注</div>
       </div>
       <div class="box_middle" @click="homeFollowed">
-        <div class="number">{{ user.followedPresenter.length }}</div>
+        <div class="number">{{ user.followPresenter.length }}</div>
         <div class="title_text">被关注</div>
       </div>
       <div class="box_right" @click="home">
@@ -83,7 +83,7 @@ export default {
       })
     },
     home() {
-      if (this.checkRoutingFirst(this, '/home')) {
+      if (this.$route.params.userAccount != this.$store.state.userInfo.user.userInfo.userAccount) {
         this.$router.push({
           name: 'home',
           params: {
@@ -93,7 +93,7 @@ export default {
       }
     },
     homeFollow() {
-      if (this.checkRoutingFirst(this, '/home')) {
+      if (this.$route.params.userAccount != this.$store.state.userInfo.user.userInfo.userAccount) {
         this.$router.push({
           name: 'userFollow',
           params: {
@@ -103,7 +103,7 @@ export default {
       }
     },
     homeFollowed() {
-      if (this.checkRoutingFirst(this, '/home')) {
+      if (this.$route.params.userAccount != this.$store.state.userInfo.user.userInfo.userAccount) {
         this.$router.push({
           name: 'userFollowed',
           params: {

@@ -2,6 +2,7 @@
   <div class="user_home">
     <div class="user_home_head">
       <div class="user_home_head_bg">
+        <i @click="returnPage" class="iconfont icon-topic_fanhui"></i>
         <img class="user_home_head_bg_img" :src="bgImg" />
       </div>
       <div class="user_home_user_msg_box">
@@ -10,9 +11,7 @@
           <div class="user_home_user_name">
             <span>{{ user.userInfo.userName }}</span>
             <i :class="sexClass"></i>
-            <el-image v-if="user.userInfo.userBadge"
-              :src="badgeImg"
-            ></el-image>
+            <el-image v-if="user.userInfo.userBadge" :src="badgeImg"></el-image>
           </div>
           <div v-show="isPrivacyFriend" class="user_home_user_friend">
             <div class="user_home_user_follow" @click="goToFollow">
@@ -223,6 +222,9 @@ export default {
         path: '/home/userFollowed/' + this.userAccount,
       })
     },
+    returnPage() {
+      this.$router.back()
+    },
   },
   mounted() {
     this.initSex()
@@ -390,5 +392,16 @@ export default {
   margin-bottom: 20px;
   border-radius: 10px;
   background-color: white;
+}
+.iconfont.icon-topic_fanhui {
+  position: absolute;
+  margin-left: 8px;
+  margin-top: 8px;
+  z-index: 99;
+  font-size: 34px;
+  color: #909399;
+}
+.iconfont.icon-topic_fanhui:hover {
+  cursor: pointer;
 }
 </style>

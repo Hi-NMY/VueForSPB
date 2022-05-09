@@ -15,3 +15,19 @@ export function queryFollowedList(data) {
     data: data
   })
 }
+
+export function addFollow(data) {
+  return request({
+    url: '/follow/addFollow',
+    method: 'post',
+    data: data
+  })
+}
+
+export function deleteFollow(data) {
+  return request({
+    url: '/follow/deleteFollow',
+    method: 'post',
+    data: data
+  })
+}

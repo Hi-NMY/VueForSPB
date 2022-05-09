@@ -37,10 +37,10 @@
               <span>{{ usermsg.followNum }}</span>
             </div>
           </div>
-          <div class="user_msg_right" v-if="!filterFollow(usermsg.userAccount)">
+          <div class="user_msg_right" @click="clickFollow(usermsg.userAccount)" v-if="!filterFollow(usermsg.userAccount)">
             + 关注
           </div>
-          <div class="user_msg_right_right" v-else>已关注</div>
+          <div class="user_msg_right_right" @click="clickFollow(usermsg.userAccount)" v-else>已关注</div>
         </div>
       </el-skeleton>
       <el-skeleton
@@ -91,6 +91,10 @@ export default {
       isLoading: 'el-icon-refresh',
       loading: true,
       randomuser_skeleton_item: 'randomuser_skeleton_item',
+      queryParam: {
+        followAccount: '',
+        followedAccount: '',
+      }
     }
   },
   computed: {
@@ -132,6 +136,28 @@ export default {
         return true
       }
     },
+    clickFollow(account) {
+      const followedPresenter = this.$store.state.userInfo.user.followedPresenter
+      this.queryParam.followedAccount = account
+      this.$store.commit('index/getLoginAuthority', {
+        _this: this,
+        goto: (key) => {
+          if (key) {
+            if (followedPresenter && followedPresenter.indexOf(account) != -1) {
+              this.$store.dispatch('userInfo/removeFollow', {
+                query: this.queryParam,
+                _this: this
+              })
+            } else {
+              this.$store.dispatch('userInfo/addFollow', {
+                query: this.queryParam,
+                _this: this
+              })
+            }
+          }
+        }
+      })
+    }
   },
 }
 </script>

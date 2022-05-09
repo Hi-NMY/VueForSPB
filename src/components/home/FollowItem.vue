@@ -18,20 +18,27 @@
         </div>
       </div>
     </div>
-    <div class="folllow_msg_right" v-if="isfollow2">已关注</div>
-    <div class="folllow_msg_right_no" v-else>未关注</div>
+    <div v-if="!isOtherUser">
+      <div class="folllow_msg_right" @click="clickFollow" v-if="isFollow">
+        已关注
+      </div>
+      <div class="folllow_msg_right_no" @click="clickFollow" v-else>未关注</div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'FollowItem',
-  props: ['follow'],
+  props: ['follow', 'isOtherUser'],
   data() {
     return {
-      isfollow: false,
-      isfollow2: true,
-      sexClass: 'iconfont icon-girl'
+      sexClass: 'iconfont icon-girl',
+      isShowBtn: true,
+      queryParam: {
+        followAccount: '',
+        followedAccount: '',
+      }
     }
   },
   computed: {
@@ -40,6 +47,14 @@ export default {
     },
     badgeImg() {
       return this.urlBadgeImg(this.follow.userBadge)
+    },
+    isFollow() {
+      const followedPresenter = this.$store.state.userInfo.user.followedPresenter
+      if (!followedPresenter || followedPresenter.indexOf(this.follow.userAccount) === -1) {
+        return false
+      } else {
+        return true
+      }
     },
   },
   methods: {
@@ -58,6 +73,27 @@ export default {
         },
       })
     },
+    clickFollow() {
+      this.queryParam.followedAccount = this.follow.userAccount
+      this.$store.commit('index/getLoginAuthority', {
+        _this: this,
+        goto: (key) => {
+          if (key) {
+            if (this.isFollow) {
+              this.$store.dispatch('userInfo/removeFollow', {
+                query: this.queryParam,
+                _this: this
+              })
+            } else {
+              this.$store.dispatch('userInfo/addFollow', {
+                query: this.queryParam,
+                _this: this
+              })
+            }
+          }
+        }
+      })
+    }
   },
   mounted() {
     this.initSex()
@@ -134,6 +170,7 @@ export default {
   cursor: pointer;
 }
 .folllow_msg_right_no {
+  border: 1px solid #46b3e6;
   background-color: #46b3e6;
   color: white;
   width: 75px;

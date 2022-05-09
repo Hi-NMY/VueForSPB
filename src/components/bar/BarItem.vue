@@ -42,6 +42,12 @@
             :preview-src-list="imageA"
           ></el-image>
         </div>
+        <div v-if="isVoice" @click="playVoice" class="item_voice">
+          <div class="item_voice_box">
+            <i :class="voiceClass"></i>
+            <span>{{ audioTime }}</span>
+          </div>
+        </div>
         <div v-show="location" class="item_location">
           <i class="iconfont icon-location"></i>
           <span>{{ todo.pbLocation }}</span>
@@ -121,7 +127,10 @@ export default {
       likeIcon: 'iconfont icon-aixin',
       commentLoading: true,
       moreFun: false,
-      itemImg: 'item_img'
+      itemImg: 'item_img',
+      voiceClass: 'iconfont icon-Playerplay',
+      playAudio: undefined,
+      audioTime: '',
     }
   },
   props: ['todo'],
@@ -176,6 +185,18 @@ export default {
         return pbCommentNum
       }
     },
+    isVoice() {
+      const isVoice = this.todo.pbVoice
+      if (isVoice) {
+        this.$bus.$on('initVoice', this.nextAudio)
+        this.initVoice()
+        return true
+      } else {
+        return false
+      }
+    }
+  },
+  watch: {
   },
   methods: {
     initImage() {
@@ -201,6 +222,39 @@ export default {
             this.itemImg = 'item_img_width'
           }
         }
+      }
+    },
+    nextAudio(id) {
+      if (id != this.todo.pbOneId) {
+        this.initVoice()
+      }
+    },
+    initVoice() {
+      this.voiceClass = 'iconfont icon-Playerplay'
+      if (this.playAudio) {
+        this.playAudio.pause()
+      }
+      let audio = new Audio('http://localhost:8888/' + this.todo.pbVoice);
+      audio.load();
+      this.playAudio = audio
+      audio.oncanplay = () => {
+        this.audioTime = parseInt(audio.duration) + "S"
+      }
+    },
+    playVoice() {
+      if (this.voiceClass == 'iconfont icon-Playerpause') {
+        this.initVoice()
+      } else {
+        this.$bus.$emit('initVoice', this.todo.pbOneId)
+        this.voiceClass = 'iconfont icon-Playerpause'
+        this.playAudio.ontimeupdate = () => {
+          let t = parseInt(this.playAudio.duration) - parseInt(this.playAudio.currentTime)
+          if (t == 0) {
+            this.initVoice()
+          }
+          this.audioTime = t + 'S'
+        }
+        this.playAudio.play();
       }
     },
     imgUrl(imgList) {
@@ -306,6 +360,9 @@ export default {
     this.initLike()
   },
   beforeDestroy() {
+    if (this.playAudio) {
+      this.initVoice()
+    }
     this._timer && clearTimeout(this._timer)
     this.$bus.$off('addComment')
     this.$bus.$off('deleteComment')
@@ -397,6 +454,31 @@ export default {
     height: 150px;
     margin-right: 5px;
     border-radius: 10px;
+  }
+}
+.item_voice {
+  width: 200px;
+  height: 44px;
+  background-color: #3bb0e6;
+  border-radius: 40px;
+  .item_voice_box {
+    margin: 0px 16px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .iconfont.icon-Playerplay,
+    .iconfont.icon-Playerpause {
+      font-size: 24px;
+      color: white;
+    }
+    span {
+      color: white;
+      font-weight: bold;
+    }
+  }
+  .item_voice_box:hover {
+    cursor: pointer;
   }
 }
 .item_location {
