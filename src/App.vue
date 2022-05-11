@@ -1,29 +1,29 @@
 <template>
-    <div id="app" v-if="isAlreadyLogin">
-      <head-box v-show="this.$store.state.index.hasHead"></head-box>
-      <keep-alive>
-        <router-view v-if="$route.meta.keepAlive"></router-view>
-      </keep-alive>
-      <router-view v-if="!$route.meta.keepAlive"></router-view>
-      <el-backtop>
-        <div
-          style="
-             {
-              height: 100%;
-              width: 100%;
-              background-color: #f2f5f6;
-              box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
-              text-align: center;
-              line-height: 40px;
-              border-radius: 5px;
-              color: #1989fa;
-            }
-          "
-        >
-          ↑
-        </div>
-      </el-backtop>
-    </div>
+  <div id="app" v-if="isAlreadyLogin">
+    <head-box v-show="this.$store.state.index.hasHead"></head-box>
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
+    <el-backtop>
+      <div
+        style="
+           {
+            height: 100%;
+            width: 100%;
+            background-color: #f2f5f6;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+            text-align: center;
+            line-height: 40px;
+            border-radius: 5px;
+            color: #1989fa;
+          }
+        "
+      >
+        ↑
+      </div>
+    </el-backtop>
+  </div>
 </template>
 
 <script>
@@ -44,7 +44,7 @@ export default {
     }
   },
   methods: {
-    handleScroll (e) {
+    handleScroll(e) {
       if (e.srcElement.scrollingElement.scrollTop + e.srcElement.scrollingElement.offsetHeight + 100 >= e.srcElement.scrollingElement.scrollHeight) {
         if (this.isLoad) {
           return
@@ -76,9 +76,9 @@ export default {
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
   },
-  destroyed () {
-  window.removeEventListener('scroll', this.handleScroll)
-},
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll)
+  },
 }
 </script>
 

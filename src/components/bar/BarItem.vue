@@ -34,6 +34,13 @@
         <div class="item_article">
           <span>{{ todo.pbArticle }}</span>
         </div>
+        <div v-if="isVideo" class="item_video">
+          <video
+            ref="videoPlayer"
+            @play="playVideo"
+            class="video-js vjs-big-play-centered vjs-fluid"
+          ></video>
+        </div>
         <div :class="itemImg">
           <el-image
             v-for="(img, index) in imageA"
@@ -103,6 +110,8 @@ import barCommentItem from '@/components/bar/BarCommentItem.vue'
 import { queryBarComment } from '@/api/postbar'
 import commentInput from '@/components/bar/CommentInput.vue'
 import moreFun from '@/components/bar/MoreFun.vue'
+import videojs from 'video.js';
+import 'video.js/dist/video-js.css'
 
 export default {
   name: 'bar-item',
@@ -131,6 +140,7 @@ export default {
       voiceClass: 'iconfont icon-Playerplay',
       playAudio: undefined,
       audioTime: '',
+      player: undefined,
     }
   },
   props: ['todo'],
@@ -190,6 +200,15 @@ export default {
       if (isVoice) {
         this.$bus.$on('initVoice', this.nextAudio)
         this.initVoice()
+        return true
+      } else {
+        return false
+      }
+    },
+    isVideo() {
+      const isVideo = this.todo.pbVideo
+      if (isVideo) {
+        this.$bus.$on('initVideo', this.nextVideo)
         return true
       } else {
         return false
@@ -256,6 +275,35 @@ export default {
         }
         this.playAudio.play();
       }
+    },
+    nextVideo(id) {
+      if (id != this.todo.pbOneId) {
+        if (this.player) {
+          this.player.pause()
+        }
+      }
+    },
+    initVideo() {
+      const isVideo = this.todo.pbVideo
+      if (isVideo) {
+        this.player = videojs(this.$refs.videoPlayer, {
+          poster: 'http://localhost:8888/' + this.todo.pbVideo + '.png',
+          controls: true,
+          fluid: false,
+          sources: [
+            {
+              src:
+                'http://localhost:8888/' + this.todo.pbVideo,
+              type: 'video/mp4',
+            }
+          ]
+        }, () => {
+          this.player.log('onPlayerReady');
+        });
+      }
+    },
+    playVideo() {
+      this.$bus.$emit('initVideo', this.todo.pbOneId)
     },
     imgUrl(imgList) {
       if (typeof (imgList) == 'string') {
@@ -358,14 +406,21 @@ export default {
   mounted() {
     this.initImage()
     this.initLike()
+    this.initVideo()
   },
   beforeDestroy() {
     if (this.playAudio) {
       this.initVoice()
     }
+    if (this.player) {
+      this.player = undefined
+    }
     this._timer && clearTimeout(this._timer)
     this.$bus.$off('addComment')
     this.$bus.$off('deleteComment')
+    if (this.player) {
+      this.player.dispose();
+    }
   },
 }
 </script>
@@ -590,5 +645,19 @@ export default {
 .comment_item {
   width: 93%;
   margin-bottom: 10px;
+}
+.item_video {
+  width: 528px;
+  margin-top: 8px;
+  border-radius: 10px;
+  border: 1px solid white;
+  overflow: hidden;
+}
+.video-js {
+  /* 视频占满容器高度 */
+  height: 297px;
+  width: 528px;
+  background-color: #161616;
+  z-index: 0;
 }
 </style>

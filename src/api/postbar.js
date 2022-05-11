@@ -1,19 +1,19 @@
 import request from '@/utils/request';
 import axios from 'axios'
 
-export function queryNoVideoPostBarForDate(date) {
+export function queryNoVideoPostBarForDate(data) {
     return request({
         url: '/postbarlist/queryNoVideoBarListForDate',
         method: 'get',
-        params: date
+        params: data
     })
 }
 
-export function queryVideoPostBarForDate(date) {
+export function queryVideoPostBarForDate(data) {
     return request({
-        url: '/postbar/queryVideoPostBarForDate',
+        url: '/postbarlist/queryVideoBarListForDate',
         method: 'get',
-        params: date
+        params: data
     })
 }
 

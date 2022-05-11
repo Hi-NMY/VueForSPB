@@ -14,14 +14,17 @@
     </el-skeleton>
     <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="6">
     </el-skeleton>
+    <div style="width: 100%; text-align: center">加载中，请稍后.....</div>
   </div>
 </template>
 
 <script>
 import barItem from '@/components/bar/BarItem.vue'
 import { queryVideoPostBarForDate } from '@/api/postbar'
+import { listLoad } from '@/mixin/list'
 export default {
   name: 'VideoBar',
+  mixins: [listLoad],
   data() {
     return {
       videoPostBarList: [],
@@ -38,24 +41,36 @@ export default {
   methods: {
     refresh() {
       this.beforeRefresh()
-      //开发中
-      queryVideoPostBarForDate('').then((res) => {
-        this.videoPostBarList = res.data
+      this.obtainData()
+    },
+    obtainData() {
+      queryVideoPostBarForDate(this.queryParam).then((res) => {
+        if (this.queryParam.id == 0) {
+          this.videoPostBarList = res.data
+        } else {
+          this.videoPostBarList.push.apply(this.videoPostBarList, res.data)
+        }
+        this.queryParam.id = this.videoPostBarList[this.videoPostBarList.length - 1].id
         this.afterRefresh()
         this.$bus.$emit('afterRefresh')
       })
+    },
+    firstRefresh() {
+      this.queryParam.id = 0
+      this.refresh()
     },
     beforeRefresh() {
       this.loading = true
       this.skeletonItem = 'skeleton_item'
     },
     afterRefresh() {
+      this.loadAfter()
       this.loading = false
       this.skeletonItem = ''
     },
   },
   mounted() {
-    this.$bus.$on('refreshIndexBar', this.refresh)
+    this.$bus.$on('refreshIndexBar', this.firstRefresh)
     this.refresh()
   },
   beforeDestroy() {
@@ -64,7 +79,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style scope lang="scss">
 .skeleton_item {
   width: auto;
   padding: 20px;

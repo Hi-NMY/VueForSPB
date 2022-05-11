@@ -1,6 +1,10 @@
 <template>
   <div class="comment_item_box">
-    <el-avatar :size="35" :src="headImg(commentTodo.commentHeadImg)">
+    <el-avatar
+      :size="35"
+      @click.native="gotoHome(commentTodo.commentUser)"
+      :src="headImg(commentTodo.commentHeadImg)"
+    >
     </el-avatar>
     <div class="comment_item_main">
       <div class="comment_item_head">
@@ -143,7 +147,7 @@ export default {
       })
     },
     gotoHome(userAccount) {
-      if (this.checkRoutingFirst(this, '/home')) {
+      if (!this.$route.params.userAccount || userAccount != this.$route.params.userAccount) {
         this.$router.push({
           name: 'home',
           params: {

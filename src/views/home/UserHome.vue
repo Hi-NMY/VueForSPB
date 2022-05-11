@@ -67,7 +67,7 @@
     <div class="user_home_main">
       <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="6">
         <bar-item
-          v-for="item in noVidePostBarList"
+          v-for="item in postBarList"
           :key="item.pbOneId"
           :todo="item"
           class="infinite-list-item"
@@ -79,6 +79,7 @@
       </el-skeleton>
       <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="6">
       </el-skeleton>
+      <div style="width: 100%; text-align: center">加载中，请稍后.....</div>
     </div>
   </div>
 </template>
@@ -86,17 +87,18 @@
 <script>
 import barItem from '@/components/bar/BarItem.vue'
 import { getBirthStar } from '@/utils/dateUtil'
-import { queryNoVideoUserBarListForDate } from '@/api/home'
+import { queryNoVideoUserBarListForDate, queryVideoUserBarListForDate } from '@/api/home'
 import { homeChildren } from '@/mixin/home'
+import { listLoad } from '@/mixin/list'
 export default {
   name: 'UserHome',
   props: ['userAccount'],
-  mixins: [homeChildren],
+  mixins: [homeChildren, listLoad],
   data() {
     return {
       userNav: '1',
       moreMsg: 'iconfont icon-shangjiantou',
-      noVidePostBarList: [],
+      postBarList: [],
       loading: true,
       skeletonItem: 'skeleton_item',
       queryParam: {
@@ -104,7 +106,7 @@ export default {
         userAccount: '',
       },
       isPrivacyFriend: true,
-      sexClass: 'iconfont icon-girl'
+      sexClass: 'iconfont icon-girl',
     }
   },
   components: {
@@ -187,6 +189,7 @@ export default {
       }
     },
     handleClick(tab, event) {
+      this.queryParam.id = 0
       this.refresh()
     },
     showMoreMsg() {
@@ -198,17 +201,41 @@ export default {
     },
     refresh() {
       this.beforeRefresh()
-      this.queryParam.userAccount = this.user.userInfo.userAccount
-      queryNoVideoUserBarListForDate(this.queryParam).then((res) => {
-        this.noVidePostBarList = res.data
-        this.afterRefresh()
-      })
+      this.obtainData()
+    },
+    obtainData() {
+      if (this.userNav == '1') {
+        this.queryParam.userAccount = this.user.userInfo.userAccount
+        queryNoVideoUserBarListForDate(this.queryParam).then((res) => {
+          if (this.queryParam.id == 0) {
+            this.postBarList = res.data
+          } else {
+            this.postBarList.push.apply(this.postBarList, res.data)
+          }
+          this.queryParam.id = this.postBarList[this.postBarList.length - 1].id
+          this.afterRefresh()
+        })
+      } else {
+        this.queryParam.userAccount = this.user.userInfo.userAccount
+        queryVideoUserBarListForDate(this.queryParam).then((res) => {
+          if (this.queryParam.id == 0) {
+            this.postBarList = res.data
+          } else {
+            this.postBarList.push.apply(this.postBarList, res.data)
+          }
+          if (res.data.length != 0) {
+            this.queryParam.id = this.postBarList[this.postBarList.length - 1].id
+          }
+          this.afterRefresh()
+        })
+      }
     },
     beforeRefresh() {
       this.loading = true
       this.skeletonItem = 'skeleton_item'
     },
     afterRefresh() {
+      this.loadAfter()
       this.loading = false
       this.skeletonItem = ''
     },
@@ -253,6 +280,17 @@ export default {
     width: 100%;
     height: 240px;
     border-radius: 10px 10px 0px 0px;
+  }
+  .iconfont.icon-topic_fanhui {
+    position: absolute;
+    margin-left: 8px;
+    margin-top: 8px;
+    z-index: 99;
+    font-size: 34px;
+    color: #909399;
+  }
+  .iconfont.icon-topic_fanhui:hover {
+    cursor: pointer;
   }
 }
 .user_home_user_msg_box {
@@ -392,16 +430,5 @@ export default {
   margin-bottom: 20px;
   border-radius: 10px;
   background-color: white;
-}
-.iconfont.icon-topic_fanhui {
-  position: absolute;
-  margin-left: 8px;
-  margin-top: 8px;
-  z-index: 99;
-  font-size: 34px;
-  color: #909399;
-}
-.iconfont.icon-topic_fanhui:hover {
-  cursor: pointer;
 }
 </style>

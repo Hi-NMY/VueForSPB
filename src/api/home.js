@@ -8,6 +8,14 @@ export function queryNoVideoUserBarListForDate(data) {
   })
 }
 
+export function queryVideoUserBarListForDate(data) {
+  return request({
+    url: '/postbarlist/queryVideoUserBarListForDate',
+    method: 'post',
+    data
+  })
+}
+
 export function queryCollectBarListForDate(data) {
   return request({
     url: '/collectbar/queryCollectBarFullList',

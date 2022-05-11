@@ -51,7 +51,7 @@
     <div class="detail_topic_main">
       <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="6">
         <bar-item
-          v-for="item in noVidePostBarList"
+          v-for="item in postBarList"
           :key="item.pbOneId"
           :todo="item"
           class="infinite-list-item"
@@ -63,14 +63,17 @@
       </el-skeleton>
       <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="6">
       </el-skeleton>
+      <div style="width: 100%; text-align: center">加载中，请稍后.....</div>
     </div>
   </div>
 </template>
 <script>
 import barItem from '@/components/bar/BarItem.vue'
-import { getTopicFull, getNewTopicPostBar } from '@/api/topic'
+import { getTopicFull, getNewTopicPostBar, getHotTopicPostBar, getVideoTopicPostBar } from '@/api/topic'
+import { listLoad } from '@/mixin/list'
 export default {
   name: 'DetailTopic',
+  mixins: [listLoad],
   props: [
     'topicId',
     'topicName'
@@ -78,7 +81,7 @@ export default {
   data() {
     return {
       topicNav: '1',
-      noVidePostBarList: [],
+      postBarList: [],
       loading: true,
       skeletonItem: 'skeleton_item',
       topicInfo: {
@@ -91,7 +94,7 @@ export default {
       },
       queryParam: {
         pbTopic: '',
-        pbDate: '',
+        id: 0,
         pbThumbNum: -1,
       },
       firstQuery: {
@@ -118,32 +121,76 @@ export default {
     barItem,
   },
   methods: {
+    initTopic() {
+      this.firstQuery.topicId = this.topicId
+      this.firstQuery.topicName = this.topicName
+      getTopicFull(this.firstQuery).then((res) => {
+        this.topicInfo = res.data
+        const attentionTopic = this.$store.state.userInfo.user.attentionTopicPresenter;
+        this.isAtention = !(attentionTopic.indexOf(this.topicInfo.id) == -1)
+        this.queryParam.pbTopic = this.topicInfo.topicName
+        this.refresh()
+      })
+    },
     handleClick(tab, event) {
-      switch (tab.index) {
-        case '1':
-          this.queryParam.pbDate = ''
-          break
-        case '2':
-          this.queryParam.pbThumbNum = -1
-          break
-        default:
-          this.queryParam.pbDate = ''
-          break
-      }
+      this.queryParam.id = 0
+      this.queryParam.pbThumbNum = -1
+      this.queryParam.id = 0
       this.refresh()
     },
     refresh() {
       this.beforeRefresh()
-      getNewTopicPostBar(this.queryParam).then((res) => {
-        this.noVidePostBarList = res.data
-        this.afterRefresh()
-      })
+      this.obtainData()
+    },
+    obtainData() {
+      switch (this.topicNav) {
+        case '1':
+          getNewTopicPostBar(this.queryParam).then((res) => {
+            if (this.queryParam.id == 0) {
+              this.postBarList = res.data
+            } else {
+              this.postBarList.push.apply(this.postBarList, res.data)
+            }
+            if (this.postBarList.length != 0) {
+              this.queryParam.id = this.postBarList[this.postBarList.length - 1].id
+            }
+            this.afterRefresh()
+          })
+          break;
+        case '2':
+          getHotTopicPostBar(this.queryParam).then((res) => {
+            if (this.queryParam.pbThumbNum == -1) {
+              this.postBarList = res.data
+            } else {
+              this.postBarList.push.apply(this.postBarList, res.data)
+            }
+            if (this.postBarList.length != 0) {
+              this.queryParam.pbThumbNum = this.postBarList[this.postBarList.length - 1].pbThumbNum
+            }
+            this.afterRefresh()
+          })
+          break;
+        case '3':
+          getVideoTopicPostBar(this.queryParam).then((res) => {
+            if (this.queryParam.id == 0) {
+              this.postBarList = res.data
+            } else {
+              this.postBarList.push.apply(this.postBarList, res.data)
+            }
+            if (this.postBarList.length != 0) {
+              this.queryParam.id = this.postBarList[this.postBarList.length - 1].id
+            }
+            this.afterRefresh()
+          })
+          break;
+      }
     },
     beforeRefresh() {
       this.loading = true
       this.skeletonItem = 'skeleton_item'
     },
     afterRefresh() {
+      this.loadAfter()
       this.loading = false
       this.skeletonItem = ''
     },
@@ -184,15 +231,7 @@ export default {
     },
   },
   mounted() {
-    this.firstQuery.topicId = this.topicId
-    this.firstQuery.topicName = this.topicName
-    getTopicFull(this.firstQuery).then((res) => {
-      this.topicInfo = res.data
-      const attentionTopic = this.$store.state.userInfo.user.attentionTopicPresenter;
-      this.isAtention = !(attentionTopic.indexOf(this.topicInfo.id) == -1)
-      this.queryParam.pbTopic = this.topicInfo.topicName
-      this.refresh()
-    })
+    this.initTopic()
   },
 }
 </script>
@@ -213,6 +252,16 @@ export default {
   position: relative;
   width: 100%;
   height: auto;
+  .iconfont.icon-topic_fanhui {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-size: 34px;
+    color: #909399;
+  }
+  .iconfont.icon-topic_fanhui:hover {
+    cursor: pointer;
+  }
   .detail_topic_head_bg_img {
     width: 100%;
     object-fit: cover;
@@ -282,16 +331,6 @@ export default {
       padding: 2px 8px;
     }
   }
-}
-.iconfont.icon-topic_fanhui {
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  font-size: 34px;
-  color: #909399;
-}
-.iconfont.icon-topic_fanhui:hover {
-  cursor: pointer;
 }
 .detail_topic_navigation {
   margin-top: 20px;

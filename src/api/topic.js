@@ -32,6 +32,22 @@ export function getNewTopicPostBar(data) {
   })
 }
 
+export function getHotTopicPostBar(data) {
+  return request({
+    url: '/postbarlist/queryNoVideoTopicBarListForThumbNum',
+    method: 'post',
+    data: data
+  })
+}
+
+export function getVideoTopicPostBar(data) {
+  return request({
+    url: '/postbarlist/queryVideoTopicBarListForDate',
+    method: 'post',
+    data: data
+  })
+}
+
 export function addAttention(data) {
   return request({
     url: '/attentiontopic/addAttentionTopic',

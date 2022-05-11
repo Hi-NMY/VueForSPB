@@ -88,7 +88,7 @@
                 <div
                   v-for="(item, index) in searchTopics"
                   :key="index"
-                  class="topic_item"
+                  class="send_bar_topic_item"
                   @click="selectTopicItem(item)"
                 >
                   <span>{{ item }}</span>
@@ -525,11 +525,11 @@ export default {
     font-weight: bold;
   }
 }
-.topic_item,
+.send_bar_topic_item,
 .location_item {
   margin: 12px 4px;
 }
-.topic_item:hover,
+.send_bar_topic_item:hover,
 .location_item:hover {
   color: #3bb0e6;
   cursor: pointer;
