@@ -7,3 +7,19 @@ export function login(data) {
         data: data
     })
 }
+
+export function logout(data) {
+    return request({
+        url: '/users/logout',
+        method: 'post',
+        data: data
+    })
+}
+
+export function register(data) {
+    return request({
+        url: '/users/register',
+        method: 'post',
+        data: data
+    })
+}

@@ -1,7 +1,7 @@
 import { addLikeBar, removeLikeBar } from '@/api/postbar'
 import { changeInfo } from '@/api/userInfo'
 import { addAttention, deleteAttention } from '@/api/topic'
-import { addFollow,deleteFollow } from "@/api/follow";
+import { addFollow, deleteFollow } from "@/api/follow";
 
 const userInfo = {
     namespaced: true,
@@ -197,6 +197,12 @@ const userInfo = {
                     userPrivacy: ''
                 }
             }
+        },
+        updateUserLongDay(state) {
+            state.user.userInfo.userLongday += 1
+        },
+        changeBarCount(state, c) {
+            state.user.userInfo.barCount += c
         }
     },
     state: {
@@ -206,6 +212,8 @@ const userInfo = {
             followPresenter: [],
             followedPresenter: [],
             likeBar: [],
+            barCount: 0,
+            badgeCount:0,
             userInfo: {
                 id: 0,
                 stuClass: 0,

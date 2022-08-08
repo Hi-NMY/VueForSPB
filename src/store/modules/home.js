@@ -2,11 +2,15 @@ import { getInfo } from '@/api/userInfo'
 const home = {
   namespaced: true,
   actions: {
-    obtainUserInfo({ commit }, value) {
+    obtainUserInfo(context, value) {
       getInfo(value.userAccount).then(res => {
-        commit('obtainUserInfo', res.data)
+        context.commit('obtainUserInfo', res.data)
         let secre = res.data.userInfo.userPrivacy;
-        value.goto(secre.charAt(secre.length - 1) == 1)
+        if (secre.charAt(secre.length - 1) != 1) {
+          value.goto(context.state.user.followPresenter.indexOf(value.ua) != -1)
+          return
+        }
+        value.goto(true)
       })
     }
   },

@@ -13,3 +13,10 @@ export function urlJudge(url) {
 export function urlBadgeImg(url) {
   return 'http://localhost:8888/upload/UserImageServer/badge/' + url
 } 
+
+export function videoImgUrl(url) {
+  if (url.substr(0,head.length) == head) {
+    return 'http://localhost:8888/' + url + '.png'
+  }
+  return url + '?x-oss-process=video/snapshot,t_1000,m_fast'
+}

@@ -287,13 +287,13 @@ export default {
       const isVideo = this.todo.pbVideo
       if (isVideo) {
         this.player = videojs(this.$refs.videoPlayer, {
-          poster: 'http://localhost:8888/' + this.todo.pbVideo + '.png',
+          poster: this.videoImgUrl(this.todo.pbVideo),
           controls: true,
           fluid: false,
           sources: [
             {
               src:
-                'http://localhost:8888/' + this.todo.pbVideo,
+                this.urlJudge(this.todo.pbVideo),
               type: 'video/mp4',
             }
           ]

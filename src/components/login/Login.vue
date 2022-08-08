@@ -35,6 +35,8 @@
 </template>
 <script>
 import { login } from '@/api/login'
+import Cookies from 'js-cookie'
+import { b64_md5 } from "@/utils/md5Util";
 export default {
   data: function () {
     return {
@@ -48,14 +50,14 @@ export default {
         userAccount: [
           { required: true, message: '请输入你的账号', trigger: 'blur' },
           { min: 9, max: 9, message: '请输入正确的账号', trigger: 'blur' },
-          { pattern: /^G\d{8}/, message: '账号格式不对', trigger: 'blur' },
+          { pattern: /^G\d{8}/, message: '账号格式不正确', trigger: 'blur' },
         ],
         password: [
           { required: true, message: '请设置密码', trigger: 'blur' },
           {
-            min: 6,
+            min: 8,
             max: 16,
-            message: '长度在 6 到 16 个字符',
+            message: '长度在 8 到 16 个字符',
             trigger: 'blur',
           },
         ],
@@ -69,11 +71,14 @@ export default {
         return
       }
       this.loading = true
-      login(this.loginDto).then((res) => {
+      let goParams = this.loginDto
+      goParams.password = b64_md5(goParams.password)
+      console.log(goParams);
+      login(goParams).then((res) => {
         this.loading = false
-        if (res.code == 200) {
+        if (res.data && res.data.token) {
           if (this.rememberMe) {
-            localStorage.setItem('user', JSON.stringify(this.loginDto))
+            Cookies.set('token', res.data.token)
           }
           this.$bus.$emit('clearSelect', '/index')
           this.$store.commit('index/updateIsLogin', true)

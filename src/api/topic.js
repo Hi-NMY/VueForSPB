@@ -1,50 +1,50 @@
 import request from '@/utils/request'
 
-export function queryAllTopic(search) {
+export function queryAllTopic(data) {
   return request({
     url: '/topic/querySearchTopicFullList',
     method: 'get',
-    params: search
+    params: data
   })
 }
 
-export function queryAttentionTopic(search) {
+export function queryAttentionTopic(data) {
   return request({
     url: '/attentiontopic/queryAttentionTopic',
-    method: 'post',
-    data: search
+    method: 'get',
+    params: data
   })
 }
 
 export function getTopicFull(data) {
   return request({
     url: '/topic/getTopicFull',
-    method: 'post',
-    data: data
+    method: 'get',
+    params: data
   })
 }
 
 export function getNewTopicPostBar(data) {
   return request({
     url: '/postbarlist/queryNoVideoTopicBarListForDate',
-    method: 'post',
-    data: data
+    method: 'get',
+    params: data
   })
 }
 
 export function getHotTopicPostBar(data) {
   return request({
     url: '/postbarlist/queryNoVideoTopicBarListForThumbNum',
-    method: 'post',
-    data: data
+    method: 'get',
+    params: data
   })
 }
 
 export function getVideoTopicPostBar(data) {
   return request({
     url: '/postbarlist/queryVideoTopicBarListForDate',
-    method: 'post',
-    data: data
+    method: 'get',
+    params: data
   })
 }
 

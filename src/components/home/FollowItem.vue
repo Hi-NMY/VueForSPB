@@ -43,7 +43,12 @@ export default {
   },
   computed: {
     headImg() {
-      return this.urlJudge(this.follow.userHeadImg)
+      if (this.follow.userHeadImg) {
+        return this.urlJudge(this.follow.userHeadImg)
+      } else {
+        return this.urlJudge(this.follow.userHeadImage)
+      }
+
     },
     badgeImg() {
       return this.urlBadgeImg(this.follow.userBadge)
@@ -59,7 +64,7 @@ export default {
   },
   methods: {
     initSex() {
-      if (this.follow.sex == '女') {
+      if (this.follow.sex == '女' || this.follow.stuSex == '女') {
         this.sexClass = 'iconfont icon-girl'
       } else {
         this.sexClass = 'iconfont icon-boy'

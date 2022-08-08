@@ -267,6 +267,7 @@ export default {
     object-fit: cover;
     height: 220px;
     border-radius: 10px 10px 0px 0px;
+    background-color: white;
   }
   .detail_topic_head_head_img {
     top: 25%;

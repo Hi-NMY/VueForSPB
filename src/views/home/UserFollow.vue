@@ -6,14 +6,15 @@
         >）
       </div>
       <div class="search_follow">
-        <button>
+        <!-- <button>
           <i class="el-icon-search"></i>
-        </button>
-        <el-input
+        </button> -->
+        <!-- <el-input
           type="text"
           placeholder="搜索好友"
           v-model="search"
-        ></el-input>
+          @keyup.enter.native="queryTopicList"
+        ></el-input> -->
       </div>
     </div>
     <el-skeleton :class="skeletonItem" :loading="loading" animated :rows="2">

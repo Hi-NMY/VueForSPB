@@ -22,11 +22,11 @@
         <div class="title_text">被关注</div>
       </div>
       <div class="box_right" @click="home">
-        <div class="number">1</div>
+        <div class="number">{{ user.barCount }}</div>
         <div class="title_text">动态</div>
       </div>
       <div class="box_right2">
-        <div class="number">1</div>
+        <div class="number">{{ user.badgeCount }}</div>
         <div class="title_text">徽章</div>
       </div>
     </div>
@@ -51,10 +51,16 @@
 
 <script>
 import { mapState } from 'vuex'
+import { logout } from '@/api/login';
+import Cookies from 'js-cookie'
 export default {
   name: 'user-var',
   data() {
-    return {}
+    return {
+      outParams: {
+        userAccount: ''
+      }
+    }
   },
   computed: {
     ...mapState('userInfo', ['user']),
@@ -73,13 +79,25 @@ export default {
   },
   methods: {
     loginOut() {
-      this.$bus.$emit('clearSelect', '/index')
-      this.$bus.$emit('returnIndex')
-      this.$store.commit('index/updateIsLogin', false)
-      this.$store.commit('userInfo/removeUser')
-      localStorage.removeItem('user')
-      this.$router.replace({
-        path: '/refresh',
+      this.outParams.userAccount = this.$store.state.userInfo.user.userInfo.userAccount
+      logout(this.outParams).then((res) => {
+        if (res.data) {
+          this.$bus.$emit('clearSelect', '/index')
+          this.$bus.$emit('returnIndex')
+          this.$store.commit('index/updateIsLogin', false)
+          this.$store.commit('userInfo/removeUser')
+          Cookies.remove('token')
+          this.$router.replace({
+            path: '/refresh',
+          })
+        } else {
+          this.$message({
+            duration: 1500,
+            showClose: true,
+            message: res.msg,
+            type: 'error',
+          })
+        }
       })
     },
     home() {

@@ -94,10 +94,12 @@ export default {
         '/home/userInformation/' + userAccount,
       ]
       this.homeIndex = path
-      if (userAccount != this.$store.state.userInfo.user.userInfo.userAccount) {
+      let ua = this.$store.state.userInfo.user.userInfo.userAccount
+      if (userAccount != ua) {
         this.isOtherUser = true
         this.$store.dispatch('home/obtainUserInfo', {
           userAccount,
+          ua,
           goto: (key) => {
             if (key) {
               this.isAlreadyLoad = true

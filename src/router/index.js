@@ -25,7 +25,6 @@ export default new VueRouter({
 		{
 			name: 'index',
 			path: '/index',
-			name: 'index',
 			redirect: '/index/noVidePostBar',
 			component: (resolve) => require(['@/views/index/index.vue'], resolve),
 			children: [
@@ -56,9 +55,48 @@ export default new VueRouter({
 			]
 		},
 		{
+			name: 'search',
+			path: '/search',
+			redirect: '/search/sNoVideoP',
+			component: (resolve) => require(['@/views/search/index.vue'], resolve),
+			children: [
+				{
+					path: 'sNoVideoP',
+					name: 'sNoVideoP',
+					component: (resolve) => require(['@/views/search/snovideo.vue'], resolve),
+					meta: {
+						keepAlive: true // 需要缓存
+					},
+				},
+				{
+					path: 'sVideoP',
+					name: 'sVideoP',
+					component: (resolve) => require(['@/views/search/svideo.vue'], resolve),
+					meta: {
+						keepAlive: true // 需要缓存
+					},
+				},
+				{
+					path: 'sUser',
+					name: 'sUser',
+					component: (resolve) => require(['@/views/search/suser.vue'], resolve),
+					meta: {
+						keepAlive: true // 需要缓存
+					},
+				},
+				{
+					path: 'sTopic',
+					name: 'sTopic',
+					component: (resolve) => require(['@/views/search/stopic.vue'], resolve),
+					meta: {
+						keepAlive: true // 需要缓存
+					},
+				}
+			]
+		},
+		{
 			name: 'home',
 			path: '/home',
-			name: 'home',
 			redirect: '/home/userHome/:userAccount',
 			component: (resolve) => require(['@/views/home/Home.vue'], resolve),
 			children: [
@@ -182,6 +220,14 @@ export default new VueRouter({
 			redirect: '/message/aa',
 			children: [
 
+			]
+		},
+		{
+			name: 'sign',
+			path: '/sign',
+			component: (resolve) => require(['@/views/sign/sign.vue'], resolve),
+			children: [
+				
 			]
 		}
 	],

@@ -21,11 +21,13 @@ import {
   Dialog,
   CheckboxGroup,
   Checkbox,
-  Collapse, CollapseItem, DatePicker, Cascader, Switch, RadioGroup, Radio, InfiniteScroll ,Popover
+  Collapse, CollapseItem, DatePicker, Cascader, Switch, RadioGroup, Radio, InfiniteScroll, Popover
 } from 'element-ui';
 import { Picker } from "emoji-mart-vue"
 // import {infiniteScroll} from "vue-infinite-scroll";
 import 'element-ui/lib/theme-chalk/base.css';
+
+// import './assets/icon/iconfont.css'
 //引入store
 // import ElementUi from 'element-ui'
 //
@@ -39,7 +41,7 @@ import router from './router/index.js';
 import store from './store/index.js';
 import { checkRouting, checkRoutingFirst } from '@/utils/checkRouting';
 
-import { urlJudge, urlBadgeImg } from '@/utils/urlTool';
+import { urlJudge, urlBadgeImg, videoImgUrl } from '@/utils/urlTool';
 
 import 'animate.css';
 
@@ -51,6 +53,7 @@ Vue.prototype.checkRouting = checkRouting
 Vue.prototype.checkRoutingFirst = checkRoutingFirst
 Vue.prototype.urlJudge = urlJudge
 Vue.prototype.urlBadgeImg = urlBadgeImg
+Vue.prototype.videoImgUrl = videoImgUrl
 
 Vue.config.productionTip = false
 Vue.use(Button)
@@ -84,7 +87,7 @@ Vue.use(CheckboxGroup)
 Vue.use(Checkbox)
 Vue.use(InfiniteScroll)
 Vue.use(Popover)
-Vue.component('picker',Picker)
+Vue.component('picker', Picker)
 Vue.prototype.$message = Message;
 new Vue({
   render: h => h(App),

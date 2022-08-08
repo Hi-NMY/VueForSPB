@@ -97,13 +97,13 @@
           </el-form>
           <div class="dialog-footer">
             <!--<el-button type="primary" @click="changePwd" style="background-color: #46B3E6;border: 1px solid #46B3E6;">修改密码</el-button>-->
-            <el-button type="primary" @click="changePwd">修改密码</el-button>
+            <el-button type="primary" @click="toPwdDialog">修改密码</el-button>
             <el-button type="success" @click="submitForm" :loading="isLoading"
               >保存</el-button
             >
           </div>
         </el-collapse-item>
-        <el-collapse-item title="隐私设计" name="2">
+        <el-collapse-item title="隐私设置" name="2">
           <span style="margin-top: 12px; color: red"
             >(点击上方保存按钮进行保存)</span
           >
@@ -193,6 +193,40 @@
       </el-collapse>
     </div>
 
+    <el-dialog
+      custom-class="pwdDialog"
+      title="修改密码"
+      :visible.sync="updateUserPwdDialog"
+    >
+      <el-form label-width="80px" :model="updatePwdParam" :rules="pwdRules">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="旧密码:" prop="userOldPwd">
+              <el-input
+                type="password"
+                auto-complete="off"
+                v-model="updatePwdParam.userOldPwd"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="新密码:" prop="userPwd">
+              <el-input
+                type="password"
+                auto-complete="off"
+                v-model="updatePwdParam.userPwd"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div class="divSave">
+        <el-button type="success" @click="updateUserPassword">确认</el-button>
+      </div>
+    </el-dialog>
+
     <el-dialog title="我的喜欢" :visible.sync="userFavoriteDialog">
       <el-checkbox-group
         @change="changeFavorite"
@@ -213,6 +247,9 @@ import { getBirthStar } from '@/utils/dateUtil'
 import { homeChildren } from '@/mixin/home'
 import cityJson from '@/assets/city.json'
 import favoriteJson from '@/assets/favorite.json'
+import { updateUserPwd } from "@/api/userInfo";
+import { b64_md5 } from "@/utils/md5Util";
+import Cookies from 'js-cookie'
 export default {
   name: 'UserInformation',
   props: ['userAccount'],
@@ -230,18 +267,44 @@ export default {
         userPrivacy: undefined,
         userAccount: this.userAccount
       },
+      updatePwdParam: {
+        userAccount: this.userAccount,
+        userOldPwd: '',
+        userPwd: ''
+      },
       optionsplaes: [],
       citySelect: [],
       privacySelect: [],
       favoriteSelect: [],
       favorite: [],
       rules: {},
+      pwdRules: {
+        userOldPwd: [
+          { required: true, message: '请输入旧密码', trigger: 'blur' },
+          {
+            min: 8,
+            max: 16,
+            message: '长度在 8 到 16 个字符',
+            trigger: 'blur',
+          },
+        ],
+        userPwd: [
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          {
+            min: 8,
+            max: 16,
+            message: '长度在 8 到 16 个字符',
+            trigger: 'blur',
+          },
+        ],
+      },
       cityProps: {
         value: 'name',
         label: 'name',
         children: 'city',
       },
       userFavoriteDialog: false,
+      updateUserPwdDialog: false,
       isLoading: false
     };
   },
@@ -261,6 +324,9 @@ export default {
   methods: {
     toDialog() {
       this.userFavoriteDialog = true
+    },
+    toPwdDialog() {
+      this.updateUserPwdDialog = true
     },
     changeHome(value) {
       this.queryParam.userHome = value[0] + "-" + value[1] + "-" + value[2]
@@ -289,22 +355,28 @@ export default {
         }
       }
       this.optionsplaes = arr
-      this.citySelect = this.queryParam.userHome.split("-")
+      if (this.queryParam.userHome) {
+        this.citySelect = this.queryParam.userHome.split("-")
+      }
     },
     initPrivacy() {
-      let arr = this.queryParam.userPrivacy.split("")
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i] == '1') {
-          arr[i] = true
-        } else {
-          arr[i] = false
+      if (this.queryParam.userPrivacy) {
+        let arr = this.queryParam.userPrivacy.split("")
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i] == '1') {
+            arr[i] = true
+          } else {
+            arr[i] = false
+          }
         }
+        this.privacySelect = arr
       }
-      this.privacySelect = arr
     },
     initFavorite() {
       this.favorite = JSON.parse(JSON.stringify(favoriteJson))
-      this.favoriteSelect = this.queryParam.userFavorite.substring(0, this.queryParam.userFavorite.lastIndexOf('|')).split("|")
+      if (this.queryParam.userFavorite) {
+        this.favoriteSelect = this.queryParam.userFavorite.substring(0, this.queryParam.userFavorite.lastIndexOf('|')).split("|")
+      }
     },
     star(date) {
       return getBirthStar(date)
@@ -322,11 +394,38 @@ export default {
     submitForm() {
       this.isLoading = true
       this.$store.dispatch('userInfo/changeInformation', {
-        query : this.queryParam,
-        _this : this,
+        query: this.queryParam,
+        _this: this,
         goto: () => {
           this.isLoading = false
         },
+      })
+    },
+    updateUserPassword() {
+      let goParams = this.updatePwdParam
+      goParams.userOldPwd = b64_md5(goParams.userOldPwd)
+      goParams.userPwd = b64_md5(goParams.userPwd)
+      updateUserPwd(goParams).then((res) => {
+        if (res.data) {
+          Cookies.remove('token')
+          this.$router.push({
+            path: '/login',
+          })
+          this.$message({
+            duration: 1500,
+            showClose: true,
+            message: '密码修改成功,请重新登陆',
+            type: 'success',
+          })
+          this.updateUserPwdDialog = false
+        } else {
+          this.$message({
+            duration: 1500,
+            showClose: true,
+            message: res.msg,
+            type: 'error',
+          })
+        }
       })
     }
   }
@@ -355,6 +454,28 @@ export default {
   }
   .el-checkbox__label {
     margin-top: 24px;
+  }
+  .pwdDialog {
+    width: 400px;
+    margin: 0;
+    .el-button {
+      width: 100px;
+      border-radius: 25px;
+      margin: 8px 0 0 25px;
+    }
+    .divSave {
+      text-align: right;
+      margin: 0px auto;
+    }
+    .el-dialog__body {
+      padding: 10px 16px 20px 16px;
+    }
+    .el-input__inner {
+      min-width: 260px;
+    }
+    .el-form-item__error {
+      width: 400px;
+    }
   }
 }
 .userinfo_head {

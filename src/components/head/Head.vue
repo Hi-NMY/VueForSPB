@@ -30,7 +30,12 @@
       </el-menu-item>
     </el-menu>
     <div class="search">
-      <el-input type="text" placeholder="搜索" v-model="search"></el-input>
+      <el-input
+        type="text"
+        placeholder="按下enter搜索"
+        v-model="search"
+        @keyup.enter.native="querySearch"
+      ></el-input>
       <button>
         <i class="el-icon-search"></i>
       </button>
@@ -57,7 +62,7 @@
           </div>
         </div>
       </template>
-      <button class="sign"><i></i> 签到</button>
+      <button class="sign" @click="gotoSign">签到</button>
     </div>
   </div>
 </template>
@@ -68,7 +73,7 @@ export default {
   name: 'Head',
   data() {
     return {
-      headIndex: '/index',
+      headIndex: '',
       search: '',
       userMsg: false,
       headImgAnima: {
@@ -77,9 +82,9 @@ export default {
       },
     }
   },
-  watch:{
-  //解决浏览器前进后退按钮，导航正常高亮显示
-    $route(to,from){
+  watch: {
+    //解决浏览器前进后退按钮，导航正常高亮显示
+    $route(to, from) {
       this.headIndex = '/' + to.path.split('/')[1]
     }
   },
@@ -87,7 +92,7 @@ export default {
     UserVar,
   },
   computed: {
-    headImg(){
+    headImg() {
       return this.urlJudge(this.$store.state.userInfo.user.userInfo.userHeadImage)
     },
     isLogin() {
@@ -144,6 +149,32 @@ export default {
       this.headImgAnima.imgAnimaI = true
       this.headIndex = v
     },
+    gotoSign() {
+      this.$store.commit('index/getLoginAuthority', {
+        _this: this,
+        goto: (key) => {
+          if (key) {
+            if (this.checkRoutingFirst(this, '/sign')) {
+              this.$router.push({
+                name: 'sign'
+              })
+            }
+          }
+        }
+      })
+    },
+    querySearch() {
+      const routerUrl = this.$router.resolve({
+        name: 'sNoVideoP',
+        query: {
+          search:this.search
+        }
+      })
+      window.open(routerUrl.href, '_back')
+    },
+    setSearch(s){
+      this.search = s
+    }
   },
   mounted() {
     if (this.$route.path.split('/')[1]) {
@@ -152,6 +183,7 @@ export default {
       this.headIndex = '/index'
     }
     this.$bus.$on('clearSelect', this.clearSelect)
+    this.$bus.$on('setSearch', this.setSearch)
   },
 }
 </script>
@@ -213,6 +245,7 @@ export default {
   border-radius: 20px 0 0 20px;
   border: 1px solid #dcdfe6;
   border-right: 0;
+  padding: 0px 0px 0px 15px;
 }
 /deep/ .el-input__inner:focus {
   border: 1px solid #dcdfe6;

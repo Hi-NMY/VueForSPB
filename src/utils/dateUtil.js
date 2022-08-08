@@ -1,3 +1,17 @@
+const starBadgeMap = [
+  'star_aquarius.png',
+  'star_pisces.png',
+  'star_aries.png',
+  'star_taurus.png',
+  'star_gemini.png',
+  'star_cancer.png',
+  'star_leo.png',
+  'star_virgo.png',
+  'star_libra.png',
+  'star_scorpio.png',
+  'star_sagittarius.png',
+  'star_capricorn.png',
+]
 export function barTimeUtil(dateTimeStamp) { //字符串形式
   let result;
   const minute = 1000 * 60;      //把分，时，天，周，半个月，一个月用毫秒表示
@@ -80,6 +94,39 @@ export function getBirthStar(val) {
     birth_star = "射手座";
   } else if (month == 12 && day >= 22 || month == 1 && day <= 19) {
     birth_star = "摩羯座";
+  }
+  return birth_star;
+}
+
+export function getBirthStarImage(val) {
+  var date = new Date(val)
+  const month = parseInt(date.getMonth() + 1);
+  const day = parseInt(date.getDate());
+  var birth_star = "";
+  if (month == 1 && day >= 20 || month == 2 && day <= 18) {
+    birth_star = starBadgeMap[0];
+  } else if (month == 2 && day >= 19 || month == 3 && day <= 20) {
+    birth_star = starBadgeMap[1];
+  } else if (month == 3 && day >= 21 || month == 4 && day <= 19) {
+    birth_star = starBadgeMap[2];
+  } else if (month == 4 && day >= 20 || month == 5 && day <= 20) {
+    birth_star = starBadgeMap[3];
+  } else if (month == 5 && day >= 21 || month == 6 && day <= 21) {
+    birth_star = starBadgeMap[4];
+  } else if (month == 6 && day >= 22 || month == 7 && day <= 22) {
+    birth_star = starBadgeMap[5];
+  } else if (month == 7 && day >= 23 || month == 8 && day <= 22) {
+    birth_star = starBadgeMap[6];
+  } else if (month == 8 && day >= 23 || month == 9 && day <= 22) {
+    birth_star = starBadgeMap[7];
+  } else if (month == 9 && day >= 23 || month == 10 && day <= 22) {
+    birth_star = starBadgeMap[8];
+  } else if (month == 10 && day >= 23 || month == 11 && day <= 21) {
+    birth_star = starBadgeMap[9];
+  } else if (month == 11 && day >= 22 || month == 12 && day <= 21) {
+    birth_star = starBadgeMap[10];
+  } else if (month == 12 && day >= 22 || month == 1 && day <= 19) {
+    birth_star = starBadgeMap[11];
   }
   return birth_star;
 }

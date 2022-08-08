@@ -27,9 +27,9 @@
 </template>
 
 <script>
+import { getAlInfo } from '@/api/userInfo'
 import headBox from '@/components/head/Head.vue'
-import { login } from '@/api/login'
-
+import Cookies from 'js-cookie'
 export default {
   name: 'App',
   components: {
@@ -57,21 +57,27 @@ export default {
     }
   },
   created() {
-    let user = null
-    try {
-      user = JSON.parse(localStorage.getItem('user'))
-    } catch (error) { }
-    if (user) {
-      login(user).then((res) => {
-        if (res.code == 200) {
-          this.$store.commit('index/updateIsLogin', true)
-          this.$store.commit('userInfo/obtainUserInfo', res.data)
-          this.isAlreadyLogin = true
-        }
-      })
-    } else {
+    let token = Cookies.get('token');
+    if (!token) {
       this.isAlreadyLogin = true
+      return
     }
+    getAlInfo().then((res) => {
+      if (res.code == 200) {
+        this.$store.commit('index/updateIsLogin', true)
+        this.$store.commit('userInfo/obtainUserInfo', res.data)
+      } else {
+        Cookies.remove('token');
+        this.$message({
+          duration: 1500,
+          showClose: true,
+          message: res.msg,
+          type: 'error',
+        })
+      }
+      this.isAlreadyLogin = true
+    })
+
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)

@@ -2,12 +2,12 @@
   <div class="register">
     <div class="form">
       <el-form :model="param" :rules="rules" class="form_center">
-        <el-form-item prop="username">
+        <el-form-item prop="userName">
           <el-input
             type="text"
             placeholder="你的昵称"
             prefix-icon="el-icon-user"
-            v-model="param.username"
+            v-model="param.userName"
           ></el-input>
         </el-form-item>
         <el-form-item prop="userAccount">
@@ -31,18 +31,20 @@
         </div>
       </el-form>
       <div class="tishi">
-        点击“注册”即表示您同意并愿意遵守简书<br />
+        点击“注册”即表示您同意并愿意遵守校吧<br />
         <a href="">用户协议</a> 和 <a href="">隐私政策</a> 。
       </div>
     </div>
   </div>
 </template>
 <script>
+import { register } from '@/api/login'
+import { b64_md5 } from "@/utils/md5Util";
 export default {
   data: function () {
     return {
       param: {
-        username: '',
+        userName: '',
         userAccount: '',
         password: '',
       },
@@ -59,14 +61,14 @@ export default {
         userAccount: [
           { required: true, message: '请输入你的学号', trigger: 'blur' },
           { min: 9, max: 9, message: '请输入正确的学号', trigger: 'blur' },
-          { pattern: /^G\d{8}/, message: '学号格式不对', trigger: 'blur' },
+          { pattern: /^G\d{8}/, message: '学号格式不正确', trigger: 'blur' },
         ],
         password: [
           { required: true, message: '请设置密码', trigger: 'blur' },
           {
-            min: 6,
+            min: 8,
             max: 16,
-            message: '长度在 6 到 16 个字符',
+            message: '长度在 8 到 16 个字符',
             trigger: 'blur',
           },
         ],
@@ -74,7 +76,13 @@ export default {
     }
   },
   methods: {
-    submitForm() {},
+    submitForm() {
+      let goParams = this.param
+      goParams.password = b64_md5(goParams.password)
+      register(goParams).then((res) => {
+        console.log(res);
+      })
+    },
   },
 }
 </script>

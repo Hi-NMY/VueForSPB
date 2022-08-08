@@ -28,7 +28,7 @@ export function queryNoVideoFollowPostBarForDate(data) {
 export function queryBarComment(date) {
     return request({
         url: '/postbarComment/queryCommentList/' + date,
-        method: 'post',
+        method: 'get',
     })
 }
 
@@ -52,6 +52,19 @@ export function addBar(data,onReturn) {
     axios({
         method: 'post',
         url: '/api/postbarlist/addBar',
+        headers: { 'Content-Type': 'multipart/form-data' },
+        data: data
+    }).then((res) => {
+        onReturn(res)
+    }).catch((err) => {
+        reject(err)
+    });
+}
+
+export function addBarVideo(data,onReturn) {
+    axios({
+        method: 'post',
+        url: '/api/postbarlist/addBarVideo',
         headers: { 'Content-Type': 'multipart/form-data' },
         data: data
     }).then((res) => {

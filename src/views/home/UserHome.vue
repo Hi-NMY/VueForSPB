@@ -7,6 +7,10 @@
       </div>
       <div class="user_home_user_msg_box">
         <el-avatar :size="100" :src="headImg"> </el-avatar>
+        <div class="to_follow_div" v-if="isOtherUser">
+          <div class="folllow_msg_right" v-if="isFollow" @click="clickFollow">已关注</div>
+          <div class="folllow_msg_right_no" v-else @click="clickFollow">未关注</div>
+        </div>
         <div class="user_home_user_msg_base">
           <div class="user_home_user_name">
             <span>{{ user.userInfo.userName }}</span>
@@ -105,6 +109,10 @@ export default {
         id: 0,
         userAccount: '',
       },
+      queryParamF: {
+        followAccount: '',
+        followedAccount: '',
+      },
       isPrivacyFriend: true,
       sexClass: 'iconfont icon-girl',
     }
@@ -178,6 +186,14 @@ export default {
         this.isPrivacyFriend = false
       }
     },
+    isFollow() {
+      const followedPresenter = this.$store.state.userInfo.user.followedPresenter
+      if (!followedPresenter || followedPresenter.indexOf(this.user.userInfo.userAccount) === -1) {
+        return false
+      } else {
+        return true
+      }
+    },
     //是否查看全部徽章
   },
   methods: {
@@ -211,6 +227,10 @@ export default {
             this.postBarList = res.data
           } else {
             this.postBarList.push.apply(this.postBarList, res.data)
+          }
+          if (this.postBarList.length == 0) {
+            this.afterRefresh()
+            return
           }
           this.queryParam.id = this.postBarList[this.postBarList.length - 1].id
           this.afterRefresh()
@@ -252,6 +272,27 @@ export default {
     returnPage() {
       this.$router.back()
     },
+    clickFollow() {
+      this.queryParamF.followedAccount = this.user.userInfo.userAccount
+      this.$store.commit('index/getLoginAuthority', {
+        _this: this,
+        goto: (key) => {
+          if (key) {
+            if (this.isFollow) {
+              this.$store.dispatch('userInfo/removeFollow', {
+                query: this.queryParamF,
+                _this: this
+              })
+            } else {
+              this.$store.dispatch('userInfo/addFollow', {
+                query: this.queryParamF,
+                _this: this
+              })
+            }
+          }
+        }
+      })
+    }
   },
   mounted() {
     this.initSex()
@@ -285,7 +326,6 @@ export default {
     position: absolute;
     margin-left: 8px;
     margin-top: 8px;
-    z-index: 99;
     font-size: 34px;
     color: #909399;
   }
@@ -304,6 +344,41 @@ export default {
     top: -35px;
     left: 24px;
     border: 3px solid white;
+  }
+  .to_follow_div {
+    position: absolute;
+    left: 588px;
+    top: 20px;
+  }
+  .folllow_msg_right {
+    border: 1px solid grey;
+    width: 75px;
+    height: 30px;
+    border-radius: 20px;
+    text-align: center;
+    line-height: 30px;
+    color: #909399;
+  }
+  .folllow_msg_right:hover {
+    border: 1px solid #46b3e6;
+    color: #46b3e6;
+    cursor: pointer;
+  }
+  .folllow_msg_right_no {
+    border: 1px solid #46b3e6;
+    background-color: #46b3e6;
+    color: white;
+    width: 75px;
+    height: 30px;
+    border-radius: 20px;
+    text-align: center;
+    line-height: 30px;
+  }
+  .folllow_msg_right_no:hover {
+    border: 1px solid #46b3e6;
+    color: #46b3e6;
+    background-color: white;
+    cursor: pointer;
   }
 }
 .user_home_user_msg_base {

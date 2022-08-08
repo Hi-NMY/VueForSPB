@@ -3,16 +3,16 @@ import request from '@/utils/request'
 export function queryNoVideoUserBarListForDate(data) {
   return request({
     url: '/postbarlist/queryNoVideoUserBarListForDate',
-    method: 'post',
-    data
+    method: 'get',
+    params:data
   })
 }
 
 export function queryVideoUserBarListForDate(data) {
   return request({
     url: '/postbarlist/queryVideoUserBarListForDate',
-    method: 'post',
-    data
+    method: 'get',
+    params:data
   })
 }
 

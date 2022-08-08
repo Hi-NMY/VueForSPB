@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Notification, MessageBox, Message } from 'element-ui'
+import Cookies from 'js-cookie'
 
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
@@ -28,10 +28,14 @@ service.interceptors.request.use(config => {
   //   config.params = {};
   //   config.url = url;
   // }
+  if (Cookies.get('token')) {
+    config.headers['token'] = Cookies.get('token')
+  }
+  
   return config
 }, error => {
-    console.log(error)
-    Promise.reject(error)
+  console.log(error)
+  Promise.reject(error)
 })
 
 // 响应拦截器

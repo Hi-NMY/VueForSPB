@@ -13,7 +13,24 @@
           @blur="inputBlur"
         ></el-input>
       </div>
-      <div class="send_image">
+
+      <div v-show="isVideo" class="send_video">
+        <div v-show="videoUrl">
+          <i class="el-icon-error" @click="removeVideo"></i>
+          <video
+            ref="videoPlayer"
+            class="video-js vjs-big-play-centered vjs-fluid"
+          ></video>
+        </div>
+        <input
+          type="file"
+          @change="handleFileChangeVideo"
+          ref="videoInput"
+          style="display: none"
+          accept="video/*"
+        />
+      </div>
+      <div class="send_image" v-show="!isVideo">
         <div class="image_box" v-for="(item, index) in urls" :key="index">
           <i class="el-icon-error" @click="removeImage(index)"></i>
           <el-image :src="returnUrl(item)" fit="cover"></el-image>
@@ -21,7 +38,7 @@
         <div class="image_add">
           <input
             type="file"
-            @change="handleFileChange"
+            @change="handleFileChangeImage"
             ref="imageInput"
             style="display: none"
             multiple
@@ -71,8 +88,8 @@
           </el-popover>
         </div>
         <i v-show="!isVideo" class="iconfont icon-image" @click="addImage"></i>
-        <i v-show="isVideo" class="iconfont icon-video"></i>
-        <i v-show="!isVideo" class="iconfont icon-voice"></i>
+        <i v-show="isVideo" class="iconfont icon-video" @click="addVideo"></i>
+        <!-- <i v-show="!isVideo" class="iconfont icon-voice"></i> -->
         <div class="topic_popover">
           <el-popover @show="topicPopover">
             <div>
@@ -143,7 +160,9 @@
 <script>
 import { hotTopic } from '../../api/index'
 import { querySearchTopicName } from '@/api/topic'
-import { addBar } from '@/api/postbar'
+import { addBar, addBarVideo } from '@/api/postbar'
+import videojs from 'video.js';
+import 'video.js/dist/video-js.css'
 
 export default {
   name: 'send_bar',
@@ -176,7 +195,9 @@ export default {
       searchLocation: [],
       geolocationCity: undefined,
       addImageIcon: true,
-      sendLoading: false
+      sendLoading: false,
+      videoUrl: undefined,
+      player: undefined,
     }
   },
   computed: {
@@ -194,16 +215,48 @@ export default {
         }
       }
       let formData = new FormData();
-      for (let i = 0; i < this.urls.length; i++) {
-        formData.append("image", this.urls[i]);
-      }
       formData.append("userAccount", this.queryParam.userAccount);
       formData.append("pbArticle", this.queryParam.pbArticle);
       formData.append("pbTopic", this.queryParam.pbTopic);
       formData.append("pbLocation", this.queryParam.pbLocation);
-      addBar(formData,(res)=>{
+
+      if (this.urls.length > 0) {
+        for (let i = 0; i < this.urls.length; i++) {
+          formData.append("image", this.urls[i]);
+        }
+        addBar(formData, (res) => {
+          this.sendLoading = false
+          this.$bus.$emit('sendBar', false, this.isVideo)
+          this.$store.commit('userInfo/changeBarCount',1)
+          this.$message({
+            duration: 1500,
+            showClose: true,
+            type: 'success',
+            message: '发布成功',
+          })
+        })
+        return
+      }
+
+      if (this.videoUrl) {
+        formData.append("video", this.videoUrl);
+        addBarVideo(formData, (res) => {
+          this.sendLoading = false
+          this.$bus.$emit('sendBar', false, this.isVideo)
+          this.$store.commit('userInfo/changeBarCount',1)
+          this.$message({
+            duration: 1500,
+            showClose: true,
+            type: 'success',
+            message: '发布成功',
+          })
+        })
+        return
+      }
+      addBar(formData, (res) => {
         this.sendLoading = false
         this.$bus.$emit('sendBar', false, this.isVideo)
+        this.$store.commit('userInfo/changeBarCount',1)
         this.$message({
           duration: 1500,
           showClose: true,
@@ -229,6 +282,34 @@ export default {
       }
       this.$refs.imageInput.dispatchEvent(new MouseEvent('click'))
     },
+    addVideo() {
+      if (this.videoUrl) {
+        this.$message(
+          {
+            duration: 1500,
+            showClose: true,
+            type: 'warning',
+            message: '最多选择一个视频哦',
+          }
+        )
+        return
+      }
+      this.$refs.videoInput.dispatchEvent(new MouseEvent('click'))
+    },
+    // getVideoImg() {
+    //   let scale = 0.8;
+    //   let videoPlayer = this.$refs.videoPlayer
+    //   let canvas = document.createElement("canvas");
+    //   canvas.width = videoPlayer.videoWidth * scale;
+    //   canvas.height = videoPlayer.videoHeight * scale;
+    //   canvas.getContext('2d').drawImage(videoPlayer, 0, 0, canvas.width,
+    //     canvas.height);
+    //   let img = document.createElement("img");
+    //   img.src = canvas.toDataURL("image/png");
+    //   img.width = 400;
+    //   img.height = 300;
+    //   console.log(img);
+    // },
     closeSendBar() {
       this.$bus.$emit('sendBar', false, this.isVideo)
     },
@@ -322,27 +403,54 @@ export default {
     removeSelectLocation() {
       this.queryParam.pbLocation = ''
     },
-    handleFileChange(e) {
+    handleFileChangeImage(e) {
       let inputDOM = e.target.files;
       for (let i = 0; i <= inputDOM.length - 1; i++) {
-        if (i >= 4) {
+        this.urls.push(inputDOM[i])
+        if (this.urls.length >= 4) {
+          this.$message(
+            {
+              duration: 1500,
+              showClose: true,
+              type: 'warning',
+              message: '最多选择四张图片哦',
+            }
+          )
+          this.addImageIcon = false
           break
+        } else {
+          this.addImageIcon = true
         }
-        this.urls.unshift(inputDOM[i])
       }
-      if (this.urls.length >= 4) {
-        this.$message(
-          {
-            duration: 1500,
-            showClose: true,
-            type: 'warning',
-            message: '最多选择四张图片哦',
-          }
-        )
-        this.addImageIcon = false
-      } else {
-        this.addImageIcon = true
-      }
+    },
+    handleFileChangeVideo(e) {
+      let inputDOM = e.target.files;
+      this.videoUrl = inputDOM[0]
+      setTimeout(() => {
+        if (!this.player) {
+          this.player = videojs(this.$refs.videoPlayer, {
+            poster: '',
+            controls: true,
+            fluid: false,
+            sources: [
+              {
+                src: this.returnUrl(this.videoUrl),
+                type: 'video/mp4',
+              }
+            ]
+          }, () => {
+            this.player.log('onPlayerReady');
+          });
+        } else {
+          this.player.src([
+            {
+              type: 'video/mp4',
+              src: this.returnUrl(this.videoUrl),
+            },
+          ]);
+          this.player.load();
+        }
+      }, 100)
     },
     returnUrl(file) {
       let url = null;
@@ -360,6 +468,15 @@ export default {
       if (this.urls.length < 4) {
         this.addImageIcon = true
       }
+    },
+    removeVideo() {
+      this.videoUrl = undefined
+      this.player.reset(); //重置 video
+    }
+  },
+  beforeDestroy() {
+    if (this.player) {
+      this.player = undefined
     }
   },
 }
@@ -425,7 +542,8 @@ export default {
   align-items: left;
   margin-top: 15px;
 }
-.image_box {
+.image_box,
+.send_video {
   position: relative;
   .el-image__inner {
     width: 100px;
@@ -587,6 +705,20 @@ export default {
   border: 1.5px solid #46b3e6;
   .el-input__inner {
     background-color: white;
+  }
+}
+.send_video {
+  width: 352px;
+  margin-top: 8px;
+  border-radius: 10px;
+  border: 1px solid white;
+  overflow: hidden;
+  .video-js {
+    /* 视频占满容器高度 */
+    height: 198px;
+    width: 352px;
+    background-color: white;
+    z-index: 0;
   }
 }
 </style>
