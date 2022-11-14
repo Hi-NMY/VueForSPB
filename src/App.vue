@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-if="isAlreadyLogin">
+  <div id="app" v-if="isAlreadyLogin" @click.capture="closeMoreFun">
     <head-box v-show="this.$store.state.index.hasHead"></head-box>
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
@@ -54,6 +54,12 @@ export default {
       } else {
         this.isLoad = false
       }
+    },
+    closeMoreFun(e){
+      if (e.target.className == 'iconfont icon-xiajiantou') {
+        return
+      }
+      this.$bus.$emit('closeMoreFun')
     }
   },
   created() {
@@ -76,8 +82,7 @@ export default {
         })
       }
       this.isAlreadyLogin = true
-    })
-
+    })   
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)

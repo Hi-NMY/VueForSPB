@@ -1,5 +1,6 @@
 import request from '@/utils/request';
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 export function queryNoVideoPostBarForDate(data) {
     return request({
@@ -52,7 +53,10 @@ export function addBar(data,onReturn) {
     axios({
         method: 'post',
         url: '/api/postbarlist/addBar',
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'token' : Cookies.get('token')
+        },
         data: data
     }).then((res) => {
         onReturn(res)
@@ -65,7 +69,10 @@ export function addBarVideo(data,onReturn) {
     axios({
         method: 'post',
         url: '/api/postbarlist/addBarVideo',
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'token' : Cookies.get('token')
+        },
         data: data
     }).then((res) => {
         onReturn(res)

@@ -8,8 +8,12 @@
       <div class="user_home_user_msg_box">
         <el-avatar :size="100" :src="headImg"> </el-avatar>
         <div class="to_follow_div" v-if="isOtherUser">
-          <div class="folllow_msg_right" v-if="isFollow" @click="clickFollow">已关注</div>
-          <div class="folllow_msg_right_no" v-else @click="clickFollow">未关注</div>
+          <div class="folllow_msg_right" v-if="isFollow" @click="clickFollow">
+            已关注
+          </div>
+          <div class="folllow_msg_right_no" v-else @click="clickFollow">
+            未关注
+          </div>
         </div>
         <div class="user_home_user_msg_base">
           <div class="user_home_user_name">
@@ -94,6 +98,7 @@ import { getBirthStar } from '@/utils/dateUtil'
 import { queryNoVideoUserBarListForDate, queryVideoUserBarListForDate } from '@/api/home'
 import { homeChildren } from '@/mixin/home'
 import { listLoad } from '@/mixin/list'
+import { delBar } from '@/api/moreFun'
 export default {
   name: 'UserHome',
   props: ['userAccount'],
@@ -292,11 +297,25 @@ export default {
           }
         }
       })
+    },
+    delBar(id) {
+      let index = 0;
+      for (let i = 0; i < this.postBarList.length; i++) {
+        if (this.postBarList[i].pbOneId == id) {
+          index = i
+          break
+        }
+      }
+      this.postBarList.splice(index, 1)
     }
   },
   mounted() {
     this.initSex()
     this.refresh()
+    this.$bus.$on('delBar', this.delBar)
+  },
+  beforeDestroy() {
+    this.$bus.$off('delBar')
   },
 }
 </script>

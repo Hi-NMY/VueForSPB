@@ -37,6 +37,7 @@
 import { login } from '@/api/login'
 import Cookies from 'js-cookie'
 import { b64_md5 } from "@/utils/md5Util";
+const CryptoJS = require('crypto-js');
 export default {
   data: function () {
     return {
@@ -53,7 +54,7 @@ export default {
           { pattern: /^G\d{8}/, message: '账号格式不正确', trigger: 'blur' },
         ],
         password: [
-          { required: true, message: '请设置密码', trigger: 'blur' },
+          { required: true, message: '请输入密码', trigger: 'blur' },
           {
             min: 8,
             max: 16,
@@ -72,7 +73,10 @@ export default {
       }
       this.loading = true
       let goParams = this.loginDto
-      goParams.password = b64_md5(goParams.password)
+
+      let key = CryptoJS.enc.Utf8.parse("202220222022202220222022");
+      goParams.password = CryptoJS.AES.encrypt(goParams.password, key, {mode:CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7}).toString()
+
       console.log(goParams);
       login(goParams).then((res) => {
         this.loading = false

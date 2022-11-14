@@ -40,6 +40,7 @@ export default {
       this.beforeRefresh()
       this.queryParam.userAccount = this.userAccount
       queryCollectBarListForDate(this.queryParam).then((res) => {
+        console.log(res);
         this.collects = res.data
         this.afterRefresh()
       })

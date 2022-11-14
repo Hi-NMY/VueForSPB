@@ -203,7 +203,16 @@ const userInfo = {
         },
         changeBarCount(state, c) {
             state.user.userInfo.barCount += c
-        }
+        },
+        addCollectBar(state, id) {
+            state.user.collectBar.push(id)
+        },
+        delCollectBar(state, id) {
+            const index = state.user.collectBar.indexOf(id);
+            if (index > -1) {
+                state.user.collectBar.splice(index, 1);
+            }
+        },
     },
     state: {
         user: {
@@ -213,7 +222,7 @@ const userInfo = {
             followedPresenter: [],
             likeBar: [],
             barCount: 0,
-            badgeCount:0,
+            badgeCount: 0,
             userInfo: {
                 id: 0,
                 stuClass: 0,

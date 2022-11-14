@@ -14,7 +14,7 @@
         <div class="icon" style="height: 35px">
           <!--<i @click="closeSel2" class="iconfont icon-xiajiantou" style="z-index: 100"></i>-->
           <i
-            @click="moreFun = !moreFun"
+            @click="openMoreFun"
             class="iconfont icon-xiajiantou"
             style="
               z-index: 1;
@@ -25,8 +25,8 @@
               right: 16px;
             "
           ></i>
-          <div class="moreFunClass" @clicks="closeSel" v-show="moreFun">
-            <more-fun></more-fun>
+          <div class="moreFunClass" v-show="moreFun">
+            <more-fun :keyFun="keys" :barId="todo.pbOneId"></more-fun>
           </div>
         </div>
       </div>
@@ -122,6 +122,7 @@ export default {
   },
   data() {
     return {
+      keys: 1,
       topics: [],
       image: [],
       imageA: [],
@@ -388,25 +389,76 @@ export default {
       this.comments.splice(index, 1)
       this.todo.pbCommentNum -= 1
     },
-    closeSel(e) {
-      console.log(this.moreFun)
-      let _this = this
-      document.addEventListener('click', function (e) {
-        console.log(e.target.className)
-        if (e.target.className != 'iconfont icon-xiajiantou') {
-          if (e.target.className != 'morefun_content') {
-            _this.moreFun = false
-          } else {
-            _this.moreFun = true
+    // closeSel(e) {
+    //   let _this = this
+    //   if (e.target.className != 'iconfont icon-xiajiantou') {
+    //     if (e.target.className != 'morefun_content') {
+    //       this.moreFun = false
+    //     } else {
+    //       this.moreFun = true
+    //     }
+    //   }
+    //   document.addEventListener('click', function (e) {
+    //     if (e.target.className != 'iconfont icon-xiajiantou') {
+    //       if (e.target.className != 'morefun_content') {
+    //         _this.moreFun = false
+    //       } else {
+    //         _this.moreFun = true
+    //       }
+    //     }
+    //   })
+    // },
+    openMoreFun() {
+      const ac = this.$store.state.userInfo.user.userInfo.userAccount
+      if (this.moreFun) {
+        this.closeMoreFun()
+      } else {
+        const collectBar = this.$store.state.userInfo.user.collectBar
+        if (this.$route.matched[0].path != '/home' || this.$route.params.userAccount != ac) {
+          this.keys = 1
+          if (!collectBar) {
+            return
+          }
+          if (collectBar.indexOf(this.todo.pbOneId) != -1) {
+            this.keys = 2
+          }
+        } else if (this.$route.name == 'userHome') {
+          this.keys = 3
+          if (!collectBar) {
+            return
+          }
+          if (collectBar.indexOf(this.todo.pbOneId) != -1) {
+            this.keys = 4
+          }
+        } else {
+          if (!collectBar) {
+            this.keys = 1
+            return
+          }
+          if (collectBar.indexOf(this.todo.pbOneId) != -1) {
+            this.keys = 2
+          }else{
+            this.keys = 1
           }
         }
-      })
+        this.$bus.$emit('closeMoreFun')
+        this.moreFun = true
+      }
     },
+    initMoreFun() {
+
+    },
+    closeMoreFun() {
+      if (this.moreFun) {
+        this.moreFun = false
+      }
+    }
   },
   mounted() {
     this.initImage()
     this.initLike()
     this.initVideo()
+    this.$bus.$on('closeMoreFun', this.closeMoreFun)
   },
   beforeDestroy() {
     if (this.playAudio) {
@@ -418,6 +470,7 @@ export default {
     this._timer && clearTimeout(this._timer)
     this.$bus.$off('addComment')
     this.$bus.$off('deleteComment')
+    this.$bus.$off('closeMoreFun')
     if (this.player) {
       this.player.dispose();
     }
@@ -446,6 +499,7 @@ export default {
   width: auto;
   height: auto;
   position: absolute;
+  z-index: 99;
   top: 36px;
   right: 16px;
 }

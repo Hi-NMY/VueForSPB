@@ -387,6 +387,7 @@ export default {
           } else {
             los = results[0]._pois
           }
+          console.log(los);
           for (let i = 0; i < 6; i++) {
             _this.searchLocation.push(los[i].title)
           }
